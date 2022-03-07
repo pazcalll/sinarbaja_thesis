@@ -1,0 +1,44 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+
+    Options -MultiViews -Indexes
+    RewriteEngine On
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Handle Front Controller...
+    RewriteCond %{REQUEST_URI} !(\.css|\.js|\.png|\.jpg|\.gif|robots\.txt|.env)$ [NC]
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    #RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(css|js|images)/(.*)$ public/$1/$2 [L,NC]
+
+    # Disable index view
+    Options -Indexes
+
+    # Hide a specific file
+    <Files artisan>
+        Order allow,deny
+        Deny from all
+    </Files>
+    <FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+    </FilesMatch>
+        <FilesMatch \.php> # Apache 2.4.10+ can proxy to unix socket
+            SetHandler "proxy:unix:/var/run/php/php7.3-fpm.sock|fcgi://localhost/"
+        </FilesMatch>
+</IfModule>

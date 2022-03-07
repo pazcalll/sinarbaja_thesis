@@ -1,0 +1,160 @@
+[{
+    "nama": "Body Shop Original parfum",
+    "deskripsi": "Parfum Edt 30 ml Body Shop Original Counter 100% varian : strawberry (exp 09/2022, 12/2022) moringa (exp 2022) vanilla (exp 2023) shea (exp 2022-2023) Mango (exp 2022) Coconut (exp 2022) Happy Shopping Sist...",
+    "kategori": "Perawatan & Kecantikan > Parfum",
+    "merek": "The Body Shop",
+    "produk-berbahaya": "Mengandung baterai/magnet/cairan/bahan mudah terbakar",
+    "harga": "199000",
+    "stok": "11",
+    "variasi": [{
+        "nama_variasi": "Varian",
+        "nilai_variasi": ["Coconut", "Mango", "Moringa", "Shea", "Strawberry", "Vanilla"]
+    }],
+    "gambar": ["1.jpg", "2.jpg"]
+},{
+    "nama": "Apple iPhone 12 Pro Max 128GB, Pacific Blue",
+    "deskripsi": "Model HP : iPhone 12 Pro MaxKapasitas : 128GBTipe Kartu SIM : NanoKamera Depan : 12 MPKamera Belakang : 12 MP RAM : 6GB Ukuran Layar : 6, 7 inci Tipe Garansi : Garansi Resmi Warna : Pacific Blue Dimensi : 17,9 x 9, 7 x 2 9 cm Periode Garansi : 1 tahun Isi Kotak : � iPhone dengan iOS 14.� Kabel USB-C ke Lightning.� Buku Manual dan Dokumentasi lain.",
+    "kategori": "Handphone & Aksesoris > Handphone & Tablet > Iphone",
+    "merek": "Iphone",
+    "produk-berbahaya": "Tidak",
+    "harga": "20499000",
+    "stok": "46",
+    "variasi": [],
+    "gambar": "2.jpg"
+},{
+    "nama": "Love Beauty & Planet Pure And Positive, Tea Tree Oil & Vetiver Body Wash 400Ml",
+    "deskripsi": "Pure & Positive body wash kami memadukan kandungan Tea Tree Oil dengan keharuman mewah Vetiver, yang membersihkan polutan yang menempel pada tubuhmu dengan lembut, membuatmu merasa segar dan cantik alami. Body Wash ini dikemas dalam 100% botol daur ulang, vegan-certified, cruelty free, bebas dari pewarna, silikon, dan paraben. BPOM NA49180701747 Shelf Life 2 Tahun",
+    "kategori": "Perawatan & Kecantikan > Perawatan Tubuh > Sabun Mandi",
+    "merek": "Love Beauty & Planet",
+    "produk-berbahaya": "Tidak",
+    "harga": "41700",
+    "stok": "1061",
+    "variasi": [],
+    "gambar": "3.jpg"
+},{
+    "nama": "SYIFA VEST BASIC",
+    "deskripsi": "Material Cotton Waffle All Size Fit To L Detail size: Ld / lingkar dada: 114cm Panjang baju bagian depan (dengan rib depan): 58cm Panjang baju bagian belakang (dengan rib belakang): 64cm Lingkar tangan: 60cm Lingkar leher vest: 68cm",
+    "kategori": "Pakaian Wanita > Outerwear > Rompi",
+    "merek": "Tidak Ada Merek",
+    "produk-berbahaya": "Tidak",
+    "harga": "56788",
+    "stok": "4787",
+    "variasi": [
+        "Black",
+        "Mocca",
+        "Grey",
+        "Emerald",
+        "Matcha"
+    ],
+    "gambar": "4.jpg"
+},{
+    "nama": "Roro Mendut Red Jelly Sleeping Mask",
+    "deskripsi": "ORIGINAL RORO MENDUT RED JELLY Glowing Skincare Booster NA18200103743 Merupakan gel berbahan dasar herbal untuk perawatan kulit normal/ kering di pa gi & malam hari yang difokuskan untuk menjadikan kulit tampak lebih cerah, glowing dan lembut. Dapat digunakan: Wajah / TubuhMengandung Ekstrak Rosehip dan Aloe Vera Apa saja manfaat Red Jelly: - Mencerahkan - Menyamarkan noda hitam - Menjadikan kulit terasa lebih kencang - Meningkatkan elastisitas kulit - Menyamarkan pori-pori - Memberikan hidrasi pada kulit - Menjadikan kulit terasa lebih lembut Cara Penggunaan: 1. Pastikan kulit dalam kondisi bersih 2. Aplikasikan toner untuk memaksimalkan penyerapan nutrisi krim dan memudahkan pengaplikasian. 3. Ambil gel dan aplikasikan tipis-tipis secara merata 4. Lakukan hal rutin setiap pagi dan malam",
+    "kategori": "Perawatan & Kevantikan > Perawatan Wajah > Pelembab Wajah",
+    "merek": "Roro Mendut",
+    "produk-berbahaya": "Tidak",
+    "harga": "148410",
+    "stok": "1711",
+    "variasi": [],
+    "gambar": "5.jpg"
+},
+{
+    "nama": "Sandal Casual Pria Wanita Gunung Hiking Haji dan Umrah Jack V3 LAF Project",
+    "deskripsi": "",
+    "kategori": "Sepatu Pria > Sandal",
+    "merek": "LAF Project",
+    "produk-berbahaya": "Tidak",
+    "harga": "199000",
+    "stok": "13",
+    "variasi": [
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45"
+    ],
+    "gambar": "6.jpg"
+},
+{
+    "nama": "KULOT JEANS",
+    "deskripsi": "",
+    "kategori": "Pakaian Wanita > Celana",
+    "merek": "H&M",
+    "produk-berbahaya": "Tidak",
+    "harga": "265000",
+    "stok": "828",
+    "variasi": [
+        "Putih",
+        "Hitam",
+        "Army",
+        "Abu"
+    ],
+    "gambar": "7.jpg"
+},
+{
+    "nama": "DAMELIA AZALEA SANDALS",
+    "deskripsi": "",
+    "kategori": "Sepatu Wanita > Flip Flop & Sandals > Sandal Tali",
+    "merek": "Damelia",
+    "produk-berbahaya": "Tidak",
+    "harga": "90000",
+    "stok": "1013",
+    "variasi": [
+        "Black",
+        "Mocca",
+        "Navy",
+        "Salem",
+        "White",
+        "Army",
+        "Lilac"
+    ],
+    "gambar": "8.jpg"
+},
+{
+    "nama": "Logitech B170 Wireless Mouse",
+    "deskripsi": "n",
+    "kategori": "Komputer & Aksesoris > Mouse & Keyboards",
+    "merek": "Logitech",
+    "produk-berbahaya": "Tidak",
+    "harga": "100000",
+    "stok": "9049",
+    "variasi": [],
+    "gambar": "9.jpg"
+},
+{
+    "nama": "COSRX AHA/BHA Clarifying Treatment Toner 150ml",
+    "deskripsi": "",
+    "merek": "COSRX",
+    "produk-berbahaya": "Tidak",
+    "harga": "120900",
+    "stok": "199",
+    "variasi": [],
+    "gambar": "10.jpg"
+},
+{
+    "nama": "Lip Glaze BLP - Cranberry Cobbler",
+    "deskripsi": "",
+    "kategori": "Perawatan & Kecantikan > Kosmetik Bibir > Lip Gloss",
+    "merek": "BLP Beauty",
+    "produk-berbahaya": "Tidak",
+    "harga": "139000",
+    "stok": "643",
+    "variasi": [],
+    "gambar": "11.jpg"
+},
+{
+    "nama": "Lip Glaze BLP - Cranberry Cobbler",
+    "deskripsi": "",
+    "kategori": "Perawatan & Kecantikan > Kosmetik Bibir > Lip Gloss",
+    "merek": "BLP Beauty",
+    "produk-berbahaya": "Tidak",
+    "harga": "139000",
+    "stok": "643",
+    "variasi": [],
+    "gambar": "11.jpg"
+}]

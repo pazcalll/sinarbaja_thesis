@@ -1,0 +1,196 @@
+[
+    {
+        "nama": "Makanan & Minuman",
+        "sub": [
+            {
+                "nama": "Menu Sarapan",
+                "sub": [
+                    "Sereal",
+                    "Selai & Olesan",
+                    "Madu & Olesan",
+                    "Menu Sarapan Lainnya"
+                ]
+            },
+            {
+                "nama": "Roti & Kue",
+                "sub": [
+                    "Roti",
+                    "Kue Kering",
+                    "Bolu & Cake"
+                ]
+            },
+            {
+                "nama": "Susu & Olahan",
+                "sub": [
+                    "Susu Segar & Yoghurt",
+                    "Susu UHT",
+                    "Susu Bubuk",
+                    "Mentega & Margarin",
+                    "Keju",
+                    "Susu Kental Manis",
+                    "Susu & Olahan Lainnya"
+                ]
+            },
+            {
+                "nama": "Bahan Pokok",
+                "sub": [
+                    "Beras",
+                    "Minyak",
+                    "Telur",
+                    "Gula",
+                    "Mie Kering",
+                    "Pasta",
+                    "Kecap & Sambal",
+                    "Penyedap Rasa",
+                    "Tepung & Premix",
+                    "Bahan Baking",
+                    "Bahan Pokok Lainnya",
+                    "Makanan Kering"
+                ]
+            },
+            {
+                "nama": "Makanan Instan",
+                "sub": [
+                    "Mie & Pasta Instan",
+                    "Cemilan Instan",
+                    "Bumbu Instan",
+                    "Makanan Instan Lainnya"
+                ]
+            },
+            {
+                "nama": "Makanan Kaleng",
+                "sub": [
+                    "Makanan Kaleng Sayur",
+                    "Makanan Kaleng Daging",
+                    "Makanan Kaleng Buah",
+                    "Makanan Kaleng Hasil Laut"
+                ]
+            },
+            {
+                "nama": "Makanan Siap Saji",
+                "sub": []
+            },
+            {
+                "nama": "Makanan Ringan",
+                "sub": [
+                    "Biskuit & Kue Kering",
+                    "Kripik & Kerupuk",
+                    "Kacang",
+                    "Biji-bijian",
+                    "Buah Kering",
+                    "Makanan Ringan Manis Lainnya",
+                    "Makanan Ringan Asin Lainnya",
+                    "Makanan Ringan Lainnya"
+                ]
+            },
+            {
+                "nama": "Makanan Beku",
+                "sub": [
+                    "Es Krim",
+                    "Makanan Asin Beku",
+                    "Makanan Manis Beku",
+                    "Makanan Beku Lainnya"
+                ]
+            },
+            {
+                "nama": "Cokelat & Permen",
+                "sub": [
+                    "Cokelat",
+                    "Permen",
+                    "Cokelat & Permen Lainnya"
+                ]
+            },
+            {
+                "nama": "Minuman",
+                "sub": [
+                    "Kopi",
+                    "Teh",
+                    "Jus & Sirup",
+                    "Minuman Nutrisi",
+                    "Minuman Soda",
+                    "Minuman Bubuk"
+                ]
+            },
+            {
+                "nama": "Makanan Segar",
+                "sub": [
+                    "Sayuran Segar",
+                    "Buah Segar",
+                    "Daging Segar",
+                    "Hasil Laut Segar"
+                ]
+            },
+            {
+                "nama": "Makanan & Minuman Lainnya",
+                "sub": []
+            }
+        ]
+    },
+    {
+        "nama": "Perawatan & Kecantikan",
+        "sub": [
+            {
+                "nama": "Alat Kecantikan",
+                "sub": [
+                    "Brush",
+                    "Make Up Sponge",
+                    "Cetakan Alis",
+                    "Penjepit Bulu Mata",
+                    "Pinset & Silet",
+                    "Alat Perawat Wajah",
+                    "Penghilang Butu Rambut",
+                    "Rautan",
+                    "Alat Pelangsing",
+                    "Alat Kecantikan Lainnya"
+                ]
+            },
+            {
+                "nama": "Kosmetik Mata",
+                "sub": [
+                    "Primer Mata",
+                    "Eyebrow",
+                    "Eyeliner",
+                    "Eyeshadow",
+                    "Maskara",
+                    "Bulu Mata",
+                    "Skot Mata",
+                    "Kosmetik Mata Lainnya"
+                ]
+            },
+            {
+                "nama": "Kosmetik Wajah",
+                "sub": [
+                    "Primer",
+                    "BB & CC Cream",
+                    "Foundation",
+                    "Bedak",
+                    "Concealer",
+                    "Blush On",
+                    "Contour",
+                    "Highlighter",
+                    "Palette Wajah",
+                    "Setting Spray",
+                    "Kosmetik Wajah Lainnya"
+                ]
+            },
+            {
+                "nama": "Kosmetik Bibir",
+                "sub": [
+                    "Lipstik",
+                    "Lip Gloss",
+                    "Lip Liner",
+                    "Lip Tint",
+                    "Kosmetik Bibir Lainnya"
+                ]
+            },
+            {
+                "nama": "Alat Rambut",
+                "sub": [
+                    "Sisir",
+                    "Hair Dryer",
+                    "Catokan / Pengeriting Rambut"
+                ]
+            }
+        ]
+    }
+]
