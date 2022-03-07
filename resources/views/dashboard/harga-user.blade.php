@@ -109,6 +109,7 @@
                     $('#table-harga-user tbody').empty()
                     setHargaUser('{{$userId}}');
                     toastr['success']('Harga user telah di ubah !')
+
                 }
             })
         }
@@ -129,7 +130,7 @@
             $.ajax({
                 url: `{{ url('data/setting_harga/user/hargaUser') }}/{{$userId}}/{{$groupId}}?filter_check=${check_harga_filter}`,
                 type: 'GET',
-                // async: false,
+                async: false,
                 beforeSend: function ( xhr ) {
                    //Add your image loader here
                 },
@@ -186,6 +187,7 @@
                                 type: 'POST',
                                 data: arr,
                                 success: (res) => {
+                                    setHargaUser();
                                     // $('#table-harga-user tbody').empty()
                                     console.log(res)
                                     // setHargaUser('{{$userId}}');
@@ -488,7 +490,7 @@
                 // "processing" : false,
                 // "order": [],
                 "searchable":false,
-                "stateSave": true,
+                // "stateSave": true,
                 "pageLength": 10,
                 "columnDefs": [{
                     "targets"  : [0,1,2,3,4,5,6,7],

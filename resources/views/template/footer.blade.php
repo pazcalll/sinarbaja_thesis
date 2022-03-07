@@ -9,7 +9,7 @@
 <!-- Core  -->
 <script src="{{ asset('public/themeforest/global/vendor/babel-external-helpers/babel-external-helpers.js') }}">
 </script>
-<script type="text/javascript" src="{{asset('node_modules\sweetalert2\dist\sweetalert2.all.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('public\sweetalert2\dist\sweetalert2.all.min.js')}}"></script>
 <script src="{{ asset('public/themeforest/global/vendor/jquery/jquery.js') }}"></script>
 <script src="{{ asset('public/themeforest/global/vendor/popper-js/umd/popper.min.js') }}"></script>
 <script src="{{ asset('public/themeforest/global/vendor/bootstrap/bootstrap.js') }}"></script>
@@ -182,8 +182,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {{-- <script>
 $(document).ready(function(){
-  let user = {{Auth::user()->id}}
   if (user == 1) {
+
     $.ajax({
       type: "GET",
       url:  `{{route('count_harganull')}} `,
