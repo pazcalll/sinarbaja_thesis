@@ -73,6 +73,9 @@ class HargaUserController extends Controller {
         if ($request->filter_check == 'true') {
           $data = $data->whereNull('hpu.harga_user');
         }
+        else {
+          $data = $data->whereNotNull('hpu.harga_user');
+        }
         $data = $data->groupBy('hpg.id_product', 'p.barang_id', 'hpu.id_user', 'hpu.id_group')
         ->select('p.barang_id as id', 'hpu.id_user', 'hpu.id_group', DB::raw('max(p.barang_nama) as nama'), DB::raw('max(p.barang_kode) as barang_kode'),
         DB::raw('coalesce(max(case when hpg.id_group = 2 then hpg.harga_group end), 0) as level1,
@@ -93,13 +96,11 @@ class HargaUserController extends Controller {
     }
 
     public function pilihHarga($id, $id_group) {
-        // $val = DB::SELECT("select al.id,al.nama,al.barang_kode, coalesce(sum(case when al.id_group = "2" then al.harga_group end), 0) as level1, coalesce(sum(case when al.id_group = "3" then al.harga_group end), 0) as level2, coalesce(sum(case when al.id_group = "4" then al.harga_group end), 0) as level3, coalesce(sum(case when al.id_group = "5" then al.harga_group end), 0) as level4 from (select b.id, b.nama, b.barang_kode, h.id_group, h.harga_group from products b join harga_produk_group h on b.id = h.id_product) al group by al.id");
-        // dd($var);
-        $item = HargaProdukUser::with('group')
-        ->where('id_user', $id)
+        $item = DB::table('harga_produk_user AS a')
+        ->leftJoin('group_users AS b','a.id_group','b.id')
+        ->where('a.id_user', $id)
+        ->whereNotNull('a.harga_user')
         ->get()->toArray();
-        // dd($id_group);
-        // dd($item);
         return response($item, 200);
     }
 

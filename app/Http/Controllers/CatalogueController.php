@@ -52,7 +52,6 @@ class CatalogueController extends Controller
     }
 
     public function get_detailBarang(Request $request){
-      // dd(Auth::user()->id_group);
         $data = [];
         $all_data = $request["all_data"];
         $draw = $request["draw"];
@@ -61,9 +60,11 @@ class CatalogueController extends Controller
         $offset = is_null($request["start"]) ? 0 : $request["start"];
         $get = DB::table('tbl_barang AS a')
         ->select('a.*','b.*','c.*','d.*',DB::raw('SUM(b.unit_masuk) AS unit_masuk_sum'),
-        DB::raw('SUM(b.unit_keluar) AS unit_keluar_sum'))
-        ->where('a.barang_alias', $request->alias)
-        ->where('d.id_user',Auth::user()->id);
+        DB::raw('SUM(b.unit_keluar) AS unit_keluar_sum'),'e.harga','e.stok')
+        ->where('a.barang_alias', $request->alias);
+        if (Auth::user() != null) {
+          $get = $get->where('d.id_user',Auth::user()->id);
+        }
         if (!empty($search)) {
           $get = $get->where('a.barang_nama','like','%'.$search.'%');
         }
@@ -76,11 +77,13 @@ class CatalogueController extends Controller
         $get = $get->leftJoin('tbl_log_stok AS b','a.barang_id','b.id_barang')
         ->join('harga_produk_group AS c','c.id_product','a.barang_id')
         ->leftJoin('harga_produk_user AS d','d.id_product','a.barang_id')
+        ->leftJoin('user_setting AS e','d.id_user','e.user_id')
         ->groupBy('a.barang_id');
         $count = $get->get();
         $get_count = count($count);
         $get = $get->limit($limit)->offset($offset)->get();
         foreach ($get as $key => $value) {
+          // dd($value->stok);
           $stok = $value->unit_masuk_sum - $value->unit_keluar_sum;
           if(!empty(Auth::user()->id_group)){
             if (!empty($value->harga_user)) {
@@ -91,11 +94,13 @@ class CatalogueController extends Controller
             $harga = 'Login untuk melihat harga';
           }
           if ($stok > 0) {
+            $value->stok == 'on'?$stk_str = $stok.'  '.Satuan::where('satuan_id', $value->satuan_id)->get('satuan_nama')[0]->satuan_nama:$stk_str = null;
+            $value->harga == 'on'?$harga = $harga:$harga = null;
             $data[] = array(
                       'id' => $value->barang_id,
                       'nama' => $value->barang_nama,
                       'deskripsi' => $value->barang_kode.' - '.$value->barang_alias,
-                      'stok' => $stok.'  '.Satuan::where('satuan_id', $value->satuan_id)->get('satuan_nama')[0]->satuan_nama,
+                      'stok' => !empty(Auth::user())?$stk_str:null,
                       'harga' => !empty($harga)?$harga:null,
                       'btn' => ''
                     );
@@ -198,16 +203,27 @@ class CatalogueController extends Controller
         $get = DB::table('tbl_log_stok AS a')
         ->select('a.id_barang AS id',
         DB::raw('SUM(a.unit_masuk) AS unit_masuk'),
-        DB::raw('SUM(a.unit_keluar) AS unit_keluar'))
+        DB::raw('SUM(a.unit_keluar) AS unit_keluar'),
+        'tb.barang_alias')
+        ->leftJoin('tbl_barang as tb', 'tb.barang_id', 'a.id_barang')
         ->groupBy('a.id_barang')
         ->get();
+        
+        $tmpId = [];
+        foreach ($get as $key => $value) {
+          $tmpId[] = $value->id;
+        }
+        
+        $barang = array_column(DB::table('tbl_barang')->whereIn('barang_id',$tmpId)->distinct()->get(['barang_alias'])->toArray(), 'barang_alias');
+        
+        $tmpCounter = 0;
         foreach ($get as $key => $value) {
           $stock = $value->unit_masuk - $value->unit_keluar;
-          $barang = DB::table('tbl_barang')->where('barang_id',$value->id)->first();
           if ($stock > 0) {
-            $produk[] = array(
-                'barang_alias' => $barang->barang_alias,
-              );
+            if ($barang[$tmpCounter] == $value->barang_alias) {
+              $produk[] = $barang[$tmpCounter];
+              $tmpCounter += 1;
+            }
           }
         }
         return response()->json([

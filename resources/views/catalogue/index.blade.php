@@ -185,7 +185,8 @@ $bodyType = 'site-menubar-unfold';
             },
             success: (response) => {
                 $('#product-wrapper').empty()
-                bindView(response.data)
+                // bindView(response.data)
+                // $('#product-wrapper').empty()
             }
         })
     }
