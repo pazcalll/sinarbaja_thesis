@@ -220,9 +220,11 @@ class CatalogueController extends Controller
         foreach ($get as $key => $value) {
           $stock = $value->unit_masuk - $value->unit_keluar;
           if ($stock > 0) {
-            if ($barang[$tmpCounter] == $value->barang_alias) {
-              $produk[] = $barang[$tmpCounter];
-              $tmpCounter += 1;
+            if (in_array($value->barang_alias, $barang)) {
+              if (!in_array($value->barang_alias, $produk)) {
+                $produk[] = $barang[$tmpCounter];
+                $tmpCounter += 1;
+              }
             }
           }
         }

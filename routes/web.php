@@ -128,6 +128,10 @@ Route::prefix('data')->group(function () {
 
     Route::get('/drivers', [DriverController::class, 'index']);
     Route::get('/tracking', 'TrackingController@data');
+
+    // thesis
+    Route::get('/getter', 'ThesisController@getter');
+    Route::get('/rabin/{n}/{input}', 'ThesisController@rabinKarp');
 });
 
 // admin

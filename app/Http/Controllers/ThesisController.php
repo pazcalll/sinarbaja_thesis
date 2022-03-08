@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ThesisController extends Controller
 {
@@ -146,8 +148,10 @@ class ThesisController extends Controller
 
     // ========================================================================================================
     // The main algorithm
-    function rabinKarp($data, $n, $insert)
+    function rabinKarp($n, $insert)
     {
+        $data = $this->getter();
+
         // preprocessing stage of the inserted data
         $preInsert = $this->punctuationRemoval($this->caseFolding($insert));
 
@@ -189,6 +193,34 @@ class ThesisController extends Controller
         foreach ($fingerprints as $key => $value) {
             $similarities[] = $this->diceSimilarity($value, $hashesData[$key], $hashesInsert);
         }
-        return $similarities;
+        return [$similarities, $data];
+    }
+
+    function getter()
+    {
+        $get = DB::table('tbl_barang AS a')
+        ->select('a.*','b.*','c.*','d.*',DB::raw('SUM(b.unit_masuk) AS unit_masuk_sum'),
+        DB::raw('SUM(b.unit_keluar) AS unit_keluar_sum'),'e.harga','e.stok')
+        ->where('b.status', 'P1');
+        if (Auth::user() != null) {
+          $get = $get->where('d.id_user',Auth::user()->id);
+        }
+        // if (!empty($search)) {
+        //   $get = $get->where('a.barang_nama','like','%'.$search.'%');
+        // }
+        if (!empty(Auth::user()->id_group)) {
+          $get = $get->where('c.id_group',Auth::user()->id_group);
+        }
+        if (empty($all_data)) {
+          $get = $get->whereNotNull('b.unit_masuk');
+        }
+        $get = $get->leftJoin('tbl_log_stok AS b','a.barang_id','b.id_barang')
+        ->join('harga_produk_group AS c','c.id_product','a.barang_id')
+        ->leftJoin('harga_produk_user AS d','d.id_product','a.barang_id')
+        ->leftJoin('user_setting AS e','d.id_user','e.user_id')
+        ->groupBy('a.barang_id');
+        $count = $get->pluck('barang_nama');
+        // dd($count);
+        return $count;
     }
 }
