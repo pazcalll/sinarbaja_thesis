@@ -274,7 +274,7 @@ $bodyType = 'site-menubar-unfold';
                                         src="{{ asset('storage/app/public/photo/Besi.jpg') }}">
                                 </figure>
                                 <div class="card-block table-responsive">
-                                    <h4 class="card-title text-center" style="font-size: 1rem; dont-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform:uppercase;">` + product.barang_alias + `</h4>
+                                    <h4 class="card-title text-center" style="font-size: 1rem; dont-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform:uppercase;">` + product + `</h4>
 
 									`
                                     if (!currentAuth.message) {
@@ -282,19 +282,19 @@ $bodyType = 'site-menubar-unfold';
                                         newHargaProduk.forEach((item, index)=>{
                                             if (item.id_group == currentAuth.id_group && item.id_product == product.id) {
                                                 template+=`
-													<p class="text-center" style="color: #fb8b34; font-weight: bold"><a class="btn btn-round btn-primary" href="{{ url('detail/product') }}/` + product.barang_alias + `"><b>Detail</b></a></p>
+													<p class="text-center" style="color: #fb8b34; font-weight: bold"><a class="btn btn-round btn-primary" href="{{ url('detail/product') }}/` + product + `"><b>Detail</b></a></p>
 													`
                                                 foreachMarker = 1
                                             }
                                             else if(index == newHargaProduk.length-1 && foreachMarker == 0)
                                                 template+=`
-                                                <p class="text-center" style="color: #fb8b34; font-weight: bold"><a class="btn btn-round btn-primary" href="{{ url('detail/product') }}/` + product.barang_alias + `"><b>Detail</b></a></p>
+                                                <p class="text-center" style="color: #fb8b34; font-weight: bold"><a class="btn btn-round btn-primary" href="{{ url('detail/product') }}/` + product + `"><b>Detail</b></a></p>
                                                 `
                                         })
                                     }
                                     else
 										template+=`
-										<p class="text-center" style="color: #fb8b34; font-weight: bold"><a class="btn btn-round btn-primary" href="{{ url('detail/product') }}/` + product.barang_alias + `"><b>Detail</b></a></p>
+										<p class="text-center" style="color: #fb8b34; font-weight: bold"><a class="btn btn-round btn-primary" href="{{ url('detail/product') }}/` + product + `"><b>Detail</b></a></p>
 										`
                                 template+=`
                             </div>
