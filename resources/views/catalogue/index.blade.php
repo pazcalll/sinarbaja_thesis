@@ -175,7 +175,7 @@ $bodyType = 'site-menubar-unfold';
     function search(input) {
         $.ajax({
             type: "GET",
-            url: `{{ url('data/rabin') }}/${3}/${input}`,
+            url: `{{ url('data/rabin') }}/${4}/${input}`,
             dataType: "json",
             data: {
                 search: input
@@ -188,6 +188,9 @@ $bodyType = 'site-menubar-unfold';
                 console.log(response)
                 // bindView(response.data)
                 // $('#product-wrapper').empty()
+            },
+            error: (err) => {
+                console.log(err)
             }
         })
     }

@@ -196,7 +196,11 @@ class ThesisController extends Controller
             $similarities[] = $this->diceSimilarity($value, $hashesData[$key], $hashesInsert);
         }
         // dd([$similarities, $data, $base[2]]);
-        $this->itemDetails([$similarities, $data, $base[2]]);
+        return response()->json([
+            'status' => 'success',
+            'data' => $this->itemDetails([$similarities, $data, $base[2]])
+        ], 200);
+        // return $this->itemDetails([$similarities, $data, $base[2]]);
     }
 
     function getter()
@@ -318,16 +322,17 @@ class ThesisController extends Controller
             $tmpValue['similarity'] = $reIndexSimilaity[$key];
             $newData[] = $tmpValue;
         }
-        $sorter = function($a, $b) {
-            return $a['similarity'] > $b['similarity'];
+        $sorterCallback = function($a, $b) {
+            return $a['similarity'] < $b['similarity'];
         };
-        usort($newData, $sorter);
+        usort($newData, $sorterCallback);
         // $similaritySortdata = array_column($newData, 'similarity');
-        // dd($similaritySortdata);
+        return $newData;
+        // dd($newData);
         // dd(array_multisort($reIndexSimilaity, SORT_DESC, $newData));
-        dd(collect($newData)->sortBy('similarity')->reverse()->toArray());
+        // dd(collect($newData)->sortBy('similarity')->reverse()->toArray());
         // sort();
         // $numbers=array(4,6,2,22,11);
-        dd($data, $reIndexSimilaity);
+        // dd($data, $reIndexSimilaity);
     }
 }
