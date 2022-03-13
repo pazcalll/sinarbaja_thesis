@@ -161,6 +161,7 @@ class CatalogueController extends Controller
         // }
         $recordsTotal = is_null($get_count) ? 0 : $get_count;
         $recordsFiltered = is_null($get_count) ? 0 : $get_count;
+        // dd($request->post());
         return response()->json(compact("data", "draw", "recordsTotal", "recordsFiltered"));
     }
     public function tableDetail($barang_alias) {
@@ -199,39 +200,41 @@ class CatalogueController extends Controller
 
     public function catalogue()
     {
-        $produk = [];
-        $get = DB::table('tbl_log_stok AS a')
-        ->select('a.id_barang AS id',
-        DB::raw('SUM(a.unit_masuk) AS unit_masuk'),
-        DB::raw('SUM(a.unit_keluar) AS unit_keluar'),
-        'tb.barang_alias')
-        ->leftJoin('tbl_barang as tb', 'tb.barang_id', 'a.id_barang')
-        ->groupBy('a.id_barang')
-        ->get();
-        
-        $tmpId = [];
-        foreach ($get as $key => $value) {
+      $produk = [];
+      $get = DB::table('tbl_log_stok AS a')
+      ->select('a.id_barang AS id',
+      DB::raw('SUM(a.unit_masuk) AS unit_masuk'),
+      DB::raw('SUM(a.unit_keluar) AS unit_keluar'),
+      'tb.barang_alias')
+      ->leftJoin('tbl_barang as tb', 'tb.barang_id', 'a.id_barang')
+      ->groupBy('a.id_barang')
+      ->get();
+      
+      $tmpId = [];
+      foreach ($get as $key => $value) {
+        if (intval($value->unit_masuk) > intval($value->unit_keluar)) {
           $tmpId[] = $value->id;
         }
-        
-        $barang = array_column(DB::table('tbl_barang')->whereIn('barang_id',$tmpId)->distinct()->get(['barang_alias'])->toArray(), 'barang_alias');
-        
-        $tmpCounter = 0;
-        foreach ($get as $key => $value) {
-          $stock = $value->unit_masuk - $value->unit_keluar;
-          if ($stock > 0) {
-            if (in_array($value->barang_alias, $barang)) {
-              if (!in_array($value->barang_alias, $produk)) {
-                $produk[] = $barang[$tmpCounter];
-                $tmpCounter += 1;
-              }
+      }
+      
+      $barang = array_column(DB::table('tbl_barang')->whereIn('barang_id',$tmpId)->distinct()->get(['barang_alias'])->toArray(), 'barang_alias');
+      // dd($tmpId); 
+      $tmpCounter = 0;
+      foreach ($get as $key => $value) {
+        $stock = $value->unit_masuk - $value->unit_keluar;
+        if ($stock > 0) {
+          if (in_array($value->barang_alias, $barang)) {
+            if (!in_array($value->barang_alias, $produk)) {
+              $produk[] = $barang[$tmpCounter];
+              $tmpCounter += 1;
             }
           }
         }
-        return response()->json([
-          'status' => 'success',
-          'data' => $produk
-        ], 200);
+      }
+      return response()->json([
+        'status' => 'success',
+        'data' => $produk
+      ], 200);
     }
 
     public function detail(Request $request){
