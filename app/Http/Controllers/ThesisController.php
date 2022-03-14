@@ -254,7 +254,7 @@ class ThesisController extends Controller
         $similarities = array_filter($barang[0], function($value) {
             return $value != 0;  
         });
-        $filteredItem = array_intersect_key($barang[1], $similarities);
+        // $filteredItem = array_intersect_key($barang[1], $similarities);
         $barang_id = array_intersect_key($barang[2], $similarities);
         // dd($barang_id, $filteredItem, $similarities);
         // $all_data = $request["all_data"];
@@ -302,13 +302,14 @@ class ThesisController extends Controller
             $value->stok == 'on'?$stk_str = $stok.'  '.Satuan::where('satuan_id', $value->satuan_id)->get('satuan_nama')[0]->satuan_nama:$stk_str = null;
             $value->harga == 'on'?$harga = $harga:$harga = null;
             $data[] = array(
-                      'id' => $value->barang_id,
-                      'nama' => $value->barang_nama,
-                      'deskripsi' => $value->barang_kode.' - '.$value->barang_alias,
-                      'stok' => !empty(Auth::user())?$stk_str:null,
-                      'harga' => !empty($harga)?$harga:null,
-                      'btn' => ''
-                    );
+                'id' => $value->barang_id,
+                'nama' => $value->barang_nama,
+            //   'deskripsi' => $value->barang_kode.' - '.$value->barang_alias,
+                'kategori' => $value->barang_alias,
+                'stok' => !empty(Auth::user())?$stk_str:null,
+                'harga' => !empty($harga)?$harga:null,
+            //   'btn' => ''
+            );
           }
         }
         $reIndexSimilaity = [];

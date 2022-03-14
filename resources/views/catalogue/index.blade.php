@@ -13,6 +13,11 @@ $bodyType = 'site-menubar-unfold';
             margin: 0 auto;
             width: max-content;
         }
+        #search-res {
+            /* column-count: 2; */
+            margin: 0 auto;
+            width: max-content;
+        }
         .card:nth-child(2n+1){
             clear: left;
         }
@@ -26,6 +31,10 @@ $bodyType = 'site-menubar-unfold';
 
     @media only screen and (min-width: 1281px) {
         #product-wrapper {
+            margin: 0 auto;
+            width: max-content;
+        }
+        #search-res {
             margin: 0 auto;
             width: max-content;
         }
@@ -82,6 +91,51 @@ $bodyType = 'site-menubar-unfold';
     <div class="col-12">
         <div class="example-wrap">
             <div class="row">
+                <div style="display: none; width: 80%; margin: 0 auto;" id="search-res">
+                    <div class="panel" style="margin: 0 auto;">
+                        <div class="panel-body">
+                            <table id="search-table" style="margin: 0 auto; width: 100%;">
+                                <thead style="border-bottom: 1px solid gray;">
+                                    <tr style="height: 70px;">
+                                        <th width="10%">No.</th>
+                                        <th width="30%">Nama Barang</th>
+                                        <th width="20%">Kategori Barang</th>
+                                        <th width="10%">Stok</th>
+                                        <th width="20%">Harga</th>
+                                        <th width="10%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody style="height: 20px">
+                                    
+                                </tbody>
+                            </table>
+                            {{-- <div class="search-navigator" style="display: flex;">
+                                <div style="display:flex; margin: 0 auto">
+                                    <select id="search-navigator-select" class="form-control">
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                    </select>
+                                    <p style="margin-top:5px; margin-left:5px"> Baris</p>
+                                </div>
+                                <nav style="display:flex; margin: 0 auto">
+                                    <ul class="pagination">
+                                        <li class="page-item">
+                                            <span class="page-link">Previous</span>
+                                        </li>
+                                        <li class="page-item active" aria-current="page">
+                                            <a class="page-link" href="#">1</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#">Next</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div> --}}
+                        </div>
+                    </div>
+                </div>
                 <div class="" id="product-wrapper">
                 </div>
             </div>
@@ -184,8 +238,57 @@ $bodyType = 'site-menubar-unfold';
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: (response) => {
-                $('#product-wrapper').empty()
-                console.log(response)
+                console.log(response.data)
+                $('#product-wrapper').hide()
+                $('#search-res tbody').empty()
+                let insertTemplate = ''
+                response.data.forEach((item, index) => {
+                    if (index % 2 == 0) {
+                        insertTemplate += `
+                            <tr style="height: 50px; background-color: #e6e6e6;">
+                                <td>${index + 1}</td>
+                                <td>${item.nama}</td>
+                                <td>${item.kategori}</td>
+                            `
+                    }else{
+                        insertTemplate += `
+                            <tr style="height: 50px;">
+                                <td>${index + 1}</td>
+                                <td>${item.nama}</td>
+                                <td>${item.kategori}</td>
+                            `
+                    }
+                    if ('{{Auth::user()}}' != '') {
+                        insertTemplate += `
+                            <td>${item.stok}</td>
+                            <td>${item.harga}</td>
+                            <td>
+                                <button class="btn btn-md btn-round add-to-cart" style="background: #fb8b34; color: white; margin-left: 10px; font-weight: bold">
+                                    <li class="icon md-shopping-cart"></li>
+                                </button>
+                            </td>
+                        `
+                    }else{
+                        insertTemplate += `
+                            <td></td>
+                            <td></td>
+                            <td>Login untuk aksi lebih lanjut</td>
+                        `
+                    }
+                    insertTemplate += `</tr>`
+                });
+                $('#search-table tbody').append(insertTemplate)
+                $('#search-res').show()
+                $('#search-table').DataTable({
+                    searching: false,
+                    info: false,
+                    serverside:false,
+                    processing: false,
+                    dom: '<"top"i>rt<"bottom"flp><"row view-filter"<"col-sm-12"<"pull-right"f><"clearfix">>>',
+                    })
+                $('#search-table_length label').css('display', 'flex')
+                $('.bottom').css({'display': 'flex', 'justify-content': 'space-between'})
+
                 // bindView(response.data)
                 // $('#product-wrapper').empty()
             },
