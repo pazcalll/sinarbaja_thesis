@@ -240,7 +240,10 @@ $bodyType = 'site-menubar-unfold';
             success: (response) => {
                 console.log(response.data)
                 $('#product-wrapper').hide()
-                $('#search-res tbody').empty()
+
+                if ($.fn.dataTable.isDataTable('#search-table')) $('#search-table').DataTable().destroy()
+                
+                $('#search-table tbody').empty()
                 let insertTemplate = ''
                 response.data.forEach((item, index) => {
                     if (index % 2 == 0) {
@@ -290,6 +293,10 @@ $bodyType = 'site-menubar-unfold';
                     info: false,
                     serverside:false,
                     processing: false,
+                    columnDefs:[{
+                        targets: [0,1,2,3,4],
+                        orderable: false
+                    }],
                     dom: '<"top"i>rt<"bottom"flp><"row view-filter"<"col-sm-12"<"pull-right"f><"clearfix">>>',
                     })
                 $('#search-table_length label').css('display', 'flex')
