@@ -122,15 +122,6 @@ class ThesisController extends Controller
         // takes only matching windows from the both arrays
         $windowFingerprint = array_intersect($windowInsert, $windowData);
         return $windowFingerprint;
-        // echo "<br>";
-        // print_r($windowInsert);
-        
-        // echo "<br>";
-        // print_r($windowData);
-
-        // echo "<br>";
-        // intersection of both windowInsert and windowData
-        // return array_intersect($windowInsertString, $windowDataString);
     }
     
     function diceSimilarity($fingerprint, $hashesData, $hashesInsert)
@@ -195,36 +186,14 @@ class ThesisController extends Controller
         foreach ($fingerprints as $key => $value) {
             $similarities[] = $this->diceSimilarity($value, $hashesData[$key], $hashesInsert);
         }
-        // dd([$similarities, $data, $base[2]]);
         return response()->json([
             'status' => 'success',
             'data' => $this->itemDetails([$similarities, $data, $base[2]])
         ], 200);
-        // return $this->itemDetails([$similarities, $data, $base[2]]);
     }
 
     function getter()
     {
-        // $get = DB::table('tbl_barang AS a')
-        // ->select('a.*','b.*','c.*','d.*',DB::raw('SUM(b.unit_masuk) AS unit_masuk_sum'),
-        // DB::raw('SUM(b.unit_keluar) AS unit_keluar_sum'),'e.harga','e.stok');
-        // if (Auth::user() != null) {
-        //   $get = $get->where('d.id_user',Auth::user()->id);
-        // }
-        // if (!empty(Auth::user()->id_group)) {
-        //   $get = $get->where('c.id_group',Auth::user()->id_group);
-        // }
-        // if (empty($all_data)) {
-        //   $get = $get->whereNotNull('b.unit_masuk');
-        // }
-        // $get = $get->leftJoin('tbl_log_stok AS b','a.barang_id','b.id_barang')
-        // ->join('harga_produk_group AS c','c.id_product','a.barang_id')
-        // ->leftJoin('harga_produk_user AS d','d.id_product','a.barang_id')
-        // ->leftJoin('user_setting AS e','d.id_user','e.user_id')
-        // ->groupBy('a.barang_id');
-        // $count = $get->get();
-        // return $count;
-        
         $produk = [];
         $get = DB::table('tbl_log_stok AS a')
         ->select('a.id_barang AS id',
@@ -244,7 +213,8 @@ class ThesisController extends Controller
         
         $barang = DB::table('tbl_barang')->whereIn('barang_id',$tmpId)->distinct()->get()->toArray();
         $id = array_column(DB::table('tbl_barang')->whereIn('barang_id',$tmpId)->distinct()->get(['barang_id'])->toArray(), 'barang_id');
-        return [$get, $barang, $id];
+        $produk = [$get, $barang, $id];
+        return $produk;
     }
 
     function itemDetails($barang)
@@ -254,14 +224,7 @@ class ThesisController extends Controller
         $similarities = array_filter($barang[0], function($value) {
             return $value != 0;  
         });
-        // $filteredItem = array_intersect_key($barang[1], $similarities);
         $barang_id = array_intersect_key($barang[2], $similarities);
-        // dd($barang_id, $filteredItem, $similarities);
-        // $all_data = $request["all_data"];
-        // $draw = $request["draw"];
-        // $search = $request['search']['value'];
-        // $limit = is_null($request["length"]) ? 10 : $request["length"];
-        // $offset = is_null($request["start"]) ? 0 : $request["start"];
         $get = DB::table('tbl_barang AS a')
         ->select('a.*','b.*','c.*','d.*',DB::raw('SUM(b.unit_masuk) AS unit_masuk_sum'),
         DB::raw('SUM(b.unit_keluar) AS unit_keluar_sum'),'e.harga','e.stok')
@@ -269,9 +232,6 @@ class ThesisController extends Controller
         if (Auth::user() != null) {
           $get = $get->where('d.id_user',Auth::user()->id);
         }
-        // if (!empty($search)) {
-        //   $get = $get->where('a.barang_nama','like','%'.$search.'%');
-        // }
         if (!empty(Auth::user()->id_group)) {
           $get = $get->where('c.id_group',Auth::user()->id_group);
         }
@@ -285,9 +245,7 @@ class ThesisController extends Controller
         ->groupBy('a.barang_id');
         $count = $get->get();
         $get_count = count($count);
-        // $get = $get->limit($limit)->offset($offset)->get();
         $get = $get->get();
-        // dd($get);
         foreach ($get as $key => $value) {
           $stok = $value->unit_masuk_sum - $value->unit_keluar_sum;
           if(!empty(Auth::user()->id_group)){
@@ -304,11 +262,9 @@ class ThesisController extends Controller
             $data[] = array(
                 'id' => $value->barang_id,
                 'nama' => $value->barang_nama,
-            //   'deskripsi' => $value->barang_kode.' - '.$value->barang_alias,
                 'kategori' => $value->barang_alias,
                 'stok' => !empty(Auth::user())?$stk_str:null,
                 'harga' => !empty($harga)?$harga:null,
-            //   'btn' => ''
             );
           }
         }
@@ -316,7 +272,6 @@ class ThesisController extends Controller
         foreach ($similarities as $key => $value) {
             $reIndexSimilaity[] = $value;
         }
-        // dd($reIndexSimilaity, $similarities);
         $newData = [];
         foreach ($data as $key => $value) {
             $tmpValue = $value;
@@ -327,13 +282,6 @@ class ThesisController extends Controller
             return $a['similarity'] < $b['similarity'];
         };
         usort($newData, $sorterCallback);
-        // $similaritySortdata = array_column($newData, 'similarity');
         return $newData;
-        // dd($newData);
-        // dd(array_multisort($reIndexSimilaity, SORT_DESC, $newData));
-        // dd(collect($newData)->sortBy('similarity')->reverse()->toArray());
-        // sort();
-        // $numbers=array(4,6,2,22,11);
-        // dd($data, $reIndexSimilaity);
     }
 }

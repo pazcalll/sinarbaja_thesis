@@ -263,9 +263,15 @@ $bodyType = 'site-menubar-unfold';
                             <td>${item.stok}</td>
                             <td>${item.harga}</td>
                             <td>
-                                <button class="btn btn-md btn-round add-to-cart" style="background: #fb8b34; color: white; margin-left: 10px; font-weight: bold">
-                                    <li class="icon md-shopping-cart"></li>
-                                </button>
+                                <span style="display: flex">
+                                    <input onInput="unitInput(event, ${item.id}, 1, ${item.stok.split('  ')[0]})" type="number" class="form-control" style="text-align: center; width: 100px;" id="${item.id}" min="1" max="${item.stok.split('  ')[0]}" data-max="${item.stok.split('  ')[0]}" value="1"/>
+                                    <span class="input-group-addon bootstrap-touchspin-prefix input-group-prepend">
+                                        <span class="input-group-text">Unit/Jumlah</span>
+                                    </span>
+                                    <button value="${item.id}" class="btn btn-md btn-round add-to-cart" style="background: #fb8b34; color: white; margin-left: 10px; font-weight: bold">
+                                        <li class="icon md-shopping-cart"></li>
+                                    </button>
+                                </span>
                             </td>
                         `
                     }else{
@@ -288,7 +294,32 @@ $bodyType = 'site-menubar-unfold';
                     })
                 $('#search-table_length label').css('display', 'flex')
                 $('.bottom').css({'display': 'flex', 'justify-content': 'space-between'})
+                $('.add-to-cart').prop('click', null)
+                $('.add-to-cart').on('click', function(){
+                    var btn=$(this).val();
+                    var user = {{Auth::user()->id}}
+                    var stk = $("#"+btn).val();
+                    $.ajax({
+                        url:"{{route('addCart')}}",
+                        method:"POST", //First change type to method here
+                        data:{
+                            "_token": "{{ csrf_token() }}",
+                            id_barang: btn,
+                            id_user: user,
+                            jumlah: stk
+                        },
+                        success:function(response) {
+                            toastr['success']('Berhasil ditambahkan')
+                            cart_count()
 
+                            table_cart_ndess.ajax.reload();
+                        },
+                        error:function(){
+                            alert("error");
+                        }
+
+                    });
+                });
                 // bindView(response.data)
                 // $('#product-wrapper').empty()
             },
@@ -296,6 +327,14 @@ $bodyType = 'site-menubar-unfold';
                 console.log(err)
             }
         })
+    }
+
+    function unitInput(event, id, min, max) {
+        if (event.target.value > parseInt(max)) {
+            $('#'+id).val(max)
+        }else if(event.target.value == ''){
+            $('#'+id).val(1)
+        }
     }
 
     function filter() {
