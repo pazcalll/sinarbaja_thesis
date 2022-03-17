@@ -173,6 +173,7 @@ class ThesisController extends Controller
             $tmpHashData = $this->rollingHash($value);
             $hashesData[] = $tmpHashData;
         }
+        // dd($hashesData, $hashesInsert);
 
         // ==============================================================================================================================================================
         // hash couples of the both user input and the existing data
@@ -186,6 +187,7 @@ class ThesisController extends Controller
         foreach ($fingerprints as $key => $value) {
             $similarities[] = $this->diceSimilarity($value, $hashesData[$key], $hashesInsert);
         }
+        // dd([$subsInsert, $hashesInsert],[$subsData, $hashesData],[$base[0]]);
         return response()->json([
             'status' => 'success',
             'data' => $this->itemDetails([$similarities, $data, $base[2]])
@@ -219,6 +221,7 @@ class ThesisController extends Controller
 
     function itemDetails($barang)
     {
+        dd($barang);
         $data = [];
         $similarities = [];
         $similarities = array_filter($barang[0], function($value) {
