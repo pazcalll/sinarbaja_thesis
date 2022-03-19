@@ -144,6 +144,7 @@ class ThesisController extends Controller
     {
         $base = $this->getter();
         $data = array_column($base[1], 'barang_nama');
+        // dd($data);
 
         // preprocessing stage of the inserted data
         $preInsert = $this->punctuationRemoval($this->caseFolding($insert));
@@ -214,14 +215,12 @@ class ThesisController extends Controller
         }
         
         $barang = DB::table('tbl_barang')->whereIn('barang_id',$tmpId)->distinct()->get()->toArray();
-        $id = array_column(DB::table('tbl_barang')->whereIn('barang_id',$tmpId)->distinct()->get(['barang_id'])->toArray(), 'barang_id');
-        $produk = [$get, $barang, $id];
+        $produk = [$get, $barang, $tmpId];
         return $produk;
     }
 
     function itemDetails($barang)
     {
-        dd($barang);
         $data = [];
         $similarities = [];
         $similarities = array_filter($barang[0], function($value) {
@@ -284,6 +283,7 @@ class ThesisController extends Controller
         $sorterCallback = function($a, $b) {
             return $a['similarity'] < $b['similarity'];
         };
+        
         usort($newData, $sorterCallback);
         return $newData;
     }

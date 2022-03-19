@@ -304,7 +304,13 @@ $bodyType = 'site-menubar-unfold';
                 $('.add-to-cart').prop('click', null)
                 $('.add-to-cart').on('click', function(){
                     var btn=$(this).val();
-                    var user = {{Auth::user()->id}}
+                    var user = `
+                        @if (isset(Auth::user()->id))
+                            {{Auth::user()->id}}
+                        @else
+                            {{0}}
+                        @endif
+                    `
                     var stk = $("#"+btn).val();
                     $.ajax({
                         url:"{{route('addCart')}}",
