@@ -57,7 +57,7 @@ class ThesisController extends Controller
             // multiply the existing character of the substring by using prime number (11) powered by the index
             for ($j=0; $j < strlen($tmpSubstr); $j++) { 
                 // powering prime number comes first bcs operation of power must be done first before multiplication
-                $primesMultiplicator = pow(11, strlen($tmpSubstr)-($j+1));
+                $primesMultiplicator = pow(26, strlen($tmpSubstr)-($j+1));
                 // split the existing character of the substring by index 
                 $tmpHashChar = ord(str_split($tmpSubstr)[$j])*$primesMultiplicator;
                 // save the result into a temporary array variable
@@ -144,7 +144,6 @@ class ThesisController extends Controller
     {
         $base = $this->getter();
         $data = array_column($base[1], 'barang_nama');
-        // dd($data);
 
         // preprocessing stage of the inserted data
         $preInsert = $this->punctuationRemoval($this->caseFolding($insert));
@@ -174,7 +173,6 @@ class ThesisController extends Controller
             $tmpHashData = $this->rollingHash($value);
             $hashesData[] = $tmpHashData;
         }
-        // dd($hashesData, $hashesInsert);
 
         // ==============================================================================================================================================================
         // hash couples of the both user input and the existing data
@@ -188,7 +186,7 @@ class ThesisController extends Controller
         foreach ($fingerprints as $key => $value) {
             $similarities[] = $this->diceSimilarity($value, $hashesData[$key], $hashesInsert);
         }
-        // dd([$subsInsert, $hashesInsert],[$subsData, $hashesData],[$base[0]]);
+
         return response()->json([
             'status' => 'success',
             'data' => $this->itemDetails([$similarities, $data, $base[2]])
