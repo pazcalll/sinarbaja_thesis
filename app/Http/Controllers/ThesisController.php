@@ -285,4 +285,78 @@ class ThesisController extends Controller
         usort($newData, $sorterCallback);
         return $newData;
     }
+
+
+    // ================================================================================================================================================================
+    // ANALYTICS PURPOSES
+    // ================================================================================================================================================================
+
+    
+    public function analytics($string)
+    {
+        // dd($string);
+        return view('analytics/index', ['string' => $string]);
+    }
+
+    public function preprocessing($string)
+    {
+        return view('analytics/preprocessing', ['string' => $string]);
+    }
+
+    public function table(Request $req)
+    {
+        dd($req->all());
+        return view('analytics.table');
+    }
+
+    public function pre_casefolding(Request $req)
+    {
+        // dd($req->all());
+        $base = $this->getter();
+        $data = array_column($base[1], 'barang_nama');
+        $preData = [];
+        foreach ($data as $key => $value) {
+            $tmpPreData = $this->caseFolding($value);
+            $preData[] = ['base' => $value, 'result'=>$tmpPreData];
+        }
+
+        $stringsUser = [['base' => $req->post('string'), 'result' => strtolower($req->post('string'))]];
+        $stringsData = $preData;
+        return view('analytics.casefolding')->with('stringsUser', $stringsUser)->with('stringsData', $stringsData);
+    }
+    
+    public function pre_punctuation(Request $req)
+    {
+        $base = $this->getter();
+        $data = array_column($base[1], 'barang_nama');
+        $preData = [];
+        foreach ($data as $key => $value) {
+            $tmpPreData = $this->punctuationRemoval($this->caseFolding($value));
+            $preData[] = ['base' => $this->caseFolding($value), 'result'=>$tmpPreData];
+        }
+
+        $stringsUser = [['base' => strtolower($req->post('string')), 'result' => $this->punctuationRemoval(strtolower($req->post('string')))]];
+        $stringsData = $preData;
+        return view('analytics.punctuation')->with('stringsUser', $stringsUser)->with('stringsData', $stringsData);
+    }
+
+    public function rabin_kgram(Request $req)
+    {
+        dd($req->all());
+    }
+
+    public function rabin_hashing(Request $req)
+    {
+        dd($req->all());
+    }
+
+    public function rabin_intersect(Request $req)
+    {
+        dd($req->all());
+    }
+
+    public function similarity(Request $req)
+    {
+        dd($req->all());
+    }
 }

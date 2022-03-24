@@ -134,6 +134,19 @@ Route::prefix('data')->group(function () {
     Route::get('/rabin/{n}/{input}', 'ThesisController@rabinKarp');
 });
 
+Route::prefix('analytics')->group(function()
+{
+    Route::get('/{string}', 'ThesisController@analytics');
+    Route::get('/preprocessing/{string}', 'ThesisController@preprocessing');
+    Route::post('/table', 'ThesisController@table');
+    Route::post('/pre-casefolding', 'ThesisController@pre_casefolding');
+    Route::post('/pre-punctuation', 'ThesisController@pre_punctuation');
+    Route::post('/rabin-kgram', 'ThesisController@rabin_kgram');
+    Route::post('/rabin-hashing', 'ThesisController@rabin_hashing');
+    Route::post('/rabin-intersect', 'ThesisController@rabin_intersect');
+    Route::post('/similarity', 'ThesisController@similarity');
+});
+
 // admin
 Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], function () {
     Route::get('/', 'DashboardController@index')->name('dashboard');

@@ -94,6 +94,7 @@ $bodyType = 'site-menubar-unfold';
                 <div style="display: none; width: 80%; margin: 0 auto;" id="search-res">
                     <div class="panel" style="margin: 0 auto;">
                         <div class="panel-body">
+                            <button class="btn btn-info" onclick="analyticsPage()">Analytics</button>
                             <table id="search-table" style="margin: 0 auto; width: 100%;">
                                 <thead style="border-bottom: 1px solid gray;">
                                     <tr style="height: 70px;">
@@ -588,6 +589,10 @@ $bodyType = 'site-menubar-unfold';
 
             bindView(data)
         });
+    }
+
+    function analyticsPage() {
+        window.open('{{url("analytics")}}/'+$('#input_search').val()).focus()
     }
 </script>
 @endsection

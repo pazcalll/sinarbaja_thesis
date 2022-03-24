@@ -1,9 +1,9 @@
 <!-- Footer -->
 <footer class="site-footer" style="margin: 0px;">
-    <div class="site-footer-legal">© 2021 <a href="http://themeforest.net/item/remark-responsive-bootstrap-admin-template/11989202">Remark</a></div>
+    {{-- <div class="site-footer-legal">© 2021 <a href="http://themeforest.net/item/remark-responsive-bootstrap-admin-template/11989202">Remark</a></div>
     <div class="site-footer-right">
         Crafted with <i class="red-600 icon md-favorite"></i> by <a href="https://themeforest.net/user/creation-studio">AGSATU</a>
-    </div>
+    </div> --}}
 </footer>
 
 <!-- Core  -->
