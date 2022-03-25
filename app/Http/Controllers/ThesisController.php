@@ -342,12 +342,80 @@ class ThesisController extends Controller
 
     public function rabin_kgram(Request $req)
     {
-        dd($req->all());
+        $base = $this->getter();
+        $data = array_column($base[1], 'barang_nama');
+
+        // preprocessing stage of the inserted data
+        $preInsert = $this->punctuationRemoval($this->caseFolding($req->post('string')));
+
+        // processed data of the inserted string by user
+        // $subsInsert = kGram($insert, $n);
+        $subsInsert = $this->kGram($preInsert, 4);
+
+        // ==============================================================================================================================================================
+        // preprocessing stage of the exxisting data
+        $preData = [];
+        foreach ($data as $key => $value) {
+            $tmpPreData = $this->punctuationRemoval($this->caseFolding($value));
+            $preData[] = $tmpPreData;
+        }
+
+        // processed data of the existing data
+        $subsData = [];
+        // foreach ($data as $key => $value) {
+        foreach ($preData as $key => $value) {
+            $tmpSubsData = $this->kGram($value,4);
+            $subsData[] = ['base' => $value, 'result'=>implode(' | ', $tmpSubsData)];
+        }
+
+        $stringsUser = [['base' => $preInsert, 'result' => implode(' | ', $subsInsert)]];
+        $stringsData = $subsData;
+        // dd($stringsUser, $stringsData);
+        return view('analytics.rabin-karp', compact('stringsUser', 'stringsData'));
     }
 
     public function rabin_hashing(Request $req)
     {
-        dd($req->all());
+        $base = $this->getter();
+        $data = array_column($base[1], 'barang_nama');
+
+        // preprocessing stage of the inserted data
+        $preInsert = $this->punctuationRemoval($this->caseFolding($req->post('string')));
+
+        // processed data of the inserted string by user
+        // $subsInsert = kGram($insert, $n);
+        $subsInsert = $this->kGram($preInsert, 4);
+        $hashesInsert = $this->rollingHash($subsInsert);
+
+        // ==============================================================================================================================================================
+        // preprocessing stage of the exxisting data
+        $preData = [];
+        foreach ($data as $key => $value) {
+            $tmpPreData = $this->punctuationRemoval($this->caseFolding($value));
+            $preData[] = $tmpPreData;
+        }
+
+        // processed data of the existing data
+        $subsData = [];
+        $subsDataVis = [];
+        // foreach ($data as $key => $value) {
+        foreach ($preData as $key => $value) {
+            $tmpSubsData = $this->kGram($value, 4);
+            $subsData[] = $tmpSubsData;
+            $subsDataVis[] = ['base' => $value, 'result'=>implode(' | ', $tmpSubsData)];
+        }
+        $hashesData = [];
+        $hashesDataVis = [];
+        foreach ($subsData as $key => $value) {
+            $tmpHashData = $this->rollingHash($value);
+            $hashesData[] = $tmpHashData;
+            $hashesDataVis[] = ['base' => implode(' | ', $value), 'result'=>implode('|', $tmpHashData)];
+        }
+
+        $stringsUser = [['base' => implode(' | ', $subsInsert), 'result' => implode(' | ', $hashesInsert)]];
+        $stringsData = $hashesDataVis;
+        // dd($stringsUser, $stringsData);
+        return view('analytics.rabin-karp', compact('stringsUser', 'stringsData'));
     }
 
     public function rabin_intersect(Request $req)
