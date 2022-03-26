@@ -420,7 +420,53 @@ class ThesisController extends Controller
 
     public function rabin_intersect(Request $req)
     {
-        dd($req->all());
+        $base = $this->getter();
+        $data = array_column($base[1], 'barang_nama');
+
+        // preprocessing stage of the inserted data
+        $preInsert = $this->punctuationRemoval($this->caseFolding($req->string));
+
+        // processed data of the inserted string by user
+        // $subsInsert = kGram($insert, $n);
+        $subsInsert = $this->kGram($preInsert, 4);
+        $hashesInsert = $this->rollingHash($subsInsert);
+
+        // ==============================================================================================================================================================
+        // preprocessing stage of the exxisting data
+        $preData = [];
+        foreach ($data as $key => $value) {
+            $tmpPreData = $this->punctuationRemoval($this->caseFolding($value));
+            $preData[] = $tmpPreData;
+        }
+
+        // processed data of the existing data
+        $subsData = [];
+        // foreach ($data as $key => $value) {
+        foreach ($preData as $key => $value) {
+            $tmpSubsData = $this->kGram($value,4);
+            $subsData[] = $tmpSubsData;
+        }
+        $hashesData = [];
+        foreach ($subsData as $key => $value) {
+            $tmpHashData = $this->rollingHash($value);
+            $hashesData[] = $tmpHashData;
+        }
+
+        // ==============================================================================================================================================================
+        // hash couples of the both user input and the existing data
+        $fingerprints = [];
+        foreach ($hashesData as $key => $value) {
+            // dd($value);
+            $currentResult = function($value, $hashesInsert) {
+                if (implode('|', $this->fingerprints($value, $hashesInsert)) == "") return "none";
+                return implode('|', $this->fingerprints($value, $hashesInsert));
+            };
+            // dd($currentResult);
+            $fingerprints[] = ['base' => $data[$key].' = '.implode(' | ', $value), 'result' => $currentResult($value, $hashesInsert)];
+        }
+        $stringsUser = [['base' => implode(' | ', $subsInsert), 'result' => implode(' | ', $hashesInsert)]];
+        $stringsData = $fingerprints;
+        return view('analytics.rabin-karp', compact('stringsUser', 'stringsData'));
     }
 
     public function similarity(Request $req)
