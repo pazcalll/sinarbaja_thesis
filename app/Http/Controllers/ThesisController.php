@@ -471,6 +471,61 @@ class ThesisController extends Controller
 
     public function similarity(Request $req)
     {
-        dd($req->all());
+        $base = $this->getter();
+        $data = array_column($base[1], 'barang_nama');
+        $n = 4;
+        $insert = $req->string;
+
+        // preprocessing stage of the inserted data
+        $preInsert = $this->punctuationRemoval($this->caseFolding($insert));
+
+        // processed data of the inserted string by user
+        // $subsInsert = kGram($insert, $n);
+        $subsInsert = $this->kGram($preInsert, $n);
+        $hashesInsert = $this->rollingHash($subsInsert);
+
+        // ==============================================================================================================================================================
+        // preprocessing stage of the exxisting data
+        $preData = [];
+        foreach ($data as $key => $value) {
+            $tmpPreData = $this->punctuationRemoval($this->caseFolding($value));
+            $preData[] = $tmpPreData;
+        }
+
+        // processed data of the existing data
+        $subsData = [];
+        // foreach ($data as $key => $value) {
+        foreach ($preData as $key => $value) {
+            $tmpSubsData = $this->kGram($value,$n);
+            $subsData[] = $tmpSubsData;
+        }
+        $hashesData = [];
+        foreach ($subsData as $key => $value) {
+            $tmpHashData = $this->rollingHash($value);
+            $hashesData[] = $tmpHashData;
+        }
+
+        // ==============================================================================================================================================================
+        // hash couples of the both user input and the existing data
+        $fingerprints = [];
+        foreach ($hashesData as $key => $value) {
+            $fingerprints[] = $this->fingerprints($value, $hashesInsert);
+        }
+
+        // similarity between all of them based on the fingerprints and the existing hashes
+        $similarities = [];
+        foreach ($fingerprints as $key => $value) {
+            $similarities[] = $this->diceSimilarity($value, $hashesData[$key], $hashesInsert);
+            // dd($this->diceSimilarity($value, $hashesData[$key], $hashesInsert));
+        }
+        $similaritiesAnalytics = [];
+        foreach ($data as $key => $value) {
+            $similaritiesAnalytics[] = ['base' => $value, 'result'=>$similarities[$key]];
+        }
+        // dd($similaritiesAnalytics);
+        $stringsUser = [['base' => $req->string, 'result' => implode(' | ', $hashesInsert)]];
+        $stringsData = $similaritiesAnalytics;
+        return view('analytics.rabin-karp', compact('stringsUser', 'stringsData'));
+        // dd($req->all());
     }
 }
