@@ -520,7 +520,7 @@ class ThesisController extends Controller
         }
         $similaritiesAnalytics = [];
         foreach ($data as $key => $value) {
-            $similaritiesAnalytics[] = ['base' => $value, 'result'=>$similarities[$key]];
+            $similaritiesAnalytics[] = ['base' => $value, 'result'=>$similarities[$key].'%'];
         }
         // dd($similaritiesAnalytics);
         $stringsUser = [['base' => $req->string, 'result' => implode(' | ', $hashesInsert)]];
