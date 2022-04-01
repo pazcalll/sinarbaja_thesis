@@ -82,6 +82,37 @@ class ThesisController extends Controller
         return array_intersect($hashes1, $hashes2);
     }
 
+    function fingerprintTester($hashes1, $hashes2, $subsData, $subsInsert)
+    {
+        try {
+            // the fingerprint looks for the hash couples or the intersection of hash between the both existing hash collections
+            $tmpIntersect = array_intersect($hashes2, $hashes1);
+            // in order to get the correct hash value, there will be a function to check its real substring
+            // if the both substrings are also match, the hash couple will be counted
+            // dd($tmpIntersect);
+            $toReturn = [];
+            $checkpoint = 0;
+            foreach ($tmpIntersect as $key => $value) {
+                // if ($hashes1 == $hashes2) {
+                    
+                //     return array_intersect($hashes1, $hashes2);
+                // }
+                if ($value == $hashes2[$key]) {
+                    for ($i=$checkpoint; $i < count($subsData); $i++) { 
+                        if ($subsInsert[$key] == $subsData[$i]) {
+                            $toReturn[$key] = $value;
+                            $checkpoint = $key;
+                        }
+                    }
+                }
+            }
+            return $toReturn;
+            // dd($key, $subsData[$key], $subsInsert[$key]);
+        } catch (\Throwable $th) {
+            dd($key, $subsData, $subsInsert);
+        }
+    }
+
     function window($hashes, $w)
     {
         // to save temporary window values of the hash collection
@@ -178,7 +209,7 @@ class ThesisController extends Controller
         // hash couples of the both user input and the existing data
         $fingerprints = [];
         foreach ($hashesData as $key => $value) {
-            $fingerprints[] = $this->fingerprints($value, $hashesInsert);
+            $fingerprints[] = $this->fingerprintTester($value, $hashesInsert, $subsData[$key], $subsInsert);
         }
 
         // similarity between all of them based on the fingerprints and the existing hashes
@@ -455,14 +486,12 @@ class ThesisController extends Controller
         // ==============================================================================================================================================================
         // hash couples of the both user input and the existing data
         $fingerprints = [];
+        $currentResult = function($value, $hashesInsert, $subsData, $subsInsert, $key) {
+            if (implode('|', $this->fingerprintTester($value, $hashesInsert, $subsData[$key], $subsInsert)) == "") return "none";
+            return implode('|', $this->fingerprintTester($value, $hashesInsert, $subsData[$key], $subsInsert));
+        };
         foreach ($hashesData as $key => $value) {
-            // dd($value);
-            $currentResult = function($value, $hashesInsert) {
-                if (implode('|', $this->fingerprints($value, $hashesInsert)) == "") return "none";
-                return implode('|', $this->fingerprints($value, $hashesInsert));
-            };
-            // dd($currentResult);
-            $fingerprints[] = ['base' => $data[$key].' = '.implode(' | ', $value), 'result' => $currentResult($value, $hashesInsert)];
+            $fingerprints[] = ['base' => $data[$key].' = '.implode(' | ', $value), 'result' => $currentResult($value, $hashesInsert, $subsData, $subsInsert, $key)];
         }
         $stringsUser = [['base' => implode(' | ', $subsInsert), 'result' => implode(' | ', $hashesInsert)]];
         $stringsData = $fingerprints;
@@ -509,7 +538,7 @@ class ThesisController extends Controller
         // hash couples of the both user input and the existing data
         $fingerprints = [];
         foreach ($hashesData as $key => $value) {
-            $fingerprints[] = $this->fingerprints($value, $hashesInsert);
+            $fingerprints[] = $this->fingerprintTester($value, $hashesInsert, $subsData[$key], $subsInsert);
         }
 
         // similarity between all of them based on the fingerprints and the existing hashes
