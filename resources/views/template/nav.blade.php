@@ -16,16 +16,16 @@ $id_group = App\GroupUser::where('id', Auth::user()->id_group)->get('group_name'
 							<span class="site-menu-arrow"></span>
 						</a>
 						<ul class="site-menu-sub">
-							<li class="site-menu-item item-point active" data-url='{{url("analytics/pre-casefolding")}}'>
-								<a class="animsition-link" href="">
+							<li class="site-menu-item item-point" data-url='{{url("analytics/pre-casefolding")}}'>
+								<a class="animsition-link" href="javascript:void(0)">
 									<span class="site-menu-title">List</span>
 								</a>
 							</li>
-							{{-- <li class="site-menu-item item-point" data-url='{{url("analytics/pre-punctuation")}}'>
+							<li class="site-menu-item item-point" data-url='{{url("analytics/pre-punctuation")}}'>
 								<a class="animsition-link" href="">
 									<span class="site-menu-title">Stock</span>
 								</a>
-							</li> --}}
+							</li>
 						</ul>
 					</li>
 					<li class="site-menu-item has-sub">
@@ -36,7 +36,7 @@ $id_group = App\GroupUser::where('id', Auth::user()->id_group)->get('group_name'
 						</a>
 						<ul class="site-menu-sub">
 							<li class="site-menu-item item-point" data-url='{{url("analytics/rabin-kgram")}}'>
-								<a class="animsition-link" href="">
+								<a class="animsition-link" href="javascript:void(0)">
 									<span class="site-menu-title">List</span>
 								</a>
 							</li>
@@ -51,6 +51,12 @@ $id_group = App\GroupUser::where('id', Auth::user()->id_group)->get('group_name'
 								</a>
 							</li> --}}
 						</ul>
+					</li>
+                    <li class="site-menu-item item-point" data-url='{{url("dashboard/table-users")}}'>
+						<a href="javascript:void(0)">
+							<i class="site-menu-icon md-view-compact" aria-hidden="true"></i>
+							<span class="site-menu-title">Users</span>
+						</a>
 					</li>
                 </ul>
             </div>

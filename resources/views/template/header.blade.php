@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
-    <title>Dashboard | Remark Material Admin Template</title>
+    <title>Thesis App</title>
 
     <link rel="apple-touch-icon" href="{{ asset('public/themeforest/page-base/images/apple-touch-icon.png') }}">
     <link rel="shortcut icon" href="{{ asset('public/themeforest/page-base/images/favicon.ico') }}">
@@ -117,43 +117,21 @@
 <body class="animation {{ $bodyType ?? 'dashboard' }}">
     <nav class="site-navbar navbar navbar-default navbar-fixed-top navbar-mega" role="navigation">
         <div class="navbar-header">
-            <a class="navbar-toggler md-arrow-left navbar-toggler-left" href="{{ url('/') }}">
-            </a>
-
-            <button type="button" class="navbar-toggler" data-target="#site-navbar-collapse" data-toggle="collapse" aria-expanded="false">
-                <i class="icon md-more" aria-hidden="true"></i>
-            </button>
-
-            <div class="navbar-brand navbar-brand-center">
-                <a class="brand" href="{{ url('/') }}">
-                    {{-- <img class="navbar-brand-logo" src="{{ asset('public/themeforest/page-base/images/logo.png') }}" title="Remark">
-                    <span class="navbar-brand-text hidden-xs-down white">ECommerce</span> --}}
-                </a>
-            </div>
+            <a class="md-arrow-left navbar-toggler-left" style="width: inherit" href="{{ url('/') }}"></a>
         </div>
 
         <div class="navbar-container container-fluid">
             <!-- Navbar Collapse -->
             <div class="collapse navbar-collapse navbar-collapse-toolbar" id="site-navbar-collapse">
                 <!-- Navbar Toolbar -->
-                <ul class="nav navbar-toolbar">
-                    @if (url()->current() !== url('/'))
-                    <li class="nav-item hidden-float" id="toggleMenubar">
-                        <a class="nav-link" @if ((Auth::user()->id_group ?? '') === 1) data-toggle="menubar" @endif
-                            href="javascript:history.go(-1)">
-                            <i class="icon @if ((Auth::user()->id_group ?? '') === 1) hamburger hamburger-arrow-left @else md-arrow-left @endif ">
-                                <span class="sr-only">Toggle menubar</span>
-                                <span class="hamburger-bar"></span>
-                            </i>
-                        </a>
-                    </li>
-                    @endif
+                {{-- <ul class="nav navbar-toolbar">
+                    
                     <li class="nav-item hidden-sm-down" id="toggleFullscreen">
                         <a class="nav-link icon icon-fullscreen" data-toggle="fullscreen" href="#" role="button">
                             <span class="sr-only">Toggle fullscreen</span>
                         </a>
                     </li>
-                </ul>
+                </ul> --}}
                 <!-- End Navbar Toolbar -->
 
                 <!-- Navbar Toolbar Right -->

@@ -9,6 +9,7 @@ use App\Http\Controllers\HargaProdukUserController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ThesisUserController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -145,6 +146,11 @@ Route::prefix('analytics')->group(function()
     Route::post('/rabin-hashing', 'ThesisController@rabin_hashing');
     Route::post('/rabin-intersect', 'ThesisController@rabin_intersect');
     Route::post('/similarity', 'ThesisController@similarity');
+});
+
+Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], function ()
+{
+    Route::get('/table-users', [ThesisUserController::class, 'tableUser']);
 });
 
 // admin
