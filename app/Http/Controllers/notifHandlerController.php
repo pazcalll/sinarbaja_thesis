@@ -6,37 +6,27 @@ use Illuminate\Http\Request;
 use DB,Response;
 class notifHandlerController extends Controller
 {
-    public function count_harganull(){
-      $get = DB::table('harga_produk_user AS a')
-      ->select('b.id','b.id_group','b.name',DB::raw('COUNT(a.id) AS count'))
-      ->whereNull('a.harga_user')
-      ->leftJoin('users AS b','a.id_user','b.id')
-      ->get();
-      // $value->id.'/'.$value->name.'/'.$value->id_group.
+  public function data_notifikasi(){
+    $get = DB::table('tbl_log_activity')
+    ->orderBy('id','DESC')
+    ->get();
+    if (count($get) > 0) {
       foreach ($get as $key => $value) {
-        $output[] ='
-          <div class="col-12">
-          <a href="'Route::currentRouteName()'">
-            <div class="card border-bottom shadow-sm bg-white rounded">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col">
-                    <div class="text-info" ><h4>'.$value->name.'</h4></div>
-                  </div>
-                  <div class="col">
-                    <div style="float:right;padding-right:20px">
-                        <h6 class="text-danger">'.$value->count.' Unit harga kosong</h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </a>
-          </div>
-          ';
+        $keterangan = json_decode($value->ket);
+        foreach ($keterangan as $keterangan) {
+          $admin = DB::table('users')->where('id',$keterangan->ket->admin)->first();
+          $user = DB::table('users')->where('id',$keterangan->ket->user)->first();
+          $result[] = array(
+            'admin' => $admin->name,
+            'user' => $user->name,
+            'status' => $keterangan->ket->status == 'true'? 'Aktif': 'Tidak Aktif'
+          );
+          $output[] = view('template.pages.notifikasi',compact('keterangan','result','value'))->render();
+          $result = [];
+          // dd($output);
+        }
       }
-      $data['count'] = count($get);
-      $data['data'] = $output;
-      return response()->json($data,200);
     }
+    echo json_encode($output);
+  }
 }

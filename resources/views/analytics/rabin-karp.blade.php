@@ -1,4 +1,4 @@
-<div class="rabin" style="overflow-x: auto; overflow-y: hidden; word-wrap: break-word;">
+<div class="rabin row" style="overflow-x: auto; overflow-y: hidden; word-wrap: break-word;">
     {{-- <button class="btn btn-primary rounded style-changer" data-url={{url("analytics/pre-casefolding")}}>Case Folding</button>
     <button class="btn btn-outline-primary rounded style-changer" data-url={{url("analytics/pre-punctuation")}}>Punctuation Removal</button> --}}
     @isset($stringsUser)
