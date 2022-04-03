@@ -1,4 +1,5 @@
-<form action="javascript:void(0)" id="uploadExcel">
+<form id="uploadExcel">
+    {{ csrf_field() }} {{ method_field('POST') }}
     <div class="modal fade example-modal modal-3d-sign" id="modalUploadExcel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-simple modal-center modal" role="document">
             <div class="modal-content">

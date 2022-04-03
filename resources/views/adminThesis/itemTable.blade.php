@@ -32,5 +32,26 @@
                 "type" : "GET"
             }
         });
+        $('#uploadExcel').on('submit', function(e) {
+            e.preventDefault()
+            let fd = new FormData(this);
+            let myfile = $('#file_excel')[0].files;
+            if (myfile.length > 0){
+                $.ajax({
+                    url: '{{ route("import_excel_item") }}',
+                    // headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    type: 'POST',
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    success: (res) => {
+                        console.log('asdfasdf')
+                    },
+                    error: (err) => {
+                        // console.error(err)
+                    }
+                })
+            }
+        })
     })
 </script>

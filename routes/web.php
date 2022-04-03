@@ -155,6 +155,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], function ()
     Route::get('listItem', [ThesisItemController::class, 'listData'])->name('data_barang');
     Route::get('items', [ThesisItemController::class, 'index']);
     Route::get('export_barang', [ThesisItemController::class, 'export_excel'])->name('export_excel_item');
+    Route::post('import_barang', [ThesisItemController::class, 'import_excel'])->name('import_excel_item');
 });
 
 // admin

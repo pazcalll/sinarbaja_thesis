@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\BarangExport;
+use App\Imports\BarangImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Excel;
@@ -84,6 +85,128 @@ class ThesisItemController extends Controller
     public function destroy($id)
     {
         //
+    }
+    
+    public function import_excel(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $extensions = array("xls","xlsx","xlm","xla","xlc","xlt","xlw","csv");
+            $result = array($request->file('file_excel')->getClientOriginalExtension());
+            if(in_array($result[0],$extensions)){
+                $path = $request->file('file_excel')->getRealPath();
+                $file = $request->file('file_excel');
+                $num = 1;
+                $num_harga_group = 1;
+                // membuat nama file unik
+                $nama_file = rand().$file->getClientOriginalName();
+                $array = Excel::toArray(new BarangImport, $file);
+                dd($array);
+                foreach ($array as $key => $value) {
+                    $getArr = $value;
+                }
+                foreach ($getArr as $key => $value) {
+                    $satuan = DB::table('tbl_satuan')->select('satuan_id')->where('satuan_satuan',$value['satuan'])->first();
+                    if ($satuan == null) {
+                        DB::table('tbl_satuan')->insert(['satuan_nama' => $value['satuan'], 'satuan_satuan' => $value['satuan']]);
+                        $satuan = DB::table('tbl_satuan')->select('satuan_id')->where('satuan_satuan',$value['satuan'])->first();
+                    }
+                    $product[] = array(
+                        'barang_id' => $num,
+                        'satuan_id' => $satuan->satuan_id,
+                        'barang_nama' => $value['nama_item'],
+                        'barang_kode' => $value['kode_item'],
+                        'barang_alias' => $value['jenis'],
+                        'barangnama_asli' => $value['nama_barang_asli']
+                    );
+                    $harga_group[] = array(
+                        'id_barang' => $num,
+                        '2' => $value['harga_level_1'],
+                        '3' => $value['harga_level_2'],
+                        '4' => $value['harga_level_3'],
+                        '5' => $value['harga_level_4']
+                    );
+
+                    // $harga[]
+                    $num++;
+                }
+                foreach ($harga_group as $key => $values) {
+                    for ($i=2; $i < 6; $i++) {
+                        $set_harga[] = array(
+                            'id' => $num_harga_group++,
+                            'id_group' => $i,
+                            'id_product' => $values['id_barang'],
+                            'harga_group' => $values[$i],
+                        );
+                        $tbl_detail_harga[] = array(
+                            'id_group' => $i,
+                            'barang_id' => $values['id_barang'],
+                            'detail_harga_barang_tanggal' => date('Y-m-d'),
+                            'detail_harga_barang_harga_jual' => $values[$i]
+                        );
+                    }
+                }
+                DB::table('tbl_barang')->delete();
+                $insert_data = collect($product);
+                $chunks = $insert_data->chunk(1000);
+                foreach ($chunks as $chunk){
+                    $insert_tbl_barang = DB::table('tbl_barang')->insert($chunk->toArray());
+                }
+                if ($insert_tbl_barang == 'true') {
+                    DB::table('harga_produk_group')->delete();
+                    DB::table('tbl_detail_harga_barang')->delete();
+                    DB::statement("ALTER TABLE tbl_detail_harga_barang AUTO_INCREMENT =  1");
+                    $data_grpup_harga = collect($set_harga);
+                    $chunks_harga = $data_grpup_harga->chunk(1000);
+                    foreach ($chunks_harga as $chunks_hargas){
+                        $insert_tbl_harga_group = DB::table('harga_produk_group')->insert($chunks_hargas->toArray());
+                    }
+                    $data_detail_harga = collect($tbl_detail_harga);
+                    $chunks_detail_harga = $data_detail_harga->chunk(1000);
+                    foreach ($chunks_detail_harga as $chunks_detail_hargas){
+                        $insert_tbl_detail_harga = DB::table('tbl_detail_harga_barang')->insert($chunks_detail_hargas->toArray());
+                    }
+                }
+                if ($insert_tbl_harga_group == 'true' and $insert_tbl_detail_harga == 'true') {
+                    $users = DB::table('users')->select('id AS user_id','id_group AS id_group')->get();
+                    foreach ($users as $key => $value) {
+                        $harga_group_get = DB::table('harga_produk_group')->where('id_group',$value->id_group)->get();
+                        if (count($harga_group_get) > 0) {
+                            foreach ($harga_group_get as $key => $value_harga) {
+                                $groupOld = DB::table('harga_produk_user')
+                                    ->where('id_user','=',$value->user_id)
+                                    ->where('id_product',$value_harga->id_product)
+                                    ->first();
+                                $idG = !empty($groupOld)?$groupOld->id_group:$value->id_group;
+                                $newHarga = DB::table('harga_produk_group')
+                                    ->where('id_group',$idG)
+                                    ->where('id_product',$value_harga->id_product)
+                                    ->first();
+                                $harga_user_group[] = array(
+                                    'id_group' => $idG,
+                                    'id_product' => $value_harga->id_product,
+                                    'id_user' => $value->user_id,
+                                    'harga_user' => $newHarga->harga_group
+                                );
+                            }
+                        }
+                    }
+                }
+                DB::table('harga_produk_user')->delete();
+                DB::statement("ALTER TABLE harga_produk_user AUTO_INCREMENT =  1");
+                $data_harga_user = collect($harga_user_group);
+                $chunk_harga_user = $data_harga_user->chunk(1000);
+                foreach ($chunk_harga_user as $chunk){
+                    $inser_tbl_harga_user = DB::table('harga_produk_user')->insert($chunk->toArray());
+                }
+                if ($inser_tbl_harga_user) {
+                    DB::commit();
+                    return response('berhasil');
+                }
+            }
+        } catch (\Exception $e) {
+            dd($e);
+        }
     }
 
     public function export_excel()
