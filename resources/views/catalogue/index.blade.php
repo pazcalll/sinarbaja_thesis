@@ -74,19 +74,6 @@ $bodyType = 'site-menubar-unfold';
 @endsection
 
 @section('page')
-{{-- <div class="row">
-    <div class="col-12">
-        <div class="py-15">
-            <div class="text-center">
-                <div class="btn-group" aria-label="Basic example" role="group">
-                    <a type="button" class="btn btn-icon btn-primary waves-effect waves-classic" style="color: #fff"><i class="icon md-collection-image" aria-hidden="true"></i></a>
-                    <a class="btn btn-icon btn-light waves-effect waves-classic" href="{{ url('index-tabel') }}" style="color: #3f51b5"><i class="icon md-view-list" aria-hidden="true"></i></a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> --}}
-
 <div class="row">
     <div class="col-12">
         <div class="example-wrap">
@@ -94,6 +81,7 @@ $bodyType = 'site-menubar-unfold';
                 <div style="display: none; width: 80%; margin: 0 auto;" id="search-res">
                     <div class="panel" style="margin: 0 auto;">
                         <div class="panel-body">
+                            <div id="loading-notification"></div>
                             <button class="btn btn-info" onclick="analyticsPage()">Analytics</button>
                             <table id="search-table" style="margin: 0 auto; width: 100%;">
                                 <thead style="border-bottom: 1px solid gray;">
@@ -110,30 +98,6 @@ $bodyType = 'site-menubar-unfold';
                                     
                                 </tbody>
                             </table>
-                            {{-- <div class="search-navigator" style="display: flex;">
-                                <div style="display:flex; margin: 0 auto">
-                                    <select id="search-navigator-select" class="form-control">
-                                        <option value="5">5</option>
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                    </select>
-                                    <p style="margin-top:5px; margin-left:5px"> Baris</p>
-                                </div>
-                                <nav style="display:flex; margin: 0 auto">
-                                    <ul class="pagination">
-                                        <li class="page-item">
-                                            <span class="page-link">Previous</span>
-                                        </li>
-                                        <li class="page-item active" aria-current="page">
-                                            <a class="page-link" href="#">1</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#">Next</a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -182,8 +146,6 @@ $bodyType = 'site-menubar-unfold';
             const {
                 data
             } = res
-            // console.log(res)
-            // console.log("jj",data)
             if (carts == null) {
                 carts = []
             }
@@ -228,6 +190,7 @@ $bodyType = 'site-menubar-unfold';
     }) // end of jquery
 
     function search(input) {
+        $('#loading-notification').html('Loading, please wait...')
         $.ajax({
             type: "GET",
             url: `{{ url('data/rabin') }}/${4}/${input}`,
@@ -334,6 +297,7 @@ $bodyType = 'site-menubar-unfold';
 
                     });
                 });
+                $('#loading-notification').html('')
                 // bindView(response.data)
                 // $('#product-wrapper').empty()
             },
@@ -393,10 +357,6 @@ $bodyType = 'site-menubar-unfold';
                     }
                 })
                 hargaPerGroup=response
-                // console.log(hargaPerGroup)
-                // if ('{{Auth::user()}}' != []) {
-                //     console.log('{{Auth::user()}}')
-                // }
             },
             error: (err) =>{
                 console.log(err)
@@ -414,8 +374,6 @@ $bodyType = 'site-menubar-unfold';
         }
     })
     function bindView(data) {
-        // path.push(data)
-        // console.log(path)
         currentPage = data.current_page
 
         $('#loader').hide()
@@ -521,7 +479,6 @@ $bodyType = 'site-menubar-unfold';
     let qtyBuyItem = 0
     let param = {}
     $(document).on('click', '.buyitem', function() {
-        // i = i+1
         const $parent = $($(this).parent())
         qtyBuyItem = $($parent.children()[0]).val()
 
@@ -545,9 +502,6 @@ $bodyType = 'site-menubar-unfold';
         $('#btn-buy-item').data('id', $(this).data('id'))
         $('#btn-buy-item').data('total', totalBuyItem)
         $('#btn-buy-item').data('qty', qtyBuyItem)
-        // $('#btn-buy-item').click(function() {
-
-        // })
     })
     $(document).on('click', '#btn-buy-item', function() {
         var arr = []
@@ -571,25 +525,6 @@ $bodyType = 'site-menubar-unfold';
 
         addToChart(product, qty, id)
     });
-
-    function move(path, id) {
-        $('#loader').show()
-
-        var json = $.getJSON({
-            url: `${path}?page=${id}`,
-            type: 'GET',
-            async: true
-        }).then((res) => {
-            const {
-                data
-            } = res
-            if (carts == null) {
-                carts = []
-            }
-
-            bindView(data)
-        });
-    }
 
     function analyticsPage() {
         window.open('{{url("analytics")}}/'+$('#input_search').val()).focus()

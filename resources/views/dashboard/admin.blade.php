@@ -21,8 +21,8 @@
                                     <span class="counter-number-related text-capitalize">Items</span>
                                     
                                 </div>
-                                <span
-                                    class="counter-number" style="color: red; font-size:24pt;">0</span>
+                                {{-- <span
+                                    class="counter-number" style="color: red; font-size:24pt;">0</span> --}}
                             </div>
                             <div class="white">
                                 <i class="icon icon-circle icon-2x md-archive bg-blue-600" aria-hidden="true"></i>
@@ -39,8 +39,8 @@
                                     <span class="counter-number-related text-capitalize">Orders</span>
                                     
                                 </div>
-                                <span
-                                    class="counter-number" style="color: red; font-size:24pt;">0</span>
+                                {{-- <span
+                                    class="counter-number" style="color: red; font-size:24pt;">0</span> --}}
                             </div>
                             <div class="white">
                                 <i class="icon icon-circle icon-2x md-collection-item bg-blue-600" aria-hidden="true"></i>

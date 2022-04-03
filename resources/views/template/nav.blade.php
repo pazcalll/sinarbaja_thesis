@@ -16,7 +16,7 @@ $id_group = App\GroupUser::where('id', Auth::user()->id_group)->get('group_name'
 							<span class="site-menu-arrow"></span>
 						</a>
 						<ul class="site-menu-sub">
-							<li class="site-menu-item item-point" data-url='{{url("analytics/pre-casefolding")}}'>
+							<li class="site-menu-item item-point" data-url='{{url("dashboard/items")}}'>
 								<a class="animsition-link" href="javascript:void(0)">
 									<span class="site-menu-title">List</span>
 								</a>
