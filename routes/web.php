@@ -152,6 +152,7 @@ Route::prefix('analytics')->group(function()
 Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], function ()
 {
     Route::get('table-users', [ThesisUserController::class, 'tableUser']);
+    Route::post('delete-user', [ThesisUserController::class, 'destroy'])->name('deleteUser');
     Route::get('listItem', [ThesisItemController::class, 'listData'])->name('data_barang');
     Route::get('items', [ThesisItemController::class, 'index']);
     Route::get('export_barang', [ThesisItemController::class, 'export_excel'])->name('export_excel_item');

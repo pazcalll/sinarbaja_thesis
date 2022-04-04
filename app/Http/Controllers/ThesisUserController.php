@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ThesisUserController extends Controller
@@ -78,14 +79,17 @@ class ThesisUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
         //
+        $delete = DB::table('users')->where('id', $request->id)->delete();
+        return $delete;
     }
 
     public function tableUser()
     {
-        $users = DB::select('SELECT * From Users as u left join group_users as gu on u.id_group = gu.id where gu.id != 1');
+        $this_user = Auth::user()->id;
+        $users = DB::select('SELECT * From Users where id != '.$this_user.'');
         return view('adminThesis.userList', compact('users'));
     }
 }

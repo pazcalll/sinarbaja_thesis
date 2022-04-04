@@ -45,10 +45,19 @@
                     processData: false,
                     contentType: false,
                     success: (res) => {
-                        console.log('asdfasdf')
+                        $('#table_item').DataTable().destroy()
+                        $('#table_item').empty()
+                        $('#table_item').DataTable({
+                            "processing" : true,
+                            "searching" : false,
+                            "ajax" : {
+                                "url" : "{{ route('data_barang') }}",
+                                "type" : "GET"
+                            }
+                        });
                     },
                     error: (err) => {
-                        // console.error(err)
+                        console.error(err)
                     }
                 })
             }

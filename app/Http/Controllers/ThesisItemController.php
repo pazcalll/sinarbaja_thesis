@@ -101,7 +101,7 @@ class ThesisItemController extends Controller
                 // membuat nama file unik
                 $nama_file = rand().$file->getClientOriginalName();
                 $array = Excel::toArray(new BarangImport, $file);
-                dd($array);
+                // dd($array);
                 foreach ($array as $key => $value) {
                     $getArr = $value;
                 }
@@ -201,7 +201,7 @@ class ThesisItemController extends Controller
                 }
                 if ($inser_tbl_harga_user) {
                     DB::commit();
-                    return response('berhasil');
+                    return response('Success');
                 }
             }
         } catch (\Exception $e) {

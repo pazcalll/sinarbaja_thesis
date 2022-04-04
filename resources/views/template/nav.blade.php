@@ -52,7 +52,7 @@ $id_group = App\GroupUser::where('id', Auth::user()->id_group)->get('group_name'
 							</li> --}}
 						</ul>
 					</li>
-                    <li class="site-menu-item item-point" data-url='{{url("dashboard/table-users")}}'>
+                    <li class="site-menu-item item-point users-feature" data-url='{{url("dashboard/table-users")}}'>
 						<a href="javascript:void(0)">
 							<i class="site-menu-icon md-view-compact" aria-hidden="true"></i>
 							<span class="site-menu-title">Users</span>
