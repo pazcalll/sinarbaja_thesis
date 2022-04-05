@@ -9,6 +9,7 @@ use App\Http\Controllers\HargaProdukUserController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ThesisGroupUserController;
 use App\Http\Controllers\ThesisItemController;
 use App\Http\Controllers\ThesisUserController;
 use App\Http\Controllers\UserController;
@@ -153,6 +154,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], function ()
 {
     Route::get('table-users', [ThesisUserController::class, 'tableUser']);
     Route::post('delete-user', [ThesisUserController::class, 'destroy'])->name('deleteUser');
+    Route::get('get-group-user/{id}', [ThesisGroupUserController::class, 'show']);
+    Route::post('set-group-user', [ThesisGroupUserController::class, 'update'])->name('setGroupUser');
     Route::get('listItem', [ThesisItemController::class, 'listData'])->name('data_barang');
     Route::get('items', [ThesisItemController::class, 'index']);
     Route::get('export_barang', [ThesisItemController::class, 'export_excel'])->name('export_excel_item');
