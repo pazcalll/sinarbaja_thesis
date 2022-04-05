@@ -264,14 +264,25 @@ class ThesisItemController extends Controller
             $row[] = $list->satuan_nama;
             $row[] = $list->stok;
             $row[] = '<a onclick="showListHarga('.$list->barang_id.')" class="btn btn-xs btn-info" data-toggle="tooltip" data-placement="botttom" title="Lihat Harga Barang" style="color:white;"><i class="fa fa-list"> Cek Harga</i></a>';
-            $row[] = '<div class="btn-group"><a href="" class="btn btn-xs btn-success" data-toggle="tooltip" data-placement="botttom" title="Detail Harga Barang"><i class="fa fa-plus"></i></a>
-            <a onclick="editForm('.$list->barang_id.')" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="botttom" title="Edit Data"  style="color:white;"><i class="fa fa-edit"></i></a>
-            <a onclick="barcode('.$list->barang_id.','.$list->satuan_id.')" class="btn btn-xs btn-warning" data-toggle="tooltip" data-placement="botttom" title="QR Code"  style="color:black;"><i class="fa fa-qrcode"></i></a>
-            <a onclick="deleteData('.$list->barang_id.')" class="btn btn-xs btn-danger" data-toggle="tooltip" data-placement="botttom" title="Hapus Data" style="color:white;"><i class="fa  fa-trash"></i></a></div>';
+            // $row[] = '<div class="btn-group"><a href="" class="btn btn-xs btn-success" data-toggle="tooltip" data-placement="botttom" title="Detail Harga Barang"><i class="fa fa-plus"></i></a>
+            // <a onclick="editForm('.$list->barang_id.')" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="botttom" title="Edit Data"  style="color:white;"><i class="fa fa-edit"></i></a>
+            // <a onclick="barcode('.$list->barang_id.','.$list->satuan_id.')" class="btn btn-xs btn-warning" data-toggle="tooltip" data-placement="botttom" title="QR Code"  style="color:black;"><i class="fa fa-qrcode"></i></a>
+            // <a onclick="deleteData('.$list->barang_id.')" class="btn btn-xs btn-danger" data-toggle="tooltip" data-placement="botttom" title="Hapus Data" style="color:white;"><i class="fa  fa-trash"></i></a></div>';
             $data[] = $row;
 
         }
         $output = array("data" => $data);
         return response()->json($output);
+    }
+
+    public function list_harga($id){
+        $harga=DB::select("SELECT tb.barang_id, tb.barang_nama, td.detail_harga_barang_tanggal, td.detail_harga_barang_harga_jual, gu.group_name
+            FROM tbl_barang as tb LEFT JOIN tbl_detail_harga_barang as td
+            ON tb.barang_id = td.barang_id
+            RIGHT JOIN group_users as gu
+            ON td.id_group = gu.id
+            WHERE td.barang_id = $id
+        ");
+        return response(json_encode((array)$harga), 200);
     }
 }
