@@ -15,7 +15,7 @@
                         <div class="input-group col-12 user-name-div">
                             <h4></h4>
                         </div>
-                        <input type="hidden" name="id" id="user-id">
+                        <input type="hidden" name="user-id-group-edit" id="user-id-group-edit">
                     </div>
                     <div class="form-group col-12">
                         <label class="col-4 control-label">User Group : </label>
@@ -27,7 +27,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" form="setGroupUser" class="btn btn-primary">Delete</button>
+                    <button type="submit" form="setGroupUser" class="btn btn-primary">Change Group</button>
                 </div>
             </div>
         </div>

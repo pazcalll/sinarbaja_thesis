@@ -89,7 +89,11 @@ class ThesisUserController extends Controller
     public function tableUser()
     {
         $this_user = Auth::user()->id;
-        $users = DB::select('SELECT * From Users where id != '.$this_user.'');
+        $users = DB::select('SELECT u.*, gu.group_name as group_name
+            From users as u 
+            left join group_users as gu on u.id_group = gu.id
+            where u.id != '.$this_user.'
+        ');
         return view('adminThesis.userList', compact('users'));
     }
 }
