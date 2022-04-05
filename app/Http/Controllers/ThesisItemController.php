@@ -285,4 +285,44 @@ class ThesisItemController extends Controller
         ");
         return response(json_encode((array)$harga), 200);
     }
+
+    public function stockTable()
+    {
+        return view('adminThesis.itemStock');
+    }
+
+    public function allItemStock(){
+        $persediaan = DB::select("SELECT *
+            FROM
+                (
+                SELECT
+                    tls.*,
+                    tb.barang_kode AS kode_barang,
+                    tb.barang_nama AS nama_barang,
+                    SUM( tls.unit_masuk - tls.unit_keluar ) AS stok,
+                    ts.satuan_nama AS nama_satuan
+                FROM
+                    tbl_log_stok AS tls
+                    LEFT JOIN tbl_barang AS tb ON tls.id_barang = barang_id
+                    LEFT JOIN tbl_satuan AS ts ON tls.id_satuan = ts.satuan_id
+                GROUP BY
+                    id_barang,
+                    id_satuan
+                ) as tbl
+        ");
+        $no = 0;
+        $data = [];
+        foreach ($persediaan as $key => $value) {
+            $no++;
+            $row = array();
+            $row[] = $no;
+            $row[] = $value->kode_barang;
+            $row[] = $value->nama_barang;
+            $row[] = $value->stok;
+            $row[] = $value->nama_satuan;
+            $data[] = $row;
+        }
+        $output = array("data" => $data);
+        return response()->json($output);
+    }
 }

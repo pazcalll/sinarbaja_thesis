@@ -5,9 +5,9 @@
     <table id="table_item" class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th style="width:5%">No #</th>
-                <th style="width:20%">Type</th>
-                <th style="width:10%">Real Name</th>
+                <th style="width:5%">No.</th>
+                <th style="width:10%">Type</th>
+                <th style="width:20%">Real Name</th>
                 <th style="width:10%">Code</th>
                 <th style="width:20%">Name</th>
                 <th style="width:10%">Unit</th>
@@ -20,7 +20,7 @@
         </tbody>
     </table>
 </div>
-@include('adminThesis.excelModal')
+@include('adminThesis.modal.modalExcelBarang')
 @include('adminThesis.modal.modalHargaBarang')
 
 <script>

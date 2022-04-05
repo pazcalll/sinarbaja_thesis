@@ -21,7 +21,7 @@ $id_group = App\GroupUser::where('id', Auth::user()->id_group)->get('group_name'
 									<span class="site-menu-title">List</span>
 								</a>
 							</li>
-							<li class="site-menu-item item-point" data-url='{{url("analytics/pre-punctuation")}}'>
+							<li class="site-menu-item item-point" data-url='{{route("stock_table")}}'>
 								<a class="animsition-link" href="">
 									<span class="site-menu-title">Stock</span>
 								</a>
