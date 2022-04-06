@@ -1,7 +1,7 @@
 <div class="container nowrap" style="width: 100%; right: 0px; background-color: white;" id="main-content">
     <h2>Stock Master</h2>
     <a href="javascript:void(0)" onclick="$('#modalUploadExcel').modal('show')" class="card-body-title"><button class="btn btn-success"><i class="icon md-upload"></i> Upload Stock</button></a>
-    <a href="javascript:void(0)" class="card-body-title"><button class="btn btn-warning"><i class="icon md-download"></i> Download Stock</button></a>
+    <a href="{{route('export_stock')}}" class="card-body-title"><button class="btn btn-warning"><i class="icon md-download"></i> Download Stock</button></a>
     <table id="table_stock" class="table table-bordered table-striped">
         <thead>
             <tr>

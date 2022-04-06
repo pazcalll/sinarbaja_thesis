@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\BarangExport;
+use App\Exports\StockExport;
 use App\Imports\BarangImport;
 use App\Imports\StokImport;
 use Illuminate\Http\Request;
@@ -361,6 +362,16 @@ class ThesisItemController extends Controller
             return response(".$insert.", 200);
         } catch (\Throwable $th) {
             //throw $th;
+            return response($th, 500);
+        }
+    }
+
+    public function exportStock()
+    {
+        try {
+            //code...
+            return Excel::download(new StockExport, 'stock.xlsx');
+        } catch (\Throwable $th) {
             return response($th, 500);
         }
     }
