@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Exports\BarangExport;
 use App\Imports\BarangImport;
+use App\Imports\StokImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Excel;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class ThesisItemController extends Controller
 {
@@ -201,7 +204,7 @@ class ThesisItemController extends Controller
                 }
                 if ($inser_tbl_harga_user) {
                     DB::commit();
-                    return response('Success');
+                    return response('Success', 200);
                 }
             }
         } catch (\Exception $e) {
@@ -324,5 +327,41 @@ class ThesisItemController extends Controller
         }
         $output = array("data" => $data);
         return response()->json($output);
+    }
+
+    public function importStock(Request $request)
+    {
+        try {
+            //code...
+            DB::beginTransaction();
+            $extensions = array("xls","xlsx","xlm","xla","xlc","xlt","xlw","csv");
+            $result = array($request->file('file_excel')->getClientOriginalExtension());
+            if(!in_array($result[0],$extensions)) return response('Salah Format', 401);
+
+            $item = Excel::toArray(new StokImport, $request->file('file_excel'))[0];
+            $toSubmit = [];
+            foreach ($item as $key => $value) {
+                $tmp = [];
+                if ($value['stok'] > 0) {
+                    $tmp['log_stok_id'] = null;
+                    $tmp['id_barang'] = $value['id_barang'];
+                    $tmp['id_satuan'] = $value['id_satuan'];
+                    $tmp['unit_masuk'] = $value['stok'];
+                    $tmp['tanggal'] = Carbon::now()->toDateString();
+                    $tmp['unit_keluar'] = 0;
+                    $tmp['status'] = 'P1';
+                    $tmp['id_user'] = Auth::user()->id;
+                    $tmp['created_at'] = null;
+                    $tmp['updated_at'] = null;
+                    $toSubmit[] = $tmp;
+                }
+            }
+            $insert = DB::table('tbl_log_stok')->insert($toSubmit);
+            DB::commit();
+            return response(".$insert.", 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response($th, 500);
+        }
     }
 }

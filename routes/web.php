@@ -161,6 +161,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], function ()
     Route::get('barang_list_harga/{id}', [ThesisItemController::class, 'list_harga']);
     Route::get('stock_table', [ThesisItemController::class, 'stockTable'])->name('stock_table');
     Route::get('all_item_stock', [ThesisItemController::class, 'allItemStock'])->name('all_item_stock');
+    Route::post('import_stock', [ThesisItemController::class, 'importStock'])->name('import_stock');
     Route::get('export_barang', [ThesisItemController::class, 'export_excel'])->name('export_excel_item');
     Route::post('import_barang', [ThesisItemController::class, 'import_excel'])->name('import_excel_item');
 });

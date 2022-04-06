@@ -102,6 +102,7 @@
             url: '{{route("setGroupUser")}}',
             type: 'POST',
             data: fd,
+            cache: false,
             success: (res) =>{
                 $('#modalSetGroupUser').modal('hide')
                 $('#modalSetGroupUser').on('hidden.bs.modal', function () {

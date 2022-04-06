@@ -16,12 +16,12 @@ $id_group = App\GroupUser::where('id', Auth::user()->id_group)->get('group_name'
 							<span class="site-menu-arrow"></span>
 						</a>
 						<ul class="site-menu-sub">
-							<li class="site-menu-item item-point" data-url='{{url("dashboard/items")}}'>
+							<li class="site-menu-item item-point item-list" data-url='{{url("dashboard/items")}}'>
 								<a class="animsition-link" href="javascript:void(0)">
 									<span class="site-menu-title">List</span>
 								</a>
 							</li>
-							<li class="site-menu-item item-point" data-url='{{route("stock_table")}}'>
+							<li class="site-menu-item item-point item-stock" data-url='{{route("stock_table")}}'>
 								<a class="animsition-link" href="">
 									<span class="site-menu-title">Stock</span>
 								</a>
@@ -35,7 +35,7 @@ $id_group = App\GroupUser::where('id', Auth::user()->id_group)->get('group_name'
 							<span class="site-menu-arrow"></span>
 						</a>
 						<ul class="site-menu-sub">
-							<li class="site-menu-item item-point" data-url='{{url("analytics/rabin-kgram")}}'>
+							<li class="site-menu-item item-point order-list" data-url='{{url("analytics/rabin-kgram")}}'>
 								<a class="animsition-link" href="javascript:void(0)">
 									<span class="site-menu-title">List</span>
 								</a>

@@ -36,6 +36,9 @@
             e.preventDefault()
             let fd = new FormData(this);
             let myfile = $('#file_excel')[0].files;
+            $('#modalUploadExcel .modal-dialog .modal-content .modal-body').html('Loading, Please Wait...')
+            $('#modalUploadExcel .modal-dialog .modal-content .modal-footer').html('')
+            
             if (myfile.length > 0){
                 $.ajax({
                     url: '{{ route("import_excel_item") }}',
@@ -45,15 +48,12 @@
                     processData: false,
                     contentType: false,
                     success: (res) => {
+                        $('#modalUploadExcel').modal('hide')
                         $('#table_item').DataTable().destroy()
                         $('#table_item').empty()
-                        $('#table_item').DataTable({
-                            "processing" : true,
-                            "ajax" : {
-                                "url" : "{{ route('data_barang') }}",
-                                "type" : "GET"
-                            }
-                        });
+                        $('#modalUploadExcel').on('hidden.bs.modal', function () {
+                            $('.item-list').click()
+                        })
                     },
                     error: (err) => {
                         console.error(err)
