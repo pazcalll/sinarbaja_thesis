@@ -2,6 +2,7 @@
     <h2>Stock Master</h2>
     <a href="javascript:void(0)" onclick="$('#modalUploadExcel').modal('show')" class="card-body-title"><button class="btn btn-success"><i class="icon md-upload"></i> Upload Stock</button></a>
     <a href="{{route('export_stock')}}" class="card-body-title"><button class="btn btn-warning"><i class="icon md-download"></i> Download Stock</button></a>
+    <a href="javascript:void(0)" onclick="$('#modalTruncateStock').modal('show')" class="card-body-title"><button class="btn btn-danger"><i class="icon md-delete"></i> Empty Stock</button></a>
     <table id="table_stock" class="table table-bordered table-striped">
         <thead>
             <tr>
@@ -18,6 +19,7 @@
     </table>
 </div>
 @include('adminThesis.modal.modalExcelBarang')
+@include('adminThesis.modal.modalEmptyStock')
 
 <script>
     $(document).ready(function(){
@@ -32,6 +34,9 @@
             e.preventDefault()
             let fd = new FormData(this);
             let myfile = $('#file_excel')[0].files;
+            $('#modalUploadExcel .modal-dialog .modal-content .modal-body').html('Loading, Please Wait...')
+            $('#modalUploadExcel .modal-dialog .modal-content .modal-footer').html('')
+
             if (myfile.length > 0){
                 $.ajax({
                     url: '{{ route("import_stock") }}',
@@ -41,21 +46,34 @@
                     processData: false,
                     contentType: false,
                     success: (res) => {
-                        $('#table_item').DataTable().destroy()
-                        $('#table_item').empty()
-                        $('#table_item').DataTable({
-                            "processing" : true,
-                            "ajax" : {
-                                "url" : "{{ route('all_item_stock') }}",
-                                "type" : "GET"
-                            }
-                        });
+                        $('#modalUploadExcel').modal('hide')
+                        $('#modalUploadExcel').on('hidden.bs.modal', function () {
+                            $('.item-stock').click()
+                        })
                     },
                     error: (err) => {
                         console.error(err)
                     }
                 })
             }
+        })
+        $('#truncateStock').on('submit', function(e) {
+            e.preventDefault()
+            $('#modalTruncateStock .modal-dialog .modal-content .modal-body').html('Loading, Please Wait...')
+            $('#modalTruncateStock .modal-dialog .modal-content .modal-footer').html('')
+            $.ajax({
+                url: '{{ route("truncate_stock") }}',
+                type: 'POST',
+                success: (res) => {
+                    $('#modalTruncateStock').modal('hide')
+                    $('#modalTruncateStock').on('hidden.bs.modal', function () {
+                        $('.item-stock').click()
+                    })
+                },
+                error: (err) => {
+                    console.error(err)
+                }
+            })
         })
     })
 </script>
