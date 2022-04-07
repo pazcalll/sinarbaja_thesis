@@ -266,51 +266,6 @@ $(document).ready(function(){
     let cartId = 0
     let tmpCart = []
 
-    function updateCart(newcarts) {
-        let total = 0
-        let cart = 0
-        $('#cart-content').empty()
-        $('#tbody-cart').empty()
-        tmpCart = newcarts
-
-        newcarts.forEach((product, index) => {
-            removeCart.push(product)
-            cart += parseInt(product.qty)
-            total += parseInt(product.harga) * parseInt(product.qty)
-            template = `
-                    <a class="list-group-item dropdown-item waves-effect waves-light waves-round" href="javascript:void(0)">
-                        <div class="media">
-                            <div class="pr-10 remove-from-cart" data-id="${index}">
-                                <i class="icon md-close-circle-o bg-red-600 white icon-circle" aria-hidden="true"></i>
-                            </div>
-                            <div class="media-body"  role="menuitem" data-target="#validasiNotifikasi" data-toggle="modal">
-                                <h6 class="media-heading">${ product.nama }</h6>
-                                <time class="media-meta" datetime="2017-06-12T20:50:48+08:00">${ product.qty } Buah</time>
-                            </div>
-                        </div>
-                    </a>`
-            $('#cart-content').append(template)
-
-            template =
-                `<tr style="text-align: center";>
-                        <td>${ index+1 }.</td>
-                        <td><a class="waves-effect waves-light waves-round" style="text-decoration:none" href="{{ url('product') }}/` + (product.id - 1) + `"> ${ product.nama } </a></td>
-                        <td>
-                            <span class="text-muted"><i class="icon md-time"></i> ${ '{{date('D, d-m-Y')}}' }</span>
-                        </td>
-                        <td><input type="text" class="form-control qty" style="text-center" id="catatan"/>
-                        <td>${ product.qty }
-                        </td>
-                        <td>Rp ${ (parseInt(product.qty) * parseInt(product.harga_user[0].harga_user)).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.") }</td>
-                        <td><i class="icon md-close-circle-o bg-red-600 white icon-circle remove-from-cart" aria-hidden="true" style="cursor: pointer" data-id="${index}"></i></td>
-                    </tr>`
-
-            $('#tbody-cart').append(template)
-        });
-
-        $('.badge-cart').html(cart)
-        $('#nominal-total').html(total)
-    }
     $(document).on('click', '.remove-from-cart', function() {
         console.log('id ', $(this).data('id'));
         cartId = $(this).data('id');
@@ -385,41 +340,6 @@ $(document).ready(function(){
                 $(location).attr('href',url);
                 // window.location.href="{{ url('/order') }}"
                 toastr["info"]('Transaksi sukses')
-            }
-        })
-    }
-
-    function singleBuy(carts, total) {
-        $.ajax({
-            url: `{{ url('/order/purchase-order') }}`,
-            type: 'POST',
-            data: {
-                _token: $('meta[name="csrf-token"]').attr('content'),
-                total: total,
-                data: carts
-            },
-            success: (response) => {
-                toastr["info"]('Transaksi sukses')
-            },
-            error: (response) => {
-                console.log(response)
-                toastr["error"]('Transaksi gagal :(')
-            }
-        })
-    }
-
-    function singleBuyDetail(carts, total, dbutton) {
-        $.ajax({
-            url: `{{ url('/order/purchase-order') }}`,
-            type: 'POST',
-            data: {
-                _token: $('meta[name="csrf-token"]').attr('content'),
-                total: total,
-                data: carts
-            },
-            success: (response) => {
-                toastr["info"]('Transaksi sukses')
-                dbutton.removeAttr('disabled')
             }
         })
     }

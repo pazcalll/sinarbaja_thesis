@@ -11,6 +11,7 @@ use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ThesisGroupUserController;
 use App\Http\Controllers\ThesisItemController;
+use App\Http\Controllers\ThesisOrderController;
 use App\Http\Controllers\ThesisUserController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -166,6 +167,10 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], function ()
     Route::post('import_barang', [ThesisItemController::class, 'import_excel'])->name('import_excel_item');
     Route::get('export_stock', [ThesisItemController::class, 'exportStock'])->name('export_stock');
     Route::post('truncate_stock', [ThesisItemController::class, 'truncateStock'])->name('truncate_stock');
+
+    // order thesis
+    Route::get('incoming_order/{no_nota}', [ThesisOrderController::class, 'show']);
+    Route::get('incoming_order', [ThesisOrderController::class, 'index'])->name('incoming_order');
 });
 
 // admin
