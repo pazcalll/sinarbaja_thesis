@@ -171,6 +171,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], function ()
     // order thesis
     Route::get('incoming_order/{no_nota}', [ThesisOrderController::class, 'show']);
     Route::get('incoming_order', [ThesisOrderController::class, 'index'])->name('incoming_order');
+    Route::post('incoming_order', [ThesisOrderController::class, 'store'])->name(('acc_order'));
 });
 
 // admin

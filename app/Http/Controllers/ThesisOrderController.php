@@ -63,6 +63,18 @@ class ThesisOrderController extends Controller
     public function store(Request $request)
     {
         //
+        $query = DB::table('purchase_orders')->where('no_nota', $request->prop)->first('id');
+        try {
+            DB::table('orders')
+                ->where('po_id', $query->id)
+                ->where('status', 'BELUM DISETUJUI')
+                ->update([
+                    'status' => 'DISETUJUI SEMUA'
+                ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response($th, 500);
+        }
     }
 
     /**

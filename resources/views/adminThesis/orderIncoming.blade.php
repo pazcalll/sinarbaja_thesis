@@ -6,16 +6,16 @@
     <table class="table table-bordered table-hover table-striped" id="tbl_po">
         <thead id="thead">
             <tr>
-                <th>No.</th>
+                <th width="5%">No.</th>
                 <th>No. Nota</th>
                 <th width="10%">Tipe User</th>
                 <th >Pembeli</th>
-                <th class="hidden-sm-down w-200">Tanggal Pesan</th>
+                <th>Tanggal Pesan</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($order as $item)
-                <tr style="cursor: pointer;" class="po-row" data-url="{{url('dashboard/incoming_order')}}/{{str_replace('=','%20',$item->no_nota)}}">
+                <tr style="cursor: pointer;" class="po-row" data-nota="{{$item->no_nota}}" data-url="{{url('dashboard/incoming_order')}}/{{str_replace('=','%20',$item->no_nota)}}">
                     <td>{{$loop->iteration}}</td>
                     <td>{{$item->no_nota}}</td>
                     <td>{{$item->group_name}}</td>
@@ -45,7 +45,24 @@
                     'url' : `${$(this).data('url')}`
                 }
             })
+            $("#accOrder").data("prop", $(this).data('nota'))
         })
         $('#tbl_po').DataTable();
+    })
+    $("#accOrder").on('click', function() {
+        $.ajax({
+            url: '{{route("acc_order")}}',
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            type: 'POST',
+            data: {
+                prop: $(this).data('prop')
+            },
+            success: (res) => {
+                $('#modal-po').modal('hide')
+                $('#modal-po').on('hidden.bs.modal', function () {
+                    $('.order-list').click()
+                })
+            }
+        })
     })
 </script>
