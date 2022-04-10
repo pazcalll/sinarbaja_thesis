@@ -398,13 +398,6 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="form-group">
-                          <label for="jenispembayaran_select">Jenis Pembayaran</label>
-                          <select style="width: 250px;" class="form-control" id="jenispembayaran_select">
-                            <option value="trasfer">Transfer</option>
-                            <option value="cod">COD</option>
-                          </select>
-                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

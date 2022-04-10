@@ -1,5 +1,5 @@
 <div class="container nowrap" style="width: 100%; right: 0px; background-color: white;" id="main-content">
-    <h2>Stock Master</h2>
+    <h2>List Incoming Order</h2>
     {{-- <a href="javascript:void(0)" onclick="$('#modalUploadExcel').modal('show')" class="card-body-title"><button class="btn btn-success"><i class="icon md-upload"></i> Upload Stock</button></a>
     <a href="{{route('export_stock')}}" class="card-body-title"><button class="btn btn-warning"><i class="icon md-download"></i> Download Stock</button></a>
     <a href="javascript:void(0)" onclick="$('#modalTruncateStock').modal('show')" class="card-body-title"><button class="btn btn-danger"><i class="icon md-delete"></i> Empty Stock</button></a> --}}
@@ -15,7 +15,12 @@
         </thead>
         <tbody>
             @foreach ($order as $item)
-                <tr style="cursor: pointer;" class="po-row" data-nota="{{$item->no_nota}}" data-url="{{url('dashboard/incoming_order')}}/{{str_replace('=','%20',$item->no_nota)}}">
+                <tr style="cursor: pointer;" 
+                    class="po-row" 
+                    data-nota="{{$item->no_nota}}" 
+                    data-url="{{url('dashboard/incoming_order')}}/{{str_replace('=','%20',$item->no_nota)}}"
+                    data-cust="{{$item->name}}"
+                >
                     <td>{{$loop->iteration}}</td>
                     <td>{{$item->no_nota}}</td>
                     <td>{{$item->group_name}}</td>
@@ -45,6 +50,8 @@
                     'url' : `${$(this).data('url')}`
                 }
             })
+            $('#cust-name').html($(this).data('cust'))
+            $('#no-nota').html($(this).data('nota'))
             $("#accOrder").data("prop", $(this).data('nota'))
         })
         $('#tbl_po').DataTable();
