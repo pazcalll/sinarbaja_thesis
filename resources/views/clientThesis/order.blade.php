@@ -43,23 +43,12 @@ $showNavigation = false;
 </div>
 @endsection
 
-@section('modal')
-
-@endsection
-
 @section('js')
 <script>
-    // $.ajax({
-    //     url:'{{route("pesananBelumDisetujui")}}',
-    //     type:'GET',
-    //     success:(res)=>{
-    //         console.log(res)
-    //     }
-    // })
     function format ( d ) {
         console.log(JSON.parse(d.barang.replace(/&quot;/g, '"')))
         let newTbl = JSON.parse(d.barang.replace(/&quot;/g, '"'))
-        let openingTbl = `<table style="width:100%">
+        let openingTbl = `<table style="width:100%" class="table table-bordered table-hover table-striped">
             <thead>
                 <tr>
                     <th>Nama Barang</th>
@@ -87,12 +76,13 @@ $showNavigation = false;
     }
      let dt = $('#table-unaccepted').DataTable({
         ajax: '{{route("pesananBelumDisetujui")}}',
+        searching: false,
         columns: [
             {
                 class:"details-control",
                 orderable:false,
                 data: null,
-                defaultContent: "V"
+                defaultContent: "+"
             },
             {
                 data: '',
@@ -116,13 +106,15 @@ $showNavigation = false;
         if ( row.child.isShown() ) {
             tr.removeClass( 'details' );
             row.child.hide();
- 
+            $(this).html('+')
+
             // Remove from the 'open' array
             detailRows.splice( idx, 1 );
         }
         else {
             tr.addClass( 'details' );
             row.child( format( row.data() ) ).show();
+            $(this).html('-')
  
             // Add to the 'open' array
             if ( idx === -1 ) {

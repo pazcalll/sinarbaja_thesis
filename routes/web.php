@@ -150,6 +150,7 @@ Route::prefix('analytics')->group(function()
     Route::post('/rabin-hashing', 'ThesisController@rabin_hashing');
     Route::post('/rabin-intersect', 'ThesisController@rabin_intersect');
     Route::post('/similarity', 'ThesisController@similarity');
+    Route::post('/similarity-res', 'ThesisController@similarityRes');
 });
 
 Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'admin']], function ()
@@ -174,6 +175,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'admin']], funct
     Route::get('incoming_order/{no_nota}', [ThesisAdminOrderController::class, 'show']);
     Route::get('incoming_order', [ThesisAdminOrderController::class, 'index'])->name('incoming_order');
     Route::post('incoming_order', [ThesisAdminOrderController::class, 'store'])->name(('acc_order'));
+    Route::get('to_send', [ThesisAdminOrderController::class, 'sendPage'])->name('send_page');
+    Route::get('to_send/page/list', [ThesisAdminOrderController::class, 'sendList'])->name('send_list');
 });
 
 Route::group(['middleware' => 'auth'], function()

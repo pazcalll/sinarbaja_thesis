@@ -180,4 +180,33 @@ class ThesisAdminOrderController extends Controller
     {
         //
     }
+
+    public function sendPage()
+    {
+        return view('adminThesis.orderSend');
+    }
+
+    public function sendList()
+    {
+        $data = DB::select('SELECT po.*, 
+                SUM(o.qty * o.harga_order) as total_harga, 
+                CONCAT( "[", GROUP_CONCAT(JSON_OBJECT("nama_barang", o.nama_barang, "qty", o.qty, "harga", o.harga_order)), "]") as barang,
+                t.kirim,
+                t.status as status_pembayaran,
+                u.name as user_name,
+                gu.group_name
+            FROM purchase_orders AS po
+            LEFT JOIN orders as o 
+                ON o.po_id = po.id
+            LEFT JOIN tagihans as t
+                ON t.po_id = po.id
+            LEFT JOIN users as u
+                ON u.id = po.user_id
+            LEFT JOIN group_users as gu
+                ON u.id_group = gu.id
+            WHERE o.status = "DISETUJUI SEMUA"
+            GROUP BY po.no_nota
+        ');
+        return datatables($data)->toJson();
+    }
 }

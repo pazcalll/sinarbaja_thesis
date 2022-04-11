@@ -56,6 +56,10 @@
 @endsection
 
 @section('js')
+
+<script src="{{ asset('public/themeforest/global/js/Plugin/datatables.js') }}"></script>
+<script src="{{ asset('public/themeforest/page-base/examples/js/tables/datatable.js') }}"></script>
+<script src="{{ asset('public/themeforest/page-base/examples/js/uikit/icon.js') }}"></script>
 <script>
     $('.item-point').on('click', function(e) {
         e.preventDefault()
