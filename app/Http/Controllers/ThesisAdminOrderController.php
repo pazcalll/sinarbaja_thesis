@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class ThesisOrderController extends Controller
+class ThesisAdminOrderController extends Controller
 {
     /**
      * Display a listing of the resource.

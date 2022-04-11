@@ -9,9 +9,10 @@ use App\Http\Controllers\HargaProdukUserController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ThesisAdminOrderController;
+use App\Http\Controllers\ThesisClientOrderController;
 use App\Http\Controllers\ThesisGroupUserController;
 use App\Http\Controllers\ThesisItemController;
-use App\Http\Controllers\ThesisOrderController;
 use App\Http\Controllers\ThesisUserController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -151,8 +152,9 @@ Route::prefix('analytics')->group(function()
     Route::post('/similarity', 'ThesisController@similarity');
 });
 
-Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], function ()
+Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'admin']], function ()
 {
+    Route::get('/', 'DashboardController@index')->name('dashboard');
     Route::get('table-users', [ThesisUserController::class, 'tableUser']);
     Route::post('delete-user', [ThesisUserController::class, 'destroy'])->name('deleteUser');
     Route::get('get-group-user/{id}', [ThesisGroupUserController::class, 'show']);
@@ -169,14 +171,20 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], function ()
     Route::post('truncate_stock', [ThesisItemController::class, 'truncateStock'])->name('truncate_stock');
 
     // order thesis
-    Route::get('incoming_order/{no_nota}', [ThesisOrderController::class, 'show']);
-    Route::get('incoming_order', [ThesisOrderController::class, 'index'])->name('incoming_order');
-    Route::post('incoming_order', [ThesisOrderController::class, 'store'])->name(('acc_order'));
+    Route::get('incoming_order/{no_nota}', [ThesisAdminOrderController::class, 'show']);
+    Route::get('incoming_order', [ThesisAdminOrderController::class, 'index'])->name('incoming_order');
+    Route::post('incoming_order', [ThesisAdminOrderController::class, 'store'])->name(('acc_order'));
+});
+
+Route::group(['middleware' => 'auth'], function()
+{
+    Route::get('order', [ThesisClientOrderController::class, 'index']);
+    Route::get('order/pesanan/belum-disetujui', [ThesisClientOrderController::class, 'pesananBelumDisetujui'])->name('pesananBelumDisetujui');
+    // Route::get('order/pesanan/belum-disetujui', [ThesisClientOrderController::class, 'pesananBelumDisetujui']);
 });
 
 // admin
 Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], function () {
-    Route::get('/', 'DashboardController@index')->name('dashboard');
 
     Route::resources([
         'merek' => 'MerekController',
@@ -267,7 +275,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/profile_return', 'ProfilController@return');
 
     // purchase-order
-    Route::get('/order', 'OrderController@index');
+    // Route::get('/order', 'OrderController@index');
     Route::post('/order/purchase-order', 'PurchaseOrderController@store')->name('storeOrder');
     Route::post('/order/upload', 'TagihanController@upload');
     Route::get('/order/payment', 'PaymentController@index');

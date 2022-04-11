@@ -65,7 +65,7 @@
                     <div class="brand">
                         <img class="brand-img"
                             src="{{ asset('public/themeforest/page-base/images/logo-colored.png') }}" alt="...">
-                        <h2 class="brand-text font-size-18">PRIVATE ECOMMERCE</h2>
+                        <h2 class="brand-text font-size-18">LOGIN PAGE</h2>
                     </div>
                     <form method="post" action="{{ route('login') }}" autocomplete="off">
                         @csrf
@@ -83,7 +83,7 @@
                                 <input type="checkbox" onclick="password1()">
                                 <label for="inputCheckbox">Show Password</label>
                             </div>
-                            <a class="float-right" href="forgot-password.html">Lupa password?</a>
+                            {{-- <a class="float-right" href="forgot-password.html">Lupa password?</a> --}}
                         </div>
                         <button type="submit" class="btn btn-primary btn-block btn-lg mt-40">Masuk</button>
                     </form>
@@ -92,7 +92,7 @@
             </div>
 
             <footer class="page-copyright page-copyright-inverse">
-                <p>© 2021. All RIGHT RESERVED.</p>
+                
         </div>
         </footer>
     </div>

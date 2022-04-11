@@ -36,9 +36,9 @@
                                 <tr style="text-align: center">
                                     <th width="1%"></th>
                                     <th>No. Nota</th>
-                                    <th>No. Tagihan</th>
+                                    {{-- <th>No. Tagihan</th> --}}
                                     <th>Tanggal</th>
-                                    <th>Metode Bayar</th>
+                                    {{-- <th>Metode Bayar</th> --}}
                                     <th>Total</th>
                                     <th>Status Bayar</th>
                                     <th>Status Pengiriman</th>
@@ -54,9 +54,9 @@
                                 <tr style="text-align: center">
                                     <th width="1%"></th>
                                     <th>No. Nota</th>
-                                    <th>No. Tagihan</th>
+                                    {{-- <th>No. Tagihan</th> --}}
                                     <th>Tanggal</th>
-                                    <th>Driver</th>
+                                    {{-- <th>Driver</th> --}}
                                     <th>Total</th>
                                     <th>Status Bayar</th>
                                     <th>Status Pengiriman</th>
