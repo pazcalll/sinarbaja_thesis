@@ -324,8 +324,13 @@ $showNavigation = false;
                 {
                     data: 'kirim',
                     render: (data, type, row, meta) => {
+                        let color = ''
+                        
+                        if(row.kirim == "BELUM") color = 'danger'
+                        else if(row.kirim == "PERJALANAN") color = 'info'
+
                         return `
-                            <span class="badge badge-danger">${row.kirim}</span>
+                            <span class="badge badge-${color}">${row.kirim}</span>
                         `
                     }
                 },
@@ -335,7 +340,8 @@ $showNavigation = false;
                         let buttons = `
                             <button data-nota="${row.id}" type="button" class="btn btn-primary btn-xs btn-confirm"><li class="icon md-check"></li>Pesanan Diterima</button>
                         `
-                        return buttons
+                        if (row.kirim == "BELUM") return '_'
+                        else return buttons
                     }
                 },
             ],

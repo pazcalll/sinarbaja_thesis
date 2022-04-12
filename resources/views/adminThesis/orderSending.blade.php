@@ -4,7 +4,7 @@
     }
 </style>
 <div class="container nowrap" style="width: 100%; right: 0px; background-color: white;" id="main-content">
-    <h2>Send Order</h2>
+    <h2>Sending Process Order</h2>
     {{-- <a href="javascript:void(0)" onclick="$('#modalUploadExcel').modal('show')" class="card-body-title"><button class="btn btn-success"><i class="icon md-upload"></i> Upload Stock</button></a>
     <a href="{{route('export_stock')}}" class="card-body-title"><button class="btn btn-warning"><i class="icon md-download"></i> Download Stock</button></a>
     <a href="javascript:void(0)" onclick="$('#modalTruncateStock').modal('show')" class="card-body-title"><button class="btn btn-danger"><i class="icon md-delete"></i> Empty Stock</button></a> --}}
@@ -19,6 +19,7 @@
                 <th>Tanggal Pesan</th>
                 <th>Total</th>
                 <th>Status Pembayaran</th>
+                <th>Status Pengiriman</th>
             </tr>
         </thead>
         <tbody>
@@ -28,26 +29,6 @@
 </div>
 
 <script>
-    function sendOrder(status_pembayaran, id) {
-        if (status_pembayaran == "BELUM DIBAYAR") toastr["error"]('Customer belum bayar')
-        else if(status_pembayaran == "LUNAS"){
-            $.ajax({
-                url: "{{route('send_order')}}",
-                type: "POST",
-                data: {
-                    status_pembayaran: status_pembayaran,
-                    po_id: id
-                },
-                success: (res) => {
-                    toastr['success']('Pesanan dalam proses pengiriman')
-                    $('.to-send').click()
-                },
-                error: (err) => {
-                    toastr['error'](`${err.statusText}`)
-                }
-            })
-        }
-    }
     $(document).ready(function() {
         function format ( d ) {
             let newTbl = JSON.parse(d.barang.replace(/&quot;/g, '"'))
@@ -77,14 +58,10 @@
                 </tbody>
             </table>
             `
-            if (d.status_pembayaran == "LUNAS") 
-                closerTbl += `
-                    <button type="button" onclick="sendOrder('${d.status_pembayaran}', ${d.id})" class="btn btn-primary" style="width:100%">KIRIM</button>
-                `
             return closerTbl;
         }
         let tableSend = $('#tbl_send').DataTable({
-            ajax: '{{route("send_list")}}',
+            ajax: '{{route("sending_list")}}',
             searching: false,
             columns: [
                 {
@@ -105,6 +82,19 @@
                 {data: 'created_at'},
                 {data: 'total_harga'},
                 {data: 'status_pembayaran'},
+                {
+                    data: 'kirim',
+                    render: (data, type, row, meta) => {
+                        let color = ''
+                        
+                        if(row.kirim == "PERJALANAN") color = 'info'
+                        else if(row.kirim == "DITERIMA") color = 'success'
+
+                        return `
+                            <span class="badge badge-${color}">${row.kirim}</span>
+                        `
+                    }
+                },
             ]
         })
 

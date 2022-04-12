@@ -177,6 +177,9 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'admin']], funct
     Route::post('incoming_order', [ThesisAdminOrderController::class, 'store'])->name(('acc_order'));
     Route::get('to_send', [ThesisAdminOrderController::class, 'sendPage'])->name('send_page');
     Route::get('to_send/page/list', [ThesisAdminOrderController::class, 'sendList'])->name('send_list');
+    Route::post('to_send/page/send', [ThesisAdminOrderController::class, 'sendOrder'])->name('send_order');
+    Route::get('sending', [ThesisAdminOrderController::class, 'sendingPage'])->name('sending_page');
+    Route::get('sending/page/list', [ThesisAdminOrderController::class, 'sendingList'])->name('sending_list');
 });
 
 Route::group(['middleware' => 'auth'], function()

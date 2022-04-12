@@ -45,6 +45,11 @@ $id_group = App\GroupUser::where('id', Auth::user()->id_group)->get('group_name'
 									<span class="site-menu-title">Send List</span>
 								</a>
 							</li>
+							<li class="site-menu-item item-point sending" data-url='{{route("sending_page")}}'>
+								<a class="animsition-link" href="javascript:void(0)">
+									<span class="site-menu-title">Sending Process</span>
+								</a>
+							</li>
 							{{-- <li class="site-menu-item item-point" data-url='{{url("analytics/rabin-hashing")}}'>
 								<a class="animsition-link" href="">
 									<span class="site-menu-title">Hash</span>

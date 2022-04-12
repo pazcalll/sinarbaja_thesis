@@ -204,7 +204,53 @@ class ThesisAdminOrderController extends Controller
                 ON u.id = po.user_id
             LEFT JOIN group_users as gu
                 ON u.id_group = gu.id
-            WHERE o.status = "DISETUJUI SEMUA"
+            WHERE o.status = "DISETUJUI SEMUA" 
+                AND t.kirim = "BELUM"
+            GROUP BY po.no_nota
+        ');
+        return datatables($data)->toJson();
+    }
+
+    public function sendOrder(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            DB::table('tagihans')
+                ->where('po_id', $request->po_id)
+                ->where('status', $request->status_pembayaran)
+                ->update(['kirim' => "PERJALANAN"]);
+            DB::commit();
+            return response('Success', 200);
+        } catch (\Throwable $th) {
+            return response($th, 500);
+        }
+    }
+
+    public function sendingPage()
+    {
+        return view('adminThesis.orderSending');
+    }
+
+    public function sendingList()
+    {
+        $data = DB::select('SELECT po.*, 
+                SUM(o.qty * o.harga_order) as total_harga, 
+                CONCAT( "[", GROUP_CONCAT(JSON_OBJECT("nama_barang", o.nama_barang, "qty", o.qty, "harga", o.harga_order)), "]") as barang,
+                t.kirim,
+                t.status as status_pembayaran,
+                u.name as user_name,
+                gu.group_name
+            FROM purchase_orders AS po
+            LEFT JOIN orders as o 
+                ON o.po_id = po.id
+            LEFT JOIN tagihans as t
+                ON t.po_id = po.id
+            LEFT JOIN users as u
+                ON u.id = po.user_id
+            LEFT JOIN group_users as gu
+                ON u.id_group = gu.id
+            WHERE o.status = "DISETUJUI SEMUA" 
+                AND t.kirim = "PERJALANAN"
             GROUP BY po.no_nota
         ');
         return datatables($data)->toJson();
