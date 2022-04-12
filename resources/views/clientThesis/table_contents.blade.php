@@ -55,6 +55,7 @@
                                     <th>Tanggal</th>
                                     <th>Total</th>
                                     <th>Status Bayar</th>
+                                    <th>Status Kirim</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>

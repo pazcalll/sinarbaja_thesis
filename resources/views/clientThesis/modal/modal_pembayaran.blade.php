@@ -27,6 +27,7 @@
                                     <p id="noNotaText"></p>
                                 </div>
                                 <input type="hidden" name="jumlahBayarInput" value="0" class="form-control" id="jumlahBayarInput">
+                                <input type="hidden" name="po_id_pembayaran" value="0" class="form-control" id="po_id_pembayaran">
                                 <div class="inpHidden">
 
                                 </div>

@@ -47,7 +47,6 @@
     <link rel="stylesheet" href="{{ asset('public/themeforest/global/vendor/flag-icon-css/flag-icon.css') }}">
     <link rel="stylesheet" href="{{ asset('public/themeforest/global/vendor/waves/waves.css') }}">
     <link rel="stylesheet" href="{{ asset('public/themeforest/global/vendor/chartist/chartist.css') }}">
-    {{-- <link rel="stylesheet" href="{{ asset('public/themeforest/global/vendor/jvectormap/jquery-jvectormap.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('public/themeforest/global/vendor/chartist-plugin-tooltip/chartist-plugin-tooltip.css') }}">
     <link rel="stylesheet" href="{{ asset('public/themeforest/global/vendor/select2/select2.css') }}">
     <link rel="stylesheet" href="{{ asset('public/themeforest/global/vendor/bootstrap-tokenfield/bootstrap-tokenfield.css') }}">

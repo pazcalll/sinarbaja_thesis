@@ -184,6 +184,9 @@ Route::group(['middleware' => 'auth'], function()
     Route::get('order', [ThesisClientOrderController::class, 'index']);
     Route::get('order/req/unaccepted', [ThesisClientOrderController::class, 'orderUnaccepted'])->name('pesananBelumDisetujui');
     Route::get('order/req/unpaid', [ThesisClientOrderController::class, 'orderUnpaid'])->name('pesananBelumDibayar');
+    Route::get('order/req/paid', [ThesisClientOrderController::class, 'orderPaid'])->name('pesananLunas');
+    Route::post('order/req/upload-transfer', [ThesisClientOrderController::class, 'uploadTransfer'])->name('uploadTransfer');
+    Route::post('order/req/confirm-order', [ThesisClientOrderController::class, 'confirmOrder'])->name('confirmOrder');
 });
 
 // admin

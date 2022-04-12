@@ -42,6 +42,7 @@ $showNavigation = false;
     </div>
 </div>
 @include('clientThesis.modal.modal_pembayaran')
+@include('clientThesis.modal.modal_confirm_pesanan')
 @endsection
 
 @section('js')
@@ -214,7 +215,7 @@ $showNavigation = false;
                     data: '',
                     render: (data, type, row, meta) => {
                         let buttons = `
-                            <button data-toggle="modal" data-nota="${row.no_nota}" data-limit="${row.total_harga}" type="button" class="btn btn-warning btn-xs btn-pay"><li class="icon md-money"></li>Bayar</button>
+                            <button data-toggle="modal" data-po_id="${row.id}" data-nota="${row.no_nota}" data-limit="${row.total_harga}" type="button" class="btn btn-warning btn-xs btn-pay"><li class="icon md-money"></li>Bayar</button>
                         `
                         return buttons
                     }
@@ -225,8 +226,9 @@ $showNavigation = false;
                 $('.btn-pay').on('click', function() {
                     $('#noNotaText').html($(this).data('nota'))
                     $('#accumulation').html(formatRupiah($(this).data('limit')))
-                    $('#jumlahBayarInput').data('limit', $(this).data('limit'))
+                    // $('#jumlahBayarInput').data('limit', $(this).data('limit'))
                     $('#jumlahBayarInput').val($(this).data('limit'))
+                    $('#po_id_pembayaran').val($(this).data('po_id'))
                     $('#modalPembayaran').modal('show')
                 })
             }
@@ -268,7 +270,7 @@ $showNavigation = false;
     })
 
     $('.tab-paid').on('click', function() {
-        if ($.fn.DataTable.isDataTable('#table-paid')) return false
+        if ($.fn.DataTable.isDataTable('#table-paid')) return
 
         function format ( d ) {
             console.log(JSON.parse(d.barang.replace(/&quot;/g, '"')))
@@ -300,7 +302,7 @@ $showNavigation = false;
             return closerTbl;
         }
         let dt = $('#table-paid').DataTable({
-            ajax: '{{route("pesananBelumDibayar")}}',
+            ajax: '{{route("pesananLunas")}}',
             searching: false,
             columns: [
                 {
@@ -320,15 +322,30 @@ $showNavigation = false;
                 {data: 'total_harga'},
                 {data: 'status_pembayaran'},
                 {
+                    data: 'kirim',
+                    render: (data, type, row, meta) => {
+                        return `
+                            <span class="badge badge-danger">${row.kirim}</span>
+                        `
+                    }
+                },
+                {
                     data: '',
                     render: (data, type, row, meta) => {
                         let buttons = `
-                            <button data-toggle="modal" data-target="modalPembayaran" type="button" class="btn btn-warning btn-xs btn-pay"><li class="icon md-money"></li>Bayar</button>
+                            <button data-nota="${row.id}" type="button" class="btn btn-primary btn-xs btn-confirm"><li class="icon md-check"></li>Pesanan Diterima</button>
                         `
                         return buttons
                     }
                 },
-            ]
+            ],
+            drawCallback: () => {
+                $('.btn-confirm').unbind()
+                $('.btn-confirm').on('click', function() {
+                    $('#po_id_confirm').val($(this).data('nota'))
+                    $('#confirmPesanan').modal('show')
+                })
+            }
         })
 
         let detailRows = [];
@@ -365,6 +382,43 @@ $showNavigation = false;
         } );
     })
 
+    $('#form-bayar').on('submit', function(e) {
+        e.preventDefault()
+        let fd = new FormData(this);
+        let myfile = $('#inputBukti')[0].files;
+        $.ajax({
+            url: '{{route("uploadTransfer")}}',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: fd,
+            success: (res) => {
+                $('#modalPembayaran').modal('hide')
+                window.location.reload()
+            },
+            error: (err) => {
+                console.error(err)
+            }
+        })
+    })
+
+    $('#form-confirm').on('submit', function(e) {
+        e.preventDefault()
+        console.log($(this).serialize())
+        $('#confirmPesanan').modal('hide')
+        $.ajax({
+            url: '{{route("confirmOrder")}}',
+            type: 'POST',
+            data: $(this).serialize(),
+            success: (res) => {
+                window.location.reload()
+            },
+            error: (err) => {
+                console.error(err)
+            }
+        })
+    })
+
     // $('#jumlahBayarInput').on('input', function() {
     //     let x = document.getElementById("jumlahBayarInput").value;
     //     let limit = parseInt($("#jumlahBayarInput").data('limit'))
@@ -378,5 +432,4 @@ $showNavigation = false;
     //     document.getElementById("moneyFormat").innerHTML = "Rp. "+formatRupiah(x)
     // })
 </script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 @endsection

@@ -9,7 +9,6 @@
 <!-- Core  -->
 <script src="{{ asset('public/themeforest/global/vendor/babel-external-helpers/babel-external-helpers.js') }}">
 </script>
-<script type="text/javascript" src="{{asset('public\sweetalert2\dist\sweetalert2.all.min.js')}}"></script>
 <script src="{{ asset('public/themeforest/global/vendor/jquery/jquery.js') }}"></script>
 <script src="{{ asset('public/themeforest/global/vendor/popper-js/umd/popper.min.js') }}"></script>
 <script src="{{ asset('public/themeforest/global/vendor/bootstrap/bootstrap.js') }}"></script>
@@ -25,8 +24,6 @@
 <script src="{{ asset('public/themeforest/global/vendor/intro-js/intro.js') }}"></script>
 <script src="{{ asset('public/themeforest/global/vendor/screenfull/screenfull.js') }}"></script>
 <script src="{{ asset('public/themeforest/global/vendor/slidepanel/jquery-slidePanel.js') }}"></script>
-{{-- <script src="{{ asset('public/themeforest/global/vendor/jvectormap/jquery-jvectormap.min.js') }}"></script> --}}
-{{-- <script src="{{ asset('public/themeforest/global/vendor/jvectormap/maps/jquery-jvectormap-world-mill-en.js') }}"> --}}
 </script>
 <script src="{{ asset('public/themeforest/global/vendor/matchheight/jquery.matchHeight-min.js') }}"></script>
 <script src="{{ asset('public/themeforest/global/vendor/peity/jquery.peity.min.js') }}"></script>
@@ -138,7 +135,6 @@
 <script src="{{ asset('public/themeforest/global/js/Plugin/slidepanel.js') }}"></script>
 <script src="{{ asset('public/themeforest/global/js/Plugin/switchery.js') }}"></script>
 <script src="{{ asset('public/themeforest/global/js/Plugin/matchheight.js') }}"></script>
-{{-- <script src="{{ asset('public/themeforest/global/js/Plugin/jvectormap.js') }}"></script> --}}
 <script src="{{ asset('public/themeforest/global/js/Plugin/peity.js') }}"></script>
 <script src="{{ asset('public/themeforest/global/js/Plugin/asselectable.js') }}"></script>
 <script src="{{ asset('public/themeforest/global/js/Plugin/selectable.js') }}"></script>
@@ -168,8 +164,6 @@
 <script src="{{ asset('public/themeforest/global/js/Plugin/multi-select.js') }}"></script>
 <script src="{{ asset('public/themeforest/global/js/Plugin/jquery-placeholder.js') }}"></script>
 <script src="{{ asset('public/themeforest/global/js/Plugin/dropify.js') }}"></script>
-
-<script src="{{ asset('public/themeforest/page-base/examples/js/dashboard/v1.js') }}"></script>
 
 <script src="{{ asset('public/themeforest/global/vendor/toastr/toastr.js') }}"></script>
 <script src="{{ asset('public/themeforest/global/js/Plugin/toastr.js') }}"></script>
