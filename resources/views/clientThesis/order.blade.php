@@ -9,12 +9,7 @@ $showNavigation = false;
 @section('css')
 <style>
     td.details-control {
-        /* background: url('../resources/details_open.png') no-repeat center center; */
         cursor: pointer;
-    }
-
-    tr.details td.details-control {
-        /* background: url('../resources/details_close.png') no-repeat center center; */
     }
 </style>
 @endsection
@@ -28,7 +23,7 @@ $showNavigation = false;
                 <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                     <li class="nav-item" role="presentation"><a class="active nav-link" data-toggle="tab" href="#proses" aria-controls="proses" role="tab">Pesanan Masuk</a></li>
                     <li class="nav-item pesanan_proses" role="presentation"><a class="nav-link" data-toggle="tab" href="#pesanan_proses" aria-controls="pesanan_proses" role="tab">Pesanan Proses</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#pesanan_selesai" aria-controls="pesanan_selesai" role="tab">Pesanan Selesai</a></li>
+                    <li class="nav-item pesanan_selesai" role="presentation"><a class="nav-link" data-toggle="tab" href="#pesanan_selesai" aria-controls="pesanan_selesai" role="tab">Pesanan Selesai</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -292,7 +287,7 @@ $showNavigation = false;
                     <tr>
                         <td>${item.nama_barang}</td>
                         <td>${item.qty}</td>
-                        <td>${item.harga}</td>
+                        <td>${formatRupiah(item.harga)}</td>
                     </tr>
                 `
             });
@@ -319,7 +314,12 @@ $showNavigation = false;
                 },
                 {data: 'no_nota'},
                 {data: 'created_at'},
-                {data: 'total_harga'},
+                {
+                    data: 'total_harga',
+                    render: (data, type, row, meta) => {
+                        return formatRupiah(row.total_harga)
+                    }
+                },
                 {data: 'status_pembayaran'},
                 {
                     data: 'kirim',
@@ -408,9 +408,106 @@ $showNavigation = false;
         })
     })
 
+    $('.pesanan_selesai').on('click', function() {
+        if ($.fn.DataTable.isDataTable('#table-pesanan-selesai')) return
+
+        function format ( d ) {
+            let newTbl = JSON.parse(d.barang.replace(/&quot;/g, '"'))
+            console.log(d)
+            let openingTbl = `<table style="width:100%" class="table table-bordered table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>Nama Barang</th>
+                        <th>qty</th>
+                        <th>Harga</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    `
+            newTbl.forEach((item, _index) => {
+                // str += 'Full name: '+item.nama_barang+' '+item.qty+'<br>'+
+                //     'Salary: '+item.harga+'<br>';
+                openingTbl += `
+                    <tr>
+                        <td>${item.nama_barang}</td>
+                        <td>${item.qty}</td>
+                        <td>${formatRupiah(item.harga)}</td>
+                    </tr>
+                `
+            });
+            let closerTbl = openingTbl + `
+                </tbody>
+            </table>
+            `
+            return closerTbl;
+        }
+        let tableSend = $('#table-pesanan-selesai').DataTable({
+            ajax: '{{route("orderCompleted")}}',
+            processing: true,
+            serverSide: true,
+            searching: false,
+            columns: [
+                {
+                    class:"details-control",
+                    orderable:false,
+                    data: null,
+                    defaultContent: "+"
+                },
+                {
+                    data: '',
+                    render: (data, type, row, meta) => {
+                        return meta.row + meta.settings._iDisplayStart + 1
+                    }
+                },
+                {data: 'no_nota'},
+                {data: 'group_name'},
+                {data: 'user_name'},
+                {data: 'created_at'},
+                {
+                    data: 'total_harga',
+                    render: (data, type, row, meta) => {
+                        return formatRupiah(row.total_harga)
+                    }
+                }
+            ]
+        })
+
+        let detailRows = [];
+    
+        $('#table-pesanan-selesai tbody').on( 'click', 'tr td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = tableSend.row( tr );
+            var idx = $.inArray( tr.attr('id'), detailRows );
+    
+            if ( row.child.isShown() ) {
+                tr.removeClass( 'details' );
+                row.child.hide();
+                $(this).html('+')
+
+                // Remove from the 'open' array
+                detailRows.splice( idx, 1 );
+            }
+            else {
+                tr.addClass( 'details' );
+                row.child( format( row.data() ) ).show();
+                $(this).html('-')
+    
+                // Add to the 'open' array
+                if ( idx === -1 ) {
+                    detailRows.push( tr.attr('id') );
+                }
+            }
+        } );
+
+        tableSend.on( 'draw', function () {
+            $.each( detailRows, function ( i, id ) {
+                $('#'+id+' td.details-control').trigger( 'click' );
+            } );
+        } );
+    })
+
     $('#form-confirm').on('submit', function(e) {
         e.preventDefault()
-        console.log($(this).serialize())
         $('#confirmPesanan').modal('hide')
         $.ajax({
             url: '{{route("confirmOrder")}}',

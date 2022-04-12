@@ -180,6 +180,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'admin']], funct
     Route::post('to_send/page/send', [ThesisAdminOrderController::class, 'sendOrder'])->name('send_order');
     Route::get('sending', [ThesisAdminOrderController::class, 'sendingPage'])->name('sending_page');
     Route::get('sending/page/list', [ThesisAdminOrderController::class, 'sendingList'])->name('sending_list');
+    Route::get('completed', [ThesisAdminOrderController::class, 'completedPage'])->name('completed_page');
+    Route::get('completed/page/list', [ThesisAdminOrderController::class, 'completedList'])->name('completed_list');
 });
 
 Route::group(['middleware' => 'auth'], function()
@@ -190,6 +192,7 @@ Route::group(['middleware' => 'auth'], function()
     Route::get('order/req/paid', [ThesisClientOrderController::class, 'orderPaid'])->name('pesananLunas');
     Route::post('order/req/upload-transfer', [ThesisClientOrderController::class, 'uploadTransfer'])->name('uploadTransfer');
     Route::post('order/req/confirm-order', [ThesisClientOrderController::class, 'confirmOrder'])->name('confirmOrder');
+    Route::get('order/req/completed', [ThesisAdminOrderController::class, 'completedList'])->name('orderCompleted');
 });
 
 // admin

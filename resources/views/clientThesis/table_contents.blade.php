@@ -72,23 +72,20 @@
 <!-- Pesanan Selesai -->
 <div class="tab-pane animation-slide-bottom" id="pesanan_selesai" role="tabpanel">
     <div class="example-wrap">
-        <br>
-        <h4 class="example-title">Daftar Pesanan Selesai</h4>
         <div class="example">
             <div class="table-responsive">
                 <table class="table display w-full display nowrap" id="table-pesanan-selesai">
                     <thead>
                         <tr>
-                            <th></th>
-                            <th>No.</th>
-                            <th>No. Tagihan</th>
-                            <th>Metode Bayar</th>
-                            <th>Total</th>
-                            <th>Status Bayar</th>
+                            <th width="5%"></th>
+                            <th width="5%">No.</th>
+                            <th>No. Nota</th>
+                            <th width="10%">Tipe User</th>
+                            <th>Pembeli</th>
                             <th>Tanggal Pesan</th>
+                            <th>Total</th>
                         </tr>
                     </thead>
-                    
                 </table>
             </div>
         </div>

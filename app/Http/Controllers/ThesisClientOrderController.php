@@ -137,7 +137,9 @@ class ThesisClientOrderController extends Controller
                 ON o.po_id = po.id
             LEFT JOIN tagihans as t
                 ON t.po_id = po.id
-            WHERE o.status = "DISETUJUI SEMUA" AND t.status = "LUNAS"
+            WHERE o.status = "DISETUJUI SEMUA" 
+                AND t.status = "LUNAS"
+                AND t.kirim != "DITERIMA"
             GROUP BY po.no_nota
         ');
         // dd(json_encode(explode('"', $pesanan[0]->barang)));
@@ -202,6 +204,15 @@ class ThesisClientOrderController extends Controller
 
     public function confirmOrder(Request $request)
     {
-        dd($request->post());
+        DB::beginTransaction();
+        try {
+            DB::table('tagihans')
+                ->where('po_id', $request->po_id_confirm)
+                ->update(['kirim' => 'DITERIMA']);
+            DB::commit();
+            return response("confirm order success", 200);
+        } catch (\Throwable $th) {
+            return response($th, 500);
+        }
     }
 }
