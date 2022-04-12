@@ -27,8 +27,8 @@ $showNavigation = false;
             <div class="panel-body nav-tabs-animate nav-tabs-horizontal" data-plugin="tabs">
                 <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                     <li class="nav-item" role="presentation"><a class="active nav-link" data-toggle="tab" href="#proses" aria-controls="proses" role="tab">Pesanan Masuk</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" onclick="btnRefresh()" href="#pesanan_proses" aria-controls="pesanan_proses" role="tab">Pesanan Proses</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" onclick="btnRefresh()" href="#pesanan_selesai" aria-controls="pesanan_selesai" role="tab">Pesanan Selesai</a></li>
+                    <li class="nav-item pesanan_proses" role="presentation"><a class="nav-link" data-toggle="tab" href="#pesanan_proses" aria-controls="pesanan_proses" role="tab">Pesanan Proses</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#pesanan_selesai" aria-controls="pesanan_selesai" role="tab">Pesanan Selesai</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -41,93 +41,342 @@ $showNavigation = false;
         </div>
     </div>
 </div>
+@include('clientThesis.modal.modal_pembayaran')
 @endsection
 
 @section('js')
 <script>
-    function format ( d ) {
-        console.log(JSON.parse(d.barang.replace(/&quot;/g, '"')))
-        let newTbl = JSON.parse(d.barang.replace(/&quot;/g, '"'))
-        let openingTbl = `<table style="width:100%" class="table table-bordered table-hover table-striped">
-            <thead>
-                <tr>
-                    <th>Nama Barang</th>
-                    <th>qty</th>
-                    <th>Harga</th>
-                </tr>
-            </thead>
-            <tbody>
-                `
-        newTbl.forEach((item, _index) => {
-            // str += 'Full name: '+item.nama_barang+' '+item.qty+'<br>'+
-            //     'Salary: '+item.harga+'<br>';
-            openingTbl += `
-                <tr>
-                    <td>${item.nama_barang}</td>
-                    <td>${item.qty}</td>
-                    <td>${item.harga}</td>
-                </tr>
-            `
-        });
-        let closerTbl = openingTbl + `
-            </tbody>
-        </table>`
-        return closerTbl;
+    function formatRupiah(x) {
+        let number_string = ''
+        if (Number.isInteger(x)) number_string = x.toString()
+        else number_string = x
+
+        split   		= number_string.split(','),
+        sisa     		= split[0].length % 3,
+        rupiah     		= split[0].substr(0, sisa),
+        ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+
+        // tambahkan titik jika yang di input sudah menjadi angka ribuan
+        if(ribuan){
+            separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
+        }	
+        return "Rp. "+rupiah
     }
-     let dt = $('#table-unaccepted').DataTable({
-        ajax: '{{route("pesananBelumDisetujui")}}',
-        searching: false,
-        columns: [
-            {
-                class:"details-control",
-                orderable:false,
-                data: null,
-                defaultContent: "+"
-            },
-            {
-                data: '',
-                render: (data, type, row, meta) => {
-                    return meta.row + meta.settings._iDisplayStart + 1
+
+    $(document).ready(function() {
+        function format ( d ) {
+            console.log(JSON.parse(d.barang.replace(/&quot;/g, '"')))
+            let newTbl = JSON.parse(d.barang.replace(/&quot;/g, '"'))
+            let openingTbl = `<table style="width:100%" class="table table-bordered table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>Nama Barang</th>
+                        <th>qty</th>
+                        <th>Harga</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    `
+            newTbl.forEach((item, _index) => {
+                // str += 'Full name: '+item.nama_barang+' '+item.qty+'<br>'+
+                //     'Salary: '+item.harga+'<br>';
+                openingTbl += `
+                    <tr>
+                        <td>${item.nama_barang}</td>
+                        <td>${item.qty}</td>
+                        <td>${formatRupiah(item.harga)}</td>
+                    </tr>
+                `
+            });
+            let closerTbl = openingTbl + `
+                </tbody>
+            </table>`
+            return closerTbl;
+        }
+        let dt = $('#table-unaccepted').DataTable({
+            ajax: '{{route("pesananBelumDisetujui")}}',
+            searching: false,
+            columns: [
+                {
+                    class:"details-control",
+                    orderable:false,
+                    data: null,
+                    defaultContent: "+"
+                },
+                {
+                    data: '',
+                    render: (data, type, row, meta) => {
+                        return meta.row + meta.settings._iDisplayStart + 1
+                    }
+                },
+                {data: 'no_nota'},
+                {data: 'created_at'},
+                {
+                    data: 'total_harga',
+                    render: (data, type, row, meta) => {
+                        return formatRupiah(row.total_harga)
+                    }
+                },
+            ]
+        })
+
+        let detailRows = [];
+    
+        $('#table-unaccepted tbody').on( 'click', 'tr td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = dt.row( tr );
+            var idx = $.inArray( tr.attr('id'), detailRows );
+    
+            if ( row.child.isShown() ) {
+                tr.removeClass( 'details' );
+                row.child.hide();
+                $(this).html('+')
+
+                // Remove from the 'open' array
+                detailRows.splice( idx, 1 );
+            }
+            else {
+                tr.addClass( 'details' );
+                row.child( format( row.data() ) ).show();
+                $(this).html('-')
+    
+                // Add to the 'open' array
+                if ( idx === -1 ) {
+                    detailRows.push( tr.attr('id') );
                 }
-            },
-            {data: 'no_nota'},
-            {data: 'created_at'},
-            {data: 'total_harga'},
-        ]
+            }
+        } );
+
+        dt.on( 'draw', function () {
+            $.each( detailRows, function ( i, id ) {
+                $('#'+id+' td.details-control').trigger( 'click' );
+            } );
+        } );
     })
 
-    let detailRows = [];
- 
-    $('#table-unaccepted tbody').on( 'click', 'tr td.details-control', function () {
-        var tr = $(this).closest('tr');
-        var row = dt.row( tr );
-        var idx = $.inArray( tr.attr('id'), detailRows );
- 
-        if ( row.child.isShown() ) {
-            tr.removeClass( 'details' );
-            row.child.hide();
-            $(this).html('+')
+    $('.pesanan_proses').on('click', function() {
+        if ($.fn.DataTable.isDataTable('#table-unpaid')) return
 
-            // Remove from the 'open' array
-            detailRows.splice( idx, 1 );
+        function format ( d ) {
+            console.log(JSON.parse(d.barang.replace(/&quot;/g, '"')))
+            let newTbl = JSON.parse(d.barang.replace(/&quot;/g, '"'))
+            let openingTbl = `<table style="width:100%" class="table table-bordered table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>Nama Barang</th>
+                        <th>qty</th>
+                        <th>Harga</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    `
+            newTbl.forEach((item, _index) => {
+                openingTbl += `
+                    <tr>
+                        <td>${item.nama_barang}</td>
+                        <td>${item.qty}</td>
+                        <td>${formatRupiah(item.harga)}</td>
+                    </tr>
+                `
+            });
+            let closerTbl = openingTbl + `
+                </tbody>
+            </table>`
+            return closerTbl;
         }
-        else {
-            tr.addClass( 'details' );
-            row.child( format( row.data() ) ).show();
-            $(this).html('-')
- 
-            // Add to the 'open' array
-            if ( idx === -1 ) {
-                detailRows.push( tr.attr('id') );
+        let dt = $('#table-unpaid').DataTable({
+            ajax: '{{route("pesananBelumDibayar")}}',
+            searching: false,
+            columns: [
+                {
+                    class:"details-control",
+                    orderable:false,
+                    data: null,
+                    defaultContent: "+"
+                },
+                {
+                    data: '',
+                    render: (data, type, row, meta) => {
+                        return meta.row + meta.settings._iDisplayStart + 1
+                    }
+                },
+                {data: 'no_nota'},
+                {data: 'created_at'},
+                {
+                    data: '',
+                    render: (data, type, row, meta) => {
+                        return formatRupiah(row.total_harga)
+                    }
+                },
+                {data: 'status_pembayaran'},
+                {
+                    data: '',
+                    render: (data, type, row, meta) => {
+                        let buttons = `
+                            <button data-toggle="modal" data-nota="${row.no_nota}" data-limit="${row.total_harga}" type="button" class="btn btn-warning btn-xs btn-pay"><li class="icon md-money"></li>Bayar</button>
+                        `
+                        return buttons
+                    }
+                },
+            ],
+            drawCallback: ()=>{
+                $('.btn-pay').unbind()
+                $('.btn-pay').on('click', function() {
+                    $('#noNotaText').html($(this).data('nota'))
+                    $('#accumulation').html(formatRupiah($(this).data('limit')))
+                    $('#jumlahBayarInput').data('limit', $(this).data('limit'))
+                    $('#jumlahBayarInput').val($(this).data('limit'))
+                    $('#modalPembayaran').modal('show')
+                })
             }
-        }
-    } );
+        })
 
-    dt.on( 'draw', function () {
-        $.each( detailRows, function ( i, id ) {
-            $('#'+id+' td.details-control').trigger( 'click' );
+        let detailRows = [];
+    
+        $('#table-unpaid tbody').on( 'click', 'tr td.details-control', function () {
+            console.log('asdf')
+            var tr = $(this).closest('tr');
+            var row = dt.row( tr );
+            var idx = $.inArray( tr.attr('id'), detailRows );
+    
+            if ( row.child.isShown() ) {
+                tr.removeClass( 'details' );
+                row.child.hide();
+                $(this).html('+')
+
+                // Remove from the 'open' array
+                detailRows.splice( idx, 1 );
+            }
+            else {
+                tr.addClass( 'details' );
+                row.child( format( row.data() ) ).show();
+                $(this).html('-')
+    
+                // Add to the 'open' array
+                if ( idx === -1 ) {
+                    detailRows.push( tr.attr('id') );
+                }
+            }
         } );
-    } );
+
+        dt.on( 'draw', function () {
+            $.each( detailRows, function ( i, id ) {
+                $('#'+id+' td.details-control').trigger( 'click' );
+            } );
+        } );
+    })
+
+    $('.tab-paid').on('click', function() {
+        if ($.fn.DataTable.isDataTable('#table-paid')) return false
+
+        function format ( d ) {
+            console.log(JSON.parse(d.barang.replace(/&quot;/g, '"')))
+            let newTbl = JSON.parse(d.barang.replace(/&quot;/g, '"'))
+            let openingTbl = `<table style="width:100%" class="table table-bordered table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>Nama Barang</th>
+                        <th>qty</th>
+                        <th>Harga</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    `
+            newTbl.forEach((item, _index) => {
+                // str += 'Full name: '+item.nama_barang+' '+item.qty+'<br>'+
+                //     'Salary: '+item.harga+'<br>';
+                openingTbl += `
+                    <tr>
+                        <td>${item.nama_barang}</td>
+                        <td>${item.qty}</td>
+                        <td>${item.harga}</td>
+                    </tr>
+                `
+            });
+            let closerTbl = openingTbl + `
+                </tbody>
+            </table>`
+            return closerTbl;
+        }
+        let dt = $('#table-paid').DataTable({
+            ajax: '{{route("pesananBelumDibayar")}}',
+            searching: false,
+            columns: [
+                {
+                    class:"details-control",
+                    orderable:false,
+                    data: null,
+                    defaultContent: "+"
+                },
+                {
+                    data: '',
+                    render: (data, type, row, meta) => {
+                        return meta.row + meta.settings._iDisplayStart + 1
+                    }
+                },
+                {data: 'no_nota'},
+                {data: 'created_at'},
+                {data: 'total_harga'},
+                {data: 'status_pembayaran'},
+                {
+                    data: '',
+                    render: (data, type, row, meta) => {
+                        let buttons = `
+                            <button data-toggle="modal" data-target="modalPembayaran" type="button" class="btn btn-warning btn-xs btn-pay"><li class="icon md-money"></li>Bayar</button>
+                        `
+                        return buttons
+                    }
+                },
+            ]
+        })
+
+        let detailRows = [];
+    
+        $('#table-paid tbody').on( 'click', 'tr td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = dt.row( tr );
+            var idx = $.inArray( tr.attr('id'), detailRows );
+    
+            if ( row.child.isShown() ) {
+                tr.removeClass( 'details' );
+                row.child.hide();
+                $(this).html('+')
+
+                // Remove from the 'open' array
+                detailRows.splice( idx, 1 );
+            }
+            else {
+                tr.addClass( 'details' );
+                row.child( format( row.data() ) ).show();
+                $(this).html('-')
+    
+                // Add to the 'open' array
+                if ( idx === -1 ) {
+                    detailRows.push( tr.attr('id') );
+                }
+            }
+        } );
+
+        dt.on( 'draw', function () {
+            $.each( detailRows, function ( i, id ) {
+                $('#'+id+' td.details-control').trigger( 'click' );
+            } );
+        } );
+    })
+
+    // $('#jumlahBayarInput').on('input', function() {
+    //     let x = document.getElementById("jumlahBayarInput").value;
+    //     let limit = parseInt($("#jumlahBayarInput").data('limit'))
+    //     if (x < 0) {
+    //         document.getElementById("jumlahBayarInput").value = 0
+    //         x = 0
+    //     }else if(x >limit){
+    //         document.getElementById("jumlahBayarInput").value = limit
+    //         x = limit
+    //     }
+    //     document.getElementById("moneyFormat").innerHTML = "Rp. "+formatRupiah(x)
+    // })
 </script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 @endsection

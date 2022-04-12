@@ -89,7 +89,7 @@ class ThesisClientOrderController extends Controller
         //
     }
 
-    public function pesananBelumDisetujui()
+    public function orderUnaccepted()
     {
         $pesanan = DB::select('SELECT po.*, SUM(o.qty * o.harga_order) as total_harga, CONCAT( "[", GROUP_CONCAT(JSON_OBJECT("nama_barang", o.nama_barang, "qty", o.qty, "harga", o.harga_order)), "]") as barang
             FROM purchase_orders AS po
@@ -100,6 +100,25 @@ class ThesisClientOrderController extends Controller
                 FROM tagihans as t
                 WHERE po.id = t.po_id
             ) AND o.status = "BELUM DISETUJUI"
+            GROUP BY po.no_nota
+        ');
+        // dd(json_encode(explode('"', $pesanan[0]->barang)));
+        return datatables($pesanan)->toJson();
+    }
+
+    public function orderUnpaid()
+    {
+        $pesanan = DB::select('SELECT po.*, 
+                SUM(o.qty * o.harga_order) as total_harga, 
+                CONCAT( "[", GROUP_CONCAT(JSON_OBJECT("nama_barang", o.nama_barang, "qty", o.qty, "harga", o.harga_order)), "]") as barang,
+                t.status as status_pembayaran,
+                t.kirim
+            FROM purchase_orders AS po
+            LEFT JOIN orders as o 
+                ON o.po_id = po.id
+            LEFT JOIN tagihans as t
+                ON t.po_id = po.id
+            WHERE o.status = "DISETUJUI SEMUA"
             GROUP BY po.no_nota
         ');
         // dd(json_encode(explode('"', $pesanan[0]->barang)));

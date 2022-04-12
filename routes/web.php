@@ -182,8 +182,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'admin']], funct
 Route::group(['middleware' => 'auth'], function()
 {
     Route::get('order', [ThesisClientOrderController::class, 'index']);
-    Route::get('order/pesanan/belum-disetujui', [ThesisClientOrderController::class, 'pesananBelumDisetujui'])->name('pesananBelumDisetujui');
-    // Route::get('order/pesanan/belum-disetujui', [ThesisClientOrderController::class, 'pesananBelumDisetujui']);
+    Route::get('order/req/unaccepted', [ThesisClientOrderController::class, 'orderUnaccepted'])->name('pesananBelumDisetujui');
+    Route::get('order/req/unpaid', [ThesisClientOrderController::class, 'orderUnpaid'])->name('pesananBelumDibayar');
 });
 
 // admin
