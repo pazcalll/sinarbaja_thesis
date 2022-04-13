@@ -212,6 +212,9 @@ $showNavigation = false;
                         let buttons = `
                             <button data-toggle="modal" data-po_id="${row.id}" data-nota="${row.no_nota}" data-limit="${row.total_harga}" type="button" class="btn btn-warning btn-xs btn-pay"><li class="icon md-money"></li>Bayar</button>
                         `
+                        if (row.status_pembayaran != 'BELUM DIBAYAR') {
+                            buttons = '_'
+                        }
                         return buttons
                     }
                 },

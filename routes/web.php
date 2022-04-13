@@ -182,6 +182,10 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'admin']], funct
     Route::get('sending/page/list', [ThesisAdminOrderController::class, 'sendingList'])->name('sending_list');
     Route::get('completed', [ThesisAdminOrderController::class, 'completedPage'])->name('completed_page');
     Route::get('completed/page/list', [ThesisAdminOrderController::class, 'completedList'])->name('completed_list');
+
+    // approval thesis
+    Route::post('approval/get_url', [ThesisAdminOrderController::class, 'approvalUrl'])->name('approval_url');
+    Route::post('approval/acceptance', [ThesisAdminOrderController::class, 'approvalBill'])->name('bill_acceptance');
 });
 
 Route::group(['middleware' => 'auth'], function()

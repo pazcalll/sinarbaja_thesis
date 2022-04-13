@@ -211,6 +211,43 @@ class ThesisAdminOrderController extends Controller
         return datatables($data)->toJson();
     }
 
+    public function approvalUrl(Request $request)
+    {
+        $po_id = $request->post('po_id');
+        $bukti_tf = DB::select('SELECT *
+            FROM payments
+            WHERE po_id = '.$po_id.'
+        ');
+        return response(collect($bukti_tf)->first()->bukti_tf, 200);
+    }
+
+    public function approvalBill(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            if ($request->acceptance == "true") {
+                DB::table('payments')
+                    ->where('po_id', $request->po_id)
+                    ->update(['valid'=>2]);
+                DB::table('tagihans')
+                    ->where('po_id', $request->po_id)
+                    ->update(['status' => 'LUNAS']);
+            }elseif ($request->acceptance == "false") {
+                DB::table('payments')
+                    ->where('po_id', $request->po_id)
+                    ->delete();
+                DB::table('tagihans')
+                    ->where('po_id', $request->po_id)
+                    ->update(['status' => 'BELUM DIBAYAR']);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollback();
+            return response($th, 500);
+        }
+    }
+
     public function sendOrder(Request $request)
     {
         try {

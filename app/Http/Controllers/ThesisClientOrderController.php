@@ -118,7 +118,8 @@ class ThesisClientOrderController extends Controller
                 ON o.po_id = po.id
             LEFT JOIN tagihans as t
                 ON t.po_id = po.id
-            WHERE o.status = "DISETUJUI SEMUA" AND t.status = "BELUM DIBAYAR"
+            WHERE o.status = "DISETUJUI SEMUA" 
+                AND t.status != "LUNAS"
             GROUP BY po.no_nota
         ');
         // dd(json_encode(explode('"', $pesanan[0]->barang)));
@@ -174,7 +175,6 @@ class ThesisClientOrderController extends Controller
                 $filename =time().'_'.$request->file('inputBukti')->getClientOriginalName();
                 $request->file('inputBukti')->storeAs('public/tagihan', $filename);
                 $po_id = $request['po_id_pembayaran'];
-                $tagihan_id = $request['id'];
                 $nominal_bayar = $request['jumlahBayarInput'];
 
                 // if($request['nominal_terkirim'] < $nominal_bayar) $nominal_bayar = $request['nominal_terkirim'];
@@ -182,13 +182,12 @@ class ThesisClientOrderController extends Controller
 
                 $data = [
                     'po_id' => $po_id,
-                    'tagihan_id' => $tagihan_id,
                     'valid' => 9,
                     'nominal_bayar' => $nominal_bayar,
                     'bukti_tf' => 'public/tagihan/'.$filename
                 ];
                 DB::table('payments')->insert($data);
-                DB::table('tagihans')->where('po_id', $po_id)->update(['status' => 'LUNAS']);
+                DB::table('tagihans')->where('po_id', $po_id)->update(['status' => 'BELUM DIPROSES ADMIN']);
                 DB::commit();
                 return response([
                     'message' => 'Record created',

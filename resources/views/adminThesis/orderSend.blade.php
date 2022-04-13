@@ -19,6 +19,7 @@
                 <th>Tanggal Pesan</th>
                 <th>Total</th>
                 <th>Status Pembayaran</th>
+                <th>Bukti Transfer</th>
             </tr>
         </thead>
         <tbody>
@@ -26,6 +27,8 @@
         </tbody>
     </table>
 </div>
+
+@include('adminThesis.modal.modalPersetujuanTf')
 
 <script>
     function sendOrder(status_pembayaran, id) {
@@ -47,6 +50,22 @@
                 }
             })
         }
+    }
+    function bill_acceptance(po_id, acceptance) {
+        $.ajax({
+            url: '{{route("bill_acceptance")}}',
+            type: 'POST',
+            data: {
+                po_id: po_id,
+                acceptance: acceptance
+            },
+            success: (res) => {
+                $('#modal-persetujuan-tf').modal('hide')
+                $('#modal-persetujuan-tf').on('hidden.bs.modal', function () {
+                    $('.to-send').click()
+                })
+            }
+        })
     }
     $(document).ready(function() {
         function format ( d ) {
@@ -85,7 +104,10 @@
         }
         let tableSend = $('#tbl_send').DataTable({
             ajax: '{{route("send_list")}}',
+            processing: true,
+            serverSide: true,
             searching: false,
+            stateSave: true,
             columns: [
                 {
                     class:"details-control",
@@ -105,7 +127,49 @@
                 {data: 'created_at'},
                 {data: 'total_harga'},
                 {data: 'status_pembayaran'},
-            ]
+                {
+                    data: '',
+                    render: (data, type, row, meta) => {
+                        let button = `
+                            <button data-po_id="${row.id}" type="button" class="btn btn-warning btn-persetujuan">Modal Persetujuan</button>
+                        `
+                        if (row.status_pembayaran != "BELUM DIPROSES ADMIN") {
+                            button = '_'
+                        }
+                        return button
+                    }
+                }
+            ],
+            drawCallback: () => {
+                $('.btn-persetujuan').unbind()
+                $('.btn-persetujuan').on('click', function() {
+                    let bukti_tf = ''
+                    $.ajax({
+                        url: '{{route("approval_url")}}',
+                        type: 'POST',
+                        data: {
+                            po_id: $(this).data('po_id')
+                        },
+                        success: (res) => {
+                            bukti_tf = res
+                            $('.img').html(`
+                                <a href="{{asset('storage/app/${bukti_tf}')}}" 
+                                    target="_blank" 
+                                    type="button"
+                                    class="btn btn-xs btn-primary">
+                                    <i class="icon md-money-box" aria-hidden="true"></i>Lihat Bukti Transfer
+                                </a>
+                            `)
+                            $('#modal-persetujuan-tf .modal-footer').html(`
+                                <button onclick="$('#modal-persetujuan-tf .modal-footer').html('') $('#modal-persetujuan-tf').modal('hide')" data-dismiss="modal" class="btn btn-secondary">Tutup</button>
+                                <button onclick="bill_acceptance(${$(this).data('po_id')}, false)" class="btn btn-danger">Tolak</button>
+                                <button onclick="bill_acceptance(${$(this).data('po_id')}, true)" class="btn btn-primary">Terima</button>
+                            `)
+                            $('#modal-persetujuan-tf').modal('show')
+                        }
+                    })
+                })
+            }
         })
 
         let detailRows = [];
