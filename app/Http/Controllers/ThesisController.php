@@ -171,7 +171,7 @@ class ThesisController extends Controller
 
     // ========================================================================================================
     // The main algorithm
-    function rabinKarp($n, $insert)
+    function rabinKarpFormula($n, $insert)
     {
         $base = $this->getter();
         $data = array_column($base[1], 'barang_nama');
@@ -218,11 +218,16 @@ class ThesisController extends Controller
             $similarities[] = $this->diceSimilarity($value, $hashesData[$key], $hashesInsert);
         }
 
-        return response()->json([
-            'status' => 'success',
-            'data' => $this->itemDetails([$similarities, $data, $base[2]])
-        ], 200);
+		return $this->itemDetails([$similarities, $data, $base[2]]);
     }
+
+	public function rabinKarp($n, $insert)
+	{
+		return response()->json([
+            'status' => 'success',
+            'data' => $this->rabinKarpFormula($n, $insert)
+        ], 200);
+	}
 
     function getter()
     {
@@ -274,8 +279,6 @@ class ThesisController extends Controller
         ->leftJoin('harga_produk_user AS d','d.id_product','a.barang_id')
         ->leftJoin('user_setting AS e','d.id_user','e.user_id')
         ->groupBy('a.barang_id');
-        $count = $get->get();
-        $get_count = count($count);
         $get = $get->get();
         foreach ($get as $key => $value) {
           $stok = $value->unit_masuk_sum - $value->unit_keluar_sum;
@@ -556,5 +559,75 @@ class ThesisController extends Controller
         $stringsData = $similaritiesAnalytics;
         return view('analytics.rabin-karp', compact('stringsUser', 'stringsData'));
         // dd($req->all());
+    }
+
+    public function speedPage(Request $request)
+    {
+        return view('analytics.test-speed')->with('string', $request->string);
+    }
+
+    public function speedRabin(Request $request)
+    {
+        // dd($request->all());
+        // return response($this->rabinKarp(4, $request->string), 200);
+		return response()->json([
+            'status' => 'success',
+            'data' => $this->rabinKarpFormula(4, $request->string)
+        ], 200);
+    }
+    
+    public function speedSQL(Request $request)
+    {
+        // dd($request->all());
+		$data = [];
+        $get = DB::table('tbl_barang AS a')
+			->select('a.*',
+				'b.*',
+				'c.*',
+				'd.*',
+				DB::raw('SUM(b.unit_masuk) AS unit_masuk_sum'),
+				DB::raw('SUM(b.unit_keluar) AS unit_keluar_sum'),
+				'e.harga',
+				'e.stok')
+			->where('a.barang_nama', 'like', '%'.$request->string.'%');
+        if (Auth::user() != null) {
+			$get = $get->where('d.id_user',Auth::user()->id);
+        }
+        if (!empty(Auth::user()->id_group)) {
+            $get = $get->where('c.id_group',Auth::user()->id_group);
+        }
+		$get = $get->whereNotNull('b.unit_masuk');
+        $get = $get->leftJoin('tbl_log_stok AS b','a.barang_id','b.id_barang')
+            ->join('harga_produk_group AS c','c.id_product','a.barang_id')
+            ->leftJoin('harga_produk_user AS d','d.id_product','a.barang_id')
+            ->leftJoin('user_setting AS e','d.id_user','e.user_id')
+            ->groupBy('a.barang_id')
+			->get();
+		foreach ($get as $key => $value) {
+			$stok = $value->unit_masuk_sum - $value->unit_keluar_sum;
+			if(!empty(Auth::user()->id_group)){
+				if (!empty($value->harga_user)) {
+				$harga = 'Rp. '.number_format($value->harga_user, 2, ',', '.');
+				}
+			}
+			else {
+				$harga = 'Login untuk melihat harga';
+			}
+			if ($stok > 0) {
+				$value->stok == 'on'?$stk_str = $stok.'  '.Satuan::where('satuan_id', $value->satuan_id)->get('satuan_nama')[0]->satuan_nama:$stk_str = null;
+				$value->harga == 'on'?$harga = $harga:$harga = null;
+				$data[] = array(
+					'id' => $value->barang_id,
+					'nama' => $value->barang_nama,
+					'kategori' => $value->barang_alias,
+					'stok' => !empty(Auth::user())?$stk_str:null,
+					'harga' => !empty($harga)?$harga:null,
+				);
+			}
+		}
+		return response()->json([
+			'status' => 'success',
+			'data' => $data
+		], 200);
     }
 }

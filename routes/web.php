@@ -150,7 +150,10 @@ Route::prefix('analytics')->group(function()
     Route::post('/rabin-hashing', 'ThesisController@rabin_hashing');
     Route::post('/rabin-intersect', 'ThesisController@rabin_intersect');
     Route::post('/similarity', 'ThesisController@similarity');
-    Route::post('/similarity-res', 'ThesisController@similarityRes');
+    // Route::post('/similarity-res', 'ThesisController@similarityRes');
+    Route::post('/speed', 'ThesisController@speedPage');
+    Route::post('/speed/rabin', 'ThesisController@speedRabin');
+    Route::post('/speed/sql', 'ThesisController@speedSQL');
 });
 
 Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'admin']], function ()
