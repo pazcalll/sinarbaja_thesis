@@ -19,7 +19,7 @@ $bodyType = 'site-menubar-unfold';
         <div class="panel-body">
             <div class="table-responsive">
                 <div class="title">
-                    <span class="title-catalogue" style="margin-bottom: 5px; color: blue"><b>{{$barang_alias}}</b>
+                    <span class="title-catalogue" style="margin-bottom: 5px; color: blue"><b>{{str_replace('__', ' ',$barang_alias)}}</b>
                     </span>
                     <table class="table dataTable" id="table-katalog">
                         <thead>

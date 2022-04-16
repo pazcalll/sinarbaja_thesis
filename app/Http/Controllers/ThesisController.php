@@ -578,7 +578,7 @@ class ThesisController extends Controller
     
     public function speedSQL(Request $request)
     {
-        // dd($request->all());
+        // dd($request->post());
 		$data = [];
         $get = DB::table('tbl_barang AS a')
 			->select('a.*',

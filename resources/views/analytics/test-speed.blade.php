@@ -25,14 +25,12 @@
             },
             success:(res)=>{
                 let totalTime = new Date().getTime()-ajaxTime
-                console.log(speedUrl+": ", totalTime)
-                console.log(res)
                 let speedTr = ''
                 speedTr += `
                     <tr>
                         <td>${speedUrl}</td>
                         <td>${res.data.length}</td>
-                        <td>${totalTime}</td>
+                        <td>${totalTime} ms</td>
                     </tr>
                 `
                 $('table tbody').append(speedTr)

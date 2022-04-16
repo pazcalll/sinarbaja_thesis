@@ -53,6 +53,7 @@ class CatalogueController extends Controller
 
     public function get_detailBarang(Request $request){
         $data = [];
+        // dd($request->post('alias'));
         $all_data = $request["all_data"];
         $draw = $request["draw"];
         $search = $request['search']['value'];
@@ -61,7 +62,7 @@ class CatalogueController extends Controller
         $get = DB::table('tbl_barang AS a')
         ->select('a.*','b.*','c.*','d.*',DB::raw('SUM(b.unit_masuk) AS unit_masuk_sum'),
         DB::raw('SUM(b.unit_keluar) AS unit_keluar_sum'),'e.harga','e.stok')
-        ->where('a.barang_alias', $request->alias);
+        ->where('a.barang_alias', str_replace('__', ' ',$request->alias));
         if (Auth::user() != null) {
           $get = $get->where('d.id_user',Auth::user()->id);
         }

@@ -82,7 +82,12 @@ $bodyType = 'site-menubar-unfold';
                     <div class="panel" style="margin: 0 auto;">
                         <div class="panel-body">
                             <div id="loading-notification"></div>
+                            <span class="btn-group">
+                                <button type="button" class="btn btn-primary" onclick="search($('#input_search').val(), `sql`)">SQL</button>
+                                <button type="button" class="btn btn-primary" onclick="search($('#input_search').val(), `rabin`)">Rabin</button>
+                            </span>
                             <button class="btn btn-info" onclick="analyticsPage()">Analytics</button>
+                            
                             <table id="search-table" style="margin: 0 auto; width: 100%;">
                                 <thead style="border-bottom: 1px solid gray;">
                                     <tr style="height: 70px;">
@@ -154,9 +159,9 @@ $bodyType = 'site-menubar-unfold';
             bindView(data)
         });
         //button filter katalog
-        $('#btn_filter').on('click', function() {
-            filter()
-        });
+        // $('#btn_filter').on('click', function() {
+        //     filter()
+        // });
         //end button
 
         $("#search_form").submit(function(event) {
@@ -164,39 +169,40 @@ $bodyType = 'site-menubar-unfold';
             var input = $("#input_search").val();
             search(input)
         });
-
-        // $('#btn-buy').click(function() {
-        //     let total = 0
-        //     carts.forEach((product, _index) => total += parseInt(product.harga) * parseInt(product.qty))
-        //     buy(carts, total)
-        //     carts = []
-        // })
         //function load more
-        $('#load-more').on('click', function() {
-            move(path, (currentPage + 1))
-        })
+        // $('#load-more').on('click', function() {
+        //     move(path, (currentPage + 1))
+        // })
         //end function
 
         //function reset filter kategori
-        $(document).ready(function() {
-            $("#reset").click(function() {
-                document.getElementById("form_filter").reset();
-                $('#kategori').val($('#kategori option:first-child').val()).trigger('change');
-                $('#merek').val($('#merek option:first-child').val()).trigger('change');
-                $("#filterKatalog").modal();
-            });
-        })
+        // $(document).ready(function() {
+        //     $("#reset").click(function() {
+        //         document.getElementById("form_filter").reset();
+        //         $('#kategori').val($('#kategori option:first-child').val()).trigger('change');
+        //         $('#merek').val($('#merek option:first-child').val()).trigger('change');
+        //         $("#filterKatalog").modal();
+        //     });
+        // })
         //end reset filter kategori
     }) // end of jquery
 
-    function search(input) {
+    function search(input, string = 'strings') {
+        let url = ''
+        let type = 'GET'
+        if(string == 'sql') {
+            url = `{{ url('analytics/speed/sql') }}`
+            type = 'POST'    
+        }
+        else url = `{{ url('data/rabin') }}/${4}/${input}`
+        console.log(url, input)
         $('#loading-notification').html('Loading, please wait...')
         $.ajax({
-            type: "GET",
-            url: `{{ url('data/rabin') }}/${4}/${input}`,
-            dataType: "json",
+            type: type,
+            url: url,
             data: {
-                search: input
+                search: input,
+                string: input
             },
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -315,22 +321,6 @@ $bodyType = 'site-menubar-unfold';
         }
     }
 
-    function filter() {
-        $.ajax({
-            url: "{{ url('filter') }}",
-            type: 'GET',
-            dataType: 'json',
-            data: $('#form_filter').serialize(),
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: (response) => {
-                $('#product-wrapper').empty()
-                bindView(response.data)
-            }
-        });
-    }
-
     function hargaGroup(){
         $.ajax({
             url: "{{ route('hargaGroup') }}",
@@ -357,6 +347,7 @@ $bodyType = 'site-menubar-unfold';
                     }
                 })
                 hargaPerGroup=response
+                console.log(hargaPerGroup)
             },
             error: (err) =>{
                 console.log(err)
@@ -367,24 +358,26 @@ $bodyType = 'site-menubar-unfold';
     let newdata = []
     let iterationCart = 0
     let iterationBuy = 0
-    hargaGroup()
-    hargaPerGroup.forEach((item, index)=>{
-        if (item.id_group == currentAuth.id_group) {
-            newHargaProduk.push(item)
-        }
-    })
+    // hargaGroup()
+    // hargaPerGroup.forEach((item, index)=>{
+    //     if (item.id_group == currentAuth.id_group) {
+    //         newHargaProduk.push(item)
+    //     }
+    // })
     function bindView(data) {
         currentPage = data.current_page
 
         $('#loader').hide()
         if (data != null && data.length != 0) {
             $('#result-not-found').hide()
+            console.log(data)
             data.forEach((product, index) => {
                 newdata.push(product);
                 if(currentPage != 1){
                     index = index + (4 * (currentPage-1))
                     console.log('true', index)
                 }
+                console.log(product)
                 let template = `
                             <div class="card card-shadow">
                                 <figure class="card-img-top overlay-hover overlay">
@@ -395,25 +388,28 @@ $bodyType = 'site-menubar-unfold';
                                     <h4 class="card-title text-center" style="font-size: 1rem; dont-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform:uppercase;">` + product + `</h4>
 
 									`
-                                    if (!currentAuth.message) {
-                                        let foreachMarker = 0
-                                        newHargaProduk.forEach((item, index)=>{
-                                            if (item.id_group == currentAuth.id_group && item.id_product == product.id) {
-                                                template+=`
-													<p class="text-center" style="color: #fb8b34; font-weight: bold"><a class="btn btn-round btn-primary" href="{{ url('detail/product') }}/` + product + `"><b>Detail</b></a></p>
-													`
-                                                foreachMarker = 1
-                                            }
-                                            else if(index == newHargaProduk.length-1 && foreachMarker == 0)
-                                                template+=`
-                                                <p class="text-center" style="color: #fb8b34; font-weight: bold"><a class="btn btn-round btn-primary" href="{{ url('detail/product') }}/` + product + `"><b>Detail</b></a></p>
-                                                `
-                                        })
-                                    }
-                                    else
-										template+=`
-										<p class="text-center" style="color: #fb8b34; font-weight: bold"><a class="btn btn-round btn-primary" href="{{ url('detail/product') }}/` + product + `"><b>Detail</b></a></p>
+                                    template+=`
+										<p class="text-center" style="color: #fb8b34; font-weight: bold"><a class="btn btn-round btn-primary" href="{{ url('detail/product') }}/` + product.replace(' ', '__') + `"><b>Detail</b></a></p>
 										`
+                                    // if (!currentAuth.message) {
+                                    //     let foreachMarker = 0
+                                    //     newHargaProduk.forEach((item, index)=>{
+                                    //         if (item.id_group == currentAuth.id_group && item.id_product == product.id) {
+                                    //             template+=`
+									// 				<p class="text-center" style="color: #fb8b34; font-weight: bold"><a class="btn btn-round btn-primary" href="{{ url('detail/product') }}/` + product + `"><b>Detail</b></a></p>
+									// 				`
+                                    //             foreachMarker = 1
+                                    //         }
+                                    //         else if(index == newHargaProduk.length-1 && foreachMarker == 0)
+                                    //             template+=`
+                                    //             <p class="text-center" style="color: #fb8b34; font-weight: bold"><a class="btn btn-round btn-primary" href="{{ url('detail/product') }}/` + product + `"><b>Detail</b></a></p>
+                                    //             `
+                                    //     })
+                                    // }
+                                    // else
+									// 	template+=`
+									// 	<p class="text-center" style="color: #fb8b34; font-weight: bold"><a class="btn btn-round btn-primary" href="{{ url('detail/product') }}/` + product + `"><b>Detail</b></a></p>
+									// 	`
                                 template+=`
                             </div>
                             <div class="card-block text-center div_card_beli my-cart-btn" style=" padding-top: 5px; col-lg-2">
@@ -472,59 +468,6 @@ $bodyType = 'site-menubar-unfold';
         $('#catatan').text(data.data[0].catatan)
 
     }
-    let i = 0
-    let productBuyItem = null
-    let templateBuyItem = ``
-    let totalBuyItem = 0
-    let qtyBuyItem = 0
-    let param = {}
-    $(document).on('click', '.buyitem', function() {
-        const $parent = $($(this).parent())
-        qtyBuyItem = $($parent.children()[0]).val()
-
-        productBuyItem = newdata[$(this).data('id')]
-        console.log(productBuyItem)
-        templateBuyItem = `
-                    <tr style="text-align: center";>
-                        <td>1.</td>
-                        <td><a class="waves-effect waves-light waves-round" style="color: blue">${ productBuyItem.nama }</a></td>
-                        <td><input type="text" class="form-control qty" style="text-center" id="catatan" value=""/></td>
-                        <td>Rp ${ productBuyItem.harga.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.") }</td>
-                        <td>${ qtyBuyItem }</td>
-                        <td>Rp ${ qtyBuyItem * productBuyItem.harga }</td>
-                    </tr>`
-
-        totalBuyItem = qtyBuyItem * productBuyItem.harga
-
-        $('.pembelian-content').empty()
-        $('.pembelian-content').append(templateBuyItem)
-        $('#data-harga').html(`Rp ${ totalBuyItem }`.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."))
-        $('#btn-buy-item').data('id', $(this).data('id'))
-        $('#btn-buy-item').data('total', totalBuyItem)
-        $('#btn-buy-item').data('qty', qtyBuyItem)
-    })
-    $(document).on('click', '#btn-buy-item', function() {
-        var arr = []
-        var index = $(this).data('id')
-        var totalbuy = $(this).data('total')
-        var qtybuy = $(this).data('qty')
-        param = productBuyItem
-        param.qty = qtybuy
-        arr.push(param)
-        // buy(arr, totalBuyItem)
-        singleBuy(arr, totalBuyItem)
-    })
-
-    $(document).on('click', '.add-to-cart', function() {
-        const $parent = $($(this).parent())
-        console.log($parent)
-        qty = $($parent.children()[0]).val()
-        product = newdata[$(this).data('id')]
-        id = product.id
-        console.log($(this).data('id'))
-
-        addToChart(product, qty, id)
-    });
 
     function analyticsPage() {
         window.open('{{url("analytics")}}/'+$('#input_search').val()).focus()
