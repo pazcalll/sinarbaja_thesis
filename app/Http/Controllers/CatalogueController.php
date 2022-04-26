@@ -61,7 +61,7 @@ class CatalogueController extends Controller
         $offset = is_null($request["start"]) ? 0 : $request["start"];
         $get = DB::table('tbl_barang AS a')
         ->select('a.*','b.*','c.*','d.*',DB::raw('SUM(b.unit_masuk) AS unit_masuk_sum'),
-        DB::raw('SUM(b.unit_keluar) AS unit_keluar_sum'),'e.harga','e.stok')
+        DB::raw('SUM(b.unit_keluar) AS unit_keluar_sum'))
         ->where('a.barang_alias', str_replace('__', ' ',$request->alias));
         if (Auth::user() != null) {
           $get = $get->where('d.id_user',Auth::user()->id);
@@ -78,7 +78,6 @@ class CatalogueController extends Controller
         $get = $get->leftJoin('tbl_log_stok AS b','a.barang_id','b.id_barang')
         ->join('harga_produk_group AS c','c.id_product','a.barang_id')
         ->leftJoin('harga_produk_user AS d','d.id_product','a.barang_id')
-        ->leftJoin('user_setting AS e','d.id_user','e.user_id')
         ->groupBy('a.barang_id');
         $count = $get->get();
         $get_count = count($count);
@@ -95,71 +94,16 @@ class CatalogueController extends Controller
             $harga = 'Login untuk melihat harga';
           }
           if ($stok > 0) {
-            $value->stok == 'on'?$stk_str = $stok.'  '.Satuan::where('satuan_id', $value->satuan_id)->get('satuan_nama')[0]->satuan_nama:$stk_str = null;
-            $value->harga == 'on'?$harga = $harga:$harga = null;
             $data[] = array(
                       'id' => $value->barang_id,
                       'nama' => $value->barang_nama,
                       'deskripsi' => $value->barang_kode.' - '.$value->barang_alias,
-                      'stok' => !empty(Auth::user())?$stk_str:null,
+                      'stok' => !empty(Auth::user())?$stok:null,
                       'harga' => !empty($harga)?$harga:null,
                       'btn' => ''
                     );
           }
         }
-        // dd($data);
-        // if (count($get) > 0) {
-        //   foreach ($get as $value) {
-        //     // dd($get);
-        //     $persediaan = DB::select("SELECT
-        //                                   *
-        //                                 FROM
-        //                                     (
-        //                                     SELECT
-        //                                         tls.*,
-        //                                         tb.barang_kode AS kode_barang,
-        //                                         tb.barang_nama AS nama_barang,
-        //                                         rg.nama AS nama_gudang,
-        //                                         SUM( tls.unit_masuk - tls.unit_keluar ) AS stok,
-        //                                         ts.satuan_nama AS nama_satuan  ,
-        //                                     SUM( (tls.unit_masuk * ts.konversi) - (tls.unit_keluar * ts.konversi) ) as konversi
-        //                                     FROM
-        //                                         tbl_log_stok AS tls
-        //                                         LEFT JOIN tbl_barang AS tb ON tls.id_barang = barang_id
-        //                                         LEFT JOIN ref_gudang AS rg ON tls.id_ref_gudang = rg.id
-        //                                         LEFT JOIN tbl_satuan AS ts ON tls.id_satuan = ts.satuan_id
-        //                                     WHERE tb.barang_id = $value->barang_id
-        //                                     GROUP BY
-        //                                         id_barang,
-        //                                         id_ref_gudang, id_satuan
-        //                                     ORDER BY
-        //                                         tb.barang_nama
-        //                                     ) b
-        //                                 WHERE
-        //                                   b.stok NOT LIKE '%-%'");
-        //     // dd($persediaan[0]->stok);
-        //     if(!empty(Auth::user()->id_group)){
-        //       $harga = 'Rp. '.number_format($value->harga_group, 2, ',', '.');
-        //     }
-        //     else {
-        //       $harga = 'Login untuk melihat harga';
-        //     }
-        //     // if (!empty($value->unit_masuk)) {
-        //     if ($persediaan[0]->stok != "0" || $persediaan[0]->stok != 0) {
-        //       $stok = (int)$value->unit_masuk - (int)$value->unit_keluar;
-        //       if ($stok != 0) {
-        //         $data[] = array(
-        //           'id' => $value->barang_id,
-        //           'nama' => $value->barang_nama,
-        //           'deskripsi' => $value->barang_kode.' - '.$value->barang_alias,
-        //           'stok' => $persediaan[0]->stok,
-        //           'harga' => $harga,
-        //           'btn' => ''
-        //         );
-        //       }
-        //     }
-        //   }
-        // }
         $recordsTotal = is_null($get_count) ? 0 : $get_count;
         $recordsFiltered = is_null($get_count) ? 0 : $get_count;
         // dd($request->post());

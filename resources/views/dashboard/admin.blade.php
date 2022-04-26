@@ -14,39 +14,43 @@
             <div class="col-xl-12 col-lg-12">
                 <div class="row">
                     <div class="col-lg-4">
-                        <!-- Card Toko-->
-                        <a href="javascript:void(0)" class="card p-30 flex-row justify-content-between">
+                        <a href="javascript:void(0)" onclick="{$('.item-list').parent().parent().click(); $('.item-list').click()}" class="card p-30 flex-row justify-content-between">
                             <div class="counter counter-md text-left">
                                 <div class="counter-number-group">
                                     <span class="counter-number-related text-capitalize">Items</span>
                                     
                                 </div>
-                                {{-- <span
-                                    class="counter-number" style="color: red; font-size:24pt;">0</span> --}}
                             </div>
                             <div class="white">
                                 <i class="icon icon-circle icon-2x md-archive bg-blue-600" aria-hidden="true"></i>
                             </div>
                         </a>
-                        <!-- End Card -->
                     </div>
 
                     <div class="col-lg-4">
-                        <!-- Card Toko-->
-                        <a href="javascript:void(0)" class="card p-30 flex-row justify-content-between">
+                        <a href="javascript:void(0)" onclick="{$('.order-list').parent().parent().click(); $('.order-list').click()}" class="card p-30 flex-row justify-content-between">
                             <div class="counter counter-md text-left">
                                 <div class="counter-number-group">
                                     <span class="counter-number-related text-capitalize">Orders</span>
-                                    
                                 </div>
-                                {{-- <span
-                                    class="counter-number" style="color: red; font-size:24pt;">0</span> --}}
                             </div>
                             <div class="white">
                                 <i class="icon icon-circle icon-2x md-collection-item bg-blue-600" aria-hidden="true"></i>
                             </div>
                         </a>
-                        <!-- End Card -->
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <a href="javascript:void(0)" onclick="{$('.users-feature').parent().click(); $('.users-feature').click()}" class="card p-30 flex-row justify-content-between">
+                            <div class="counter counter-md text-left">
+                                <div class="counter-number-group">
+                                    <span class="counter-number-related text-capitalize">Orders</span>
+                                </div>
+                            </div>
+                            <div class="white">
+                                <i class="icon icon-circle icon-2x md-account-circle bg-blue-600" aria-hidden="true"></i>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>

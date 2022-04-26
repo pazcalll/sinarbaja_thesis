@@ -16,9 +16,9 @@ class IsAdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::user()->id_group != 1) {
-            return redirect('/');
+        if (Auth::user()->id_group == 1) {
+            return $next($request)->header('Cache-Control','nocache, no-store,  must-revalidate');
         }
-        return $next($request);
+        return redirect('/login');
     }
 }

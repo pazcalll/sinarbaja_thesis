@@ -21,8 +21,7 @@ class ProfilController extends Controller
      */
     public function index()
     {
-        $agent = Auth::user()->agent;
-        // TODO : tambahkan where unpaid
+        $agent = Auth::user();
         $limitUsed = Order::wherehas('po.user', function($query) {
             return $query->where('id', Auth::user()->id)->with('group_user');
         })
