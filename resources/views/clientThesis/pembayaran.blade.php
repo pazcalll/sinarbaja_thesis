@@ -111,23 +111,13 @@ $bodyType = 'site-menubar-unfold site-menubar-show site-navbar-collapse-show';
                     var total= tagihan.nominal_total != null ? 'Rp' + tagihan.nominal_total.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.") : '-';
                     
                     templatePbyn = `
-                        <tbody class="table-section" data-plugin="tableSection">
+                        <tbody class="table-section">
                             <tr style="cursor: pointer; text-align: center;">
                                 <td class="text-center"></i></td>
                                 <td> ${ _index+1 } </td>
                                 <td> Tagihan ${ _index+1 }
                                 <input type="hidden" id="id_tagihan" name="id_tagihan" value="${tagihan.id}"></td>
                                 <td class="font-weight-medium text-danger">${ total }</td>
-                                <td class="font-weight-medium text-danger">
-                                <select class="option-bayar" id="metode" required="">
-                                    <option value="Alfamart/Indomaret>Alfamart/Indomaret</option>
-                                    <option value="Dana>Dana</option>
-                                    <option value="Go-Pay>GO-Pay</option>
-                                    <option value="Link Aja">Link Aja</option>
-                                    <option value="OVO">OVO</option>
-                                    <option vlaue="Transfer Bank">Transfer Bank</option>   
-                                </select>
-                                </td>
                                 <td class="text-center">
                                 <button class="btn btn-sm btn-icon btn-pure btn-default on-default" data-target="#uploadBukti" data-toggle="modal" type="button" data-original-title="Bayar">
                                     <a href="#modalPembayaran" data-toggle="tooltip" data-original-title="UploadBukti"><i class="icon md-upload" aria-hidden="true"></i></a>

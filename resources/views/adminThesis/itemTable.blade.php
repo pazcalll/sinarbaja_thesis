@@ -84,7 +84,7 @@
                             ${item.barang_nama}
                         </td>
                         <td>
-                            ${'Rp '+item.detail_harga_barang_harga_jual.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}
+                            ${'Rp '+item.harga_group.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}
                         </td>
                         <td>
                             ${item.group_name}

@@ -10,7 +10,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ThesisAdminOrderController;
-use App\Http\Controllers\ThesisClientOrderController;
+use App\Http\Controllers\ThesisCustomerController;
 use App\Http\Controllers\ThesisGroupUserController;
 use App\Http\Controllers\ThesisItemController;
 use App\Http\Controllers\ThesisUserController;
@@ -30,11 +30,6 @@ use Illuminate\Http\Request;
 |
 */
 Auth::routes();
-// Route::get('/page/{blade}', function ($blade) {
-//     return view($blade);
-// });
-
-// Route::get('/', [CatalogueController::class, 'index']);
 Route::get('/', 'CatalogueController@index');
 
 Route::post('/search', [CatalogueController::class, 'search']);
@@ -45,7 +40,6 @@ Route::get('/not-found', [CatalogueController::class, 'notFound']);
 Route::get('/product/{id}', [CatalogueController::class, 'show']);
 Route::get('/tracking', [TrackingController::class, 'client']);
 
-// ------------------faris------------------
 Route::get('/detail/product/{barang_alias}', [CatalogueController::class, 'detailTable']);
 Route::post('/detail/produk','CatalogueController@get_detailBarang')->name('get_detailBarang');
 Route::post('/detail', [CatalogueController::class, 'detail']);
@@ -54,8 +48,14 @@ Route::post('/cart','cartController@cartProcess')->name('addCart');
 Route::post('cartData','cartController@cartData')->name('cartData');
 Route::post('json_cartAll','cartController@json_cartAll')->name('json_cartAll');
 Route::get('count_harganull','notifHandlerController@count_harganull')->name('count_harganull');
+
+Route::post('/login', 'ThesisUserController@login')->name('loginUser');
+Route::post('/register', 'ThesisUserController@create')->name('registerUser');
+
+// testing
+Route::get('/user-cart-test', 'cartController@userCartTest');
 // --------------------------------------------
-// IKI CUMA GE RETURN DATA JSON TULUNG LAH BEN RAPI NGONO BEN PENAK APAL"ANE
+
 Route::prefix('data')->group(function () {
 
     Route::get('user', [UserController::class, 'authGetter'])->name('authGetter');
@@ -73,10 +73,6 @@ Route::prefix('data')->group(function () {
     Route::get('user/harga/byProduk/{produkId}', [HargaProdukUserController::class, 'usersWithPrices'])->name('usersWithPrices');
     Route::get('user/harga/byProduk/groupPriceSelection/{productId}', [HargaProdukUserController::class, 'groupPriceSelection'])->name('groupPriceSelection');
     Route::post('user/harga/byProduk/changeUserPrice', [HargaProdukUserController::class, 'changeUserPrice'])->name('changeUserPrice');
-    // Route::delete('/user/{id}/delete', 'UserController@destroyUser')->name('userDelete');
-    // Route::post('/user/create/group', [UserController::class, 'createGroup'])->name('createGroup');
-    // Route::post('/user/create/user', [UserController::class, 'createUser'])->name('createUser');
-    // Route::delete('/delete/group', [UserController::class, 'destroyGroup'])->name('deleteGroup');
 
     //setting harga user
     Route::post('setting_harga/user/setHargaUser', 'HargaUserController@setHarga')->name('setHargaUser');
@@ -89,24 +85,6 @@ Route::prefix('data')->group(function () {
     Route::get('catalogue/products', [CatalogueController::class, 'catalogue']);
     Route::get('catalogue/harga-group', [CatalogueController::class, 'hargaGroup'])->name('hargaGroup');
 
-    Route::get('/purchase-order/new', 'PurchaseOrderController@newPurchaseOrder');
-    Route::get('/purchase-order/pending', 'PurchaseOrderController@pendingOrder');
-    Route::get('/purchase-order/perintah-kirim', 'PurchaseOrderController@sentOrder');
-    Route::get('purchase-order/info-gudang/{order_id}/{tagihan_id}', 'PurchaseOrderController@infoGudang');
-    Route::get('purchase-order/pilih-gudang', 'PurchaseOrderController@pilihGudang');
-    Route::get('/purchase-order/proses', 'PurchaseOrderController@getPesananProses');
-    Route::get('/purchase-order/riwayat', 'PurchaseOrderController@riwayat');
-    Route::get('/purchase-order/pesanan-selesai', 'PurchaseOrderController@pesananSelesai');
-    Route::get('/purchase-order/order/pesanan-selesai', 'PurchaseOrderController@selesaiPesanan');
-    Route::post('purchase-order/loadData_po','PurchaseOrderController@loadData_po')->name('loadData_po');
-
-    Route::post('/purchase-order/kirim', 'PurchaseOrderController@sentPesanan');
-    Route::get('/purchase-order/tagihan', 'PurchaseOrderController@dataTagihan');
-    Route::post('/purchase-order/detailTagihan', 'PurchaseOrderController@detailTagihan');
-    Route::get('/purchase-order/approval-bayar', 'PurchaseOrderController@approval');
-
-    Route::get('/purchase-order/select_gudang', 'PurchaseOrderController@select_gudang');
-
     Route::get('/order/histori-return', [OrderController::class, 'returnHistori']);
     Route::get('/order/{id_user}/prosses', [OrderController::class, 'proses']);
     Route::get('/order/{id_user}/pesanan-proses', [OrderController::class, 'pesananProses']);
@@ -115,7 +93,6 @@ Route::prefix('data')->group(function () {
     Route::get('/order/{id_user}/return', [OrderController::class, 'return']);
     Route::get('/order/{id_user}/pesanan-selesai', [OrderController::class, 'pesananSelesai']);
     Route::get('/order/pesanan-diterima/{id_tagihan}', [OrderController::class, 'pesananDiterima']);
-    // Route::get('/order/histori-return', [OrderController::class, 'Hreturn']);
     Route::get('/order/riwayat', [OrderController::class, 'dataRiwayat']);
     Route::get('/order/pesanan-selesai', [OrderController::class, 'dataSelesai']);
     Route::post('/order/return', [OrderController::class, 'storeReturn']);
@@ -150,10 +127,9 @@ Route::prefix('analytics')->group(function()
     Route::post('/rabin-hashing', 'ThesisController@rabin_hashing');
     Route::post('/rabin-intersect', 'ThesisController@rabin_intersect');
     Route::post('/similarity', 'ThesisController@similarity');
-    // Route::post('/similarity-res', 'ThesisController@similarityRes');
     Route::post('/speed', 'ThesisController@speedPage');
-    Route::post('/speed/rabin', 'ThesisController@speedRabin');
-    Route::post('/speed/sql', 'ThesisController@speedSQL');
+    Route::get('/speed/rabin', 'ThesisController@speedRabin');
+    Route::get('/speed/sql', 'ThesisController@speedSQL');
 });
 
 Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'admin']], function ()
@@ -191,37 +167,30 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'admin']], funct
     Route::post('approval/acceptance', [ThesisAdminOrderController::class, 'approvalBill'])->name('bill_acceptance');
 });
 
-Route::group(['middleware' => 'auth'], function()
+Route::group(['middleware' => ['auth', 'customer']], function()
 {
-    Route::get('order', [ThesisClientOrderController::class, 'index']);
-    Route::get('order/req/unaccepted', [ThesisClientOrderController::class, 'orderUnaccepted'])->name('pesananBelumDisetujui');
-    Route::get('order/req/unpaid', [ThesisClientOrderController::class, 'orderUnpaid'])->name('pesananBelumDibayar');
-    Route::get('order/req/paid', [ThesisClientOrderController::class, 'orderPaid'])->name('pesananLunas');
-    Route::post('order/req/upload-transfer', [ThesisClientOrderController::class, 'uploadTransfer'])->name('uploadTransfer');
-    Route::post('order/req/confirm-order', [ThesisClientOrderController::class, 'confirmOrder'])->name('confirmOrder');
-    Route::get('order/req/completed', [ThesisAdminOrderController::class, 'completedList'])->name('orderCompleted');
+    Route::get('order', [ThesisCustomerController::class, 'index']);
+    Route::get('order/req/unaccepted', [ThesisCustomerController::class, 'orderUnaccepted'])->name('pesananBelumDisetujui');
+    Route::get('order/req/unpaid', [ThesisCustomerController::class, 'orderUnpaid'])->name('pesananBelumDibayar');
+    Route::get('order/req/paid', [ThesisCustomerController::class, 'orderPaid'])->name('pesananLunas');
+    Route::post('order/req/upload-transfer', [ThesisCustomerController::class, 'uploadTransfer'])->name('uploadTransfer');
+    Route::post('order/req/confirm-order', [ThesisCustomerController::class, 'confirmOrder'])->name('confirmOrder');
+    Route::get('order/req/completed', [ThesisCustomerController::class, 'completedList'])->name('orderCompleted');
+
+    Route::get('/profile', 'ThesisCustomerController@customerProfile')->name('profile.index');
+    Route::post('/profile_update', 'ThesisCustomerController@customerUpdateProfile')->name('profile_update');
 });
 
-// untuk user: agent dan customer
-Route::group(['middleware' => 'auth'], function () {
+// untuk user: customer
+Route::group(['middleware' => ['auth', 'customer']], function () {
 
-
-    Route::resource('/profile', 'ProfilController');
-    Route::post('/profile_update/{id?}', 'ProfilController@update')->name('profile_update');
+    // Route::resource('/profile', 'ProfilController');
+    // Route::post('/profile_update/{id?}', 'ProfilController@update')->name('profile_update');
 
     Route::get('/profile_pending', 'ProfilController@pending');
     Route::get('/profile_return', 'ProfilController@return');
 
     // purchase-order
-    // Route::get('/order', 'OrderController@index');
     Route::post('/order/purchase-order', 'PurchaseOrderController@store')->name('storeOrder');
     Route::post('/order/upload', 'TagihanController@upload');
-    Route::get('/order/payment', 'PaymentController@index');
-    Route::get('/order/getPayment', 'PaymentController@getPayment');
-    //return
-    Route::post('/return/upload', 'ReturnController@reasonsReturn')->name('reasons');
-
-    Route::get('/session/{key}', 'SessionController@retrieve');
-    Route::post('/session/save', 'SessionController@store');
-    Route::post('/session/remove', 'SessionController@remove');
 });

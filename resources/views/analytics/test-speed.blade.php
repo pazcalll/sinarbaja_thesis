@@ -15,7 +15,7 @@
         let ajaxTime= new Date().getTime();
         $.ajax({
             url: `{{url("analytics/speed")}}/`+speedUrl,
-            type: 'post',
+            type: 'get',
             async: true,
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

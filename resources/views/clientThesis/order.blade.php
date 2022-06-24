@@ -62,8 +62,10 @@ $showNavigation = false;
 
     $(document).ready(function() {
         function format ( d ) {
-            console.log(JSON.parse(d.barang.replace(/&quot;/g, '"')))
-            let newTbl = JSON.parse(d.barang.replace(/&quot;/g, '"'))
+            console.log(d)
+            // console.log(JSON.parse(d.barang.replace(/&quot;/g, '"')))
+            // let newTbl = JSON.parse(d.barang.replace(/&quot;/g, '"'))
+            let newTbl = d.order
             let openingTbl = `<table style="width:100%" class="table table-bordered table-hover table-striped">
                 <thead>
                     <tr>
@@ -81,7 +83,7 @@ $showNavigation = false;
                     <tr>
                         <td>${item.nama_barang}</td>
                         <td>${item.qty}</td>
-                        <td>${formatRupiah(item.harga)}</td>
+                        <td>${formatRupiah(item.harga_order)}</td>
                     </tr>
                 `
             });
@@ -107,7 +109,7 @@ $showNavigation = false;
                     }
                 },
                 {data: 'no_nota'},
-                {data: 'created_at'},
+                {data: 'tanggal_pesan'},
                 {
                     data: 'total_harga',
                     render: (data, type, row, meta) => {
@@ -155,8 +157,10 @@ $showNavigation = false;
         if ($.fn.DataTable.isDataTable('#table-unpaid')) return
 
         function format ( d ) {
-            console.log(JSON.parse(d.barang.replace(/&quot;/g, '"')))
-            let newTbl = JSON.parse(d.barang.replace(/&quot;/g, '"'))
+            console.log(d)
+            // console.log(JSON.parse(d.barang.replace(/&quot;/g, '"')))
+            // let newTbl = JSON.parse(d.barang.replace(/&quot;/g, '"'))
+            let newTbl = d.order
             let openingTbl = `<table style="width:100%" class="table table-bordered table-hover table-striped">
                 <thead>
                     <tr>
@@ -172,7 +176,7 @@ $showNavigation = false;
                     <tr>
                         <td>${item.nama_barang}</td>
                         <td>${item.qty}</td>
-                        <td>${formatRupiah(item.harga)}</td>
+                        <td>${formatRupiah(item.harga_order)}</td>
                     </tr>
                 `
             });
@@ -198,21 +202,27 @@ $showNavigation = false;
                     }
                 },
                 {data: 'no_nota'},
-                {data: 'created_at'},
+                {data: 'tanggal_pesan'},
                 {
                     data: '',
                     render: (data, type, row, meta) => {
                         return formatRupiah(row.total_harga)
                     }
                 },
-                {data: 'status_pembayaran'},
                 {
                     data: '',
                     render: (data, type, row, meta) => {
+                        return row.tagihan.status
+                    }
+                },
+                {
+                    data: '',
+                    render: (data, type, row, meta) => {
+                        // console.log(row)
                         let buttons = `
                             <button data-toggle="modal" data-po_id="${row.id}" data-nota="${row.no_nota}" data-limit="${row.total_harga}" type="button" class="btn btn-warning btn-xs btn-pay"><li class="icon md-money"></li>Bayar</button>
                         `
-                        if (row.status_pembayaran != 'BELUM DIBAYAR') {
+                        if (row.tagihan.status != 'BELUM DIBAYAR') {
                             buttons = '_'
                         }
                         return buttons
@@ -235,7 +245,6 @@ $showNavigation = false;
         let detailRows = [];
     
         $('#table-unpaid tbody').on( 'click', 'tr td.details-control', function () {
-            console.log('asdf')
             var tr = $(this).closest('tr');
             var row = dt.row( tr );
             var idx = $.inArray( tr.attr('id'), detailRows );
@@ -271,8 +280,10 @@ $showNavigation = false;
         if ($.fn.DataTable.isDataTable('#table-paid')) return
 
         function format ( d ) {
-            console.log(JSON.parse(d.barang.replace(/&quot;/g, '"')))
-            let newTbl = JSON.parse(d.barang.replace(/&quot;/g, '"'))
+            console.log(d)
+            // console.log(JSON.parse(d.barang.replace(/&quot;/g, '"')))
+            // let newTbl = JSON.parse(d.barang.replace(/&quot;/g, '"'))
+            let newTbl = d.order
             let openingTbl = `<table style="width:100%" class="table table-bordered table-hover table-striped">
                 <thead>
                     <tr>
@@ -290,7 +301,7 @@ $showNavigation = false;
                     <tr>
                         <td>${item.nama_barang}</td>
                         <td>${item.qty}</td>
-                        <td>${formatRupiah(item.harga)}</td>
+                        <td>${formatRupiah(item.harga_order)}</td>
                     </tr>
                 `
             });
@@ -316,24 +327,29 @@ $showNavigation = false;
                     }
                 },
                 {data: 'no_nota'},
-                {data: 'created_at'},
+                {data: 'tanggal_pesan'},
                 {
                     data: 'total_harga',
                     render: (data, type, row, meta) => {
                         return formatRupiah(row.total_harga)
                     }
                 },
-                {data: 'status_pembayaran'},
                 {
-                    data: 'kirim',
+                    data: '',
+                    render: (data,type, row, meta) => {
+                        return row.tagihan.status
+                    }
+                },
+                {
+                    data: '',
                     render: (data, type, row, meta) => {
                         let color = ''
                         
-                        if(row.kirim == "BELUM") color = 'danger'
-                        else if(row.kirim == "PERJALANAN") color = 'info'
+                        if(row.tagihan.kirim == "BELUM") color = 'danger'
+                        else if(row.tagihan.kirim == "PERJALANAN") color = 'info'
 
                         return `
-                            <span class="badge badge-${color}">${row.kirim}</span>
+                            <span class="badge badge-${color}">${row.tagihan.kirim}</span>
                         `
                     }
                 },
@@ -343,7 +359,7 @@ $showNavigation = false;
                         let buttons = `
                             <button data-nota="${row.id}" type="button" class="btn btn-primary btn-xs btn-confirm"><li class="icon md-check"></li>Pesanan Diterima</button>
                         `
-                        if (row.kirim == "BELUM") return '_'
+                        if (row.tagihan.kirim == "BELUM") return '_'
                         else return buttons
                     }
                 },
@@ -415,8 +431,9 @@ $showNavigation = false;
         if ($.fn.DataTable.isDataTable('#table-pesanan-selesai')) return
 
         function format ( d ) {
-            let newTbl = JSON.parse(d.barang.replace(/&quot;/g, '"'))
+            // let newTbl = JSON.parse(d.barang.replace(/&quot;/g, '"'))
             console.log(d)
+            let newTbl = d.order
             let openingTbl = `<table style="width:100%" class="table table-bordered table-hover table-striped">
                 <thead>
                     <tr>
@@ -434,7 +451,7 @@ $showNavigation = false;
                     <tr>
                         <td>${item.nama_barang}</td>
                         <td>${item.qty}</td>
-                        <td>${formatRupiah(item.harga)}</td>
+                        <td>${formatRupiah(item.harga_order)}</td>
                     </tr>
                 `
             });
@@ -446,8 +463,8 @@ $showNavigation = false;
         }
         let tableSend = $('#table-pesanan-selesai').DataTable({
             ajax: '{{route("orderCompleted")}}',
-            processing: true,
-            serverSide: true,
+            // processing: true,
+            // serverSide: true,
             searching: false,
             columns: [
                 {
@@ -463,9 +480,9 @@ $showNavigation = false;
                     }
                 },
                 {data: 'no_nota'},
-                {data: 'group_name'},
-                {data: 'user_name'},
-                {data: 'created_at'},
+                // {data: 'group_name'},
+                // {data: 'user_name'},
+                {data: 'tanggal_pesan'},
                 {
                     data: 'total_harga',
                     render: (data, type, row, meta) => {

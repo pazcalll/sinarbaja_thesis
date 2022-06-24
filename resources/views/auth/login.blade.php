@@ -63,11 +63,14 @@
             <div class="panel">
                 <div class="panel-body">
                     <div class="brand">
+                        @if ($errors->any())
+                            <div class="alert alert-danger">{{$errors->first()}}</div>
+                        @endif
                         <img class="brand-img"
                             src="{{ asset('public/themeforest/page-base/images/logo-colored.png') }}" alt="...">
                         <h2 class="brand-text font-size-18">LOGIN PAGE</h2>
                     </div>
-                    <form method="post" action="{{ route('login') }}" autocomplete="off">
+                    <form method="post" action="{{ route('loginUser') }}" autocomplete="off">
                         @csrf
 
                         <div class="form-group form-material floating" data-plugin="formMaterial">

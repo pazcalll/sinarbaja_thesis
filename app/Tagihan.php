@@ -3,51 +3,45 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Tracking;
-use App\Gudang;
+use stdClass;
 
-class Tagihan extends Model
+class Tagihan
 {
-    //
-    // use Columns;
-    protected $fillable = array('po_id', 'tagihan_id', 'nominal_total', 'metode_bayar' ,'no_tagihan', 'id_gudang', 'memo');
-
-    public function po() {
-        return $this->belongsTo(PurchaseOrder::class, 'po_id');
-    }
-
-    public function orders() {
-        return $this->hasMany(Order::class, 'tagihan_id');
-    }
-
-    public function trackings() {
-        return $this->hasMany(Tracking::class, 'tagihan_id');
-    }
-
-    public function driver() {
-        return $this->belongsTo(User::class, 'driver_id');
-    }
-
-    public function payment()
+    protected $id;
+    protected $po_id;
+    protected $nominal_total;
+    protected $status;
+    protected $kirim;
+    
+    public function __construct($id, $po_id, $nominal_total, $status, $kirim)
     {
-        return $this->hasOne(Payment::class);
+        $this->id = $id;
+        $this->po_id = $po_id;
+        $this->nominal_total = $nominal_total;
+        $this->status = $status;
+        $this->kirim = $kirim;
+    }
+    
+    public function getThis()
+    {
+        $getThis = new stdClass();
+        $getThis->id = $this->id;
+        $getThis->po_id = $this->po_id;
+        $getThis->nominal_total = $this->nominal_total;
+        $getThis->status = $this->status;
+        $getThis->kirim = $this->kirim;
+        return $getThis;
+    }
+    
+    public function setStatus($status)
+    {
+        $this->status = $status;
+        return $this->status;
     }
 
-    public function tracking_newest() {
-        $data_tracking_terkini = Tracking::selectRaw("max(id) as id, tagihan_id")->groupBy('tagihan_id')->pluck('id');
-        return $this->hasMany(Tracking::class, 'tagihan_id')->whereIn('id', $data_tracking_terkini);
-    }
-
-    public function order_last_status() {
-        $data_last_status = Order::selectRaw("max(id) as id, product_id")->groupBy('product_id')->whereNotIn('status',['PENDING'])->pluck('id');
-        return $this->hasMany(Order::class, 'po_id')->whereIn('id', $data_last_status)->orderBy('product_id','asc');
-    }
-
-    public function tagihan() {
-        return $this->belongsTo(Tagihan::class, 'tagihan_id');
-    }
-
-    public function gudang() {
-        return $this->belongsTo(Gudang::class, 'id_gudang');
+    public function setKirim($kirim)
+    {
+        $this->kirim = $kirim;
+        return $this->kirim;
     }
 }

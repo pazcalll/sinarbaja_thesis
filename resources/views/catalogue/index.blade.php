@@ -148,9 +148,7 @@ $bodyType = 'site-menubar-unfold';
             type: 'GET',
             async: true
         }).then((res) => {
-            const {
-                data
-            } = res
+            const {data} = res
             if (carts == null) {
                 carts = []
             }
@@ -158,33 +156,12 @@ $bodyType = 'site-menubar-unfold';
             $('#product-wrapper').empty()
             bindView(data)
         });
-        //button filter katalog
-        // $('#btn_filter').on('click', function() {
-        //     filter()
-        // });
-        //end button
 
         $("#search_form").submit(function(event) {
             event.preventDefault();
             var input = $("#input_search").val();
             search(input)
         });
-        //function load more
-        // $('#load-more').on('click', function() {
-        //     move(path, (currentPage + 1))
-        // })
-        //end function
-
-        //function reset filter kategori
-        // $(document).ready(function() {
-        //     $("#reset").click(function() {
-        //         document.getElementById("form_filter").reset();
-        //         $('#kategori').val($('#kategori option:first-child').val()).trigger('change');
-        //         $('#merek').val($('#merek option:first-child').val()).trigger('change');
-        //         $("#filterKatalog").modal();
-        //     });
-        // })
-        //end reset filter kategori
     }) // end of jquery
 
     function search(input, string = 'strings') {
@@ -192,10 +169,9 @@ $bodyType = 'site-menubar-unfold';
         let type = 'GET'
         if(string == 'sql') {
             url = `{{ url('analytics/speed/sql') }}`
-            type = 'POST'    
+            type = 'GET'    
         }
         else url = `{{ url('data/rabin') }}/${4}/${input}`
-        console.log(url, input)
         $('#loading-notification').html('Loading, please wait...')
         $.ajax({
             type: type,
@@ -208,7 +184,6 @@ $bodyType = 'site-menubar-unfold';
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: (response) => {
-                console.log(response.data)
                 $('#product-wrapper').hide()
 
                 if ($.fn.dataTable.isDataTable('#search-table')) $('#search-table').DataTable().destroy()
@@ -261,8 +236,8 @@ $bodyType = 'site-menubar-unfold';
                 $('#search-table').DataTable({
                     searching: false,
                     info: false,
-                    serverside:false,
-                    processing: false,
+                    serverside:true,
+                    processing: true,
                     columnDefs:[{
                         targets: [0,1,2,3,4],
                         orderable: false
@@ -295,7 +270,7 @@ $bodyType = 'site-menubar-unfold';
                             toastr['success']('Berhasil ditambahkan')
                             cart_count()
 
-                            table_cart_ndess.ajax.reload();
+                            table_cart.ajax.reload();
                         },
                         error:function(){
                             alert("error");
@@ -358,12 +333,6 @@ $bodyType = 'site-menubar-unfold';
     let newdata = []
     let iterationCart = 0
     let iterationBuy = 0
-    // hargaGroup()
-    // hargaPerGroup.forEach((item, index)=>{
-    //     if (item.id_group == currentAuth.id_group) {
-    //         newHargaProduk.push(item)
-    //     }
-    // })
     function bindView(data) {
         currentPage = data.current_page
 
@@ -375,7 +344,6 @@ $bodyType = 'site-menubar-unfold';
                 newdata.push(product);
                 if(currentPage != 1){
                     index = index + (4 * (currentPage-1))
-                    console.log('true', index)
                 }
                 console.log(product)
                 let template = `
@@ -391,25 +359,6 @@ $bodyType = 'site-menubar-unfold';
                                     template+=`
 										<p class="text-center" style="color: #fb8b34; font-weight: bold"><a class="btn btn-round btn-primary" href="{{ url('detail/product') }}/` + product.replace(' ', '__') + `"><b>Detail</b></a></p>
 										`
-                                    // if (!currentAuth.message) {
-                                    //     let foreachMarker = 0
-                                    //     newHargaProduk.forEach((item, index)=>{
-                                    //         if (item.id_group == currentAuth.id_group && item.id_product == product.id) {
-                                    //             template+=`
-									// 				<p class="text-center" style="color: #fb8b34; font-weight: bold"><a class="btn btn-round btn-primary" href="{{ url('detail/product') }}/` + product + `"><b>Detail</b></a></p>
-									// 				`
-                                    //             foreachMarker = 1
-                                    //         }
-                                    //         else if(index == newHargaProduk.length-1 && foreachMarker == 0)
-                                    //             template+=`
-                                    //             <p class="text-center" style="color: #fb8b34; font-weight: bold"><a class="btn btn-round btn-primary" href="{{ url('detail/product') }}/` + product + `"><b>Detail</b></a></p>
-                                    //             `
-                                    //     })
-                                    // }
-                                    // else
-									// 	template+=`
-									// 	<p class="text-center" style="color: #fb8b34; font-weight: bold"><a class="btn btn-round btn-primary" href="{{ url('detail/product') }}/` + product + `"><b>Detail</b></a></p>
-									// 	`
                                 template+=`
                             </div>
                             <div class="card-block text-center div_card_beli my-cart-btn" style=" padding-top: 5px; col-lg-2">

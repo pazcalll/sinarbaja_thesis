@@ -80,8 +80,8 @@
                             <th width="5%"></th>
                             <th width="5%">No.</th>
                             <th>No. Nota</th>
-                            <th width="10%">Tipe User</th>
-                            <th>Pembeli</th>
+                            {{-- <th width="10%">Tipe User</th>
+                            <th>Pembeli</th> --}}
                             <th>Tanggal Pesan</th>
                             <th>Total</th>
                         </tr>

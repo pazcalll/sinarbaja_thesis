@@ -25,13 +25,13 @@ class BarangExport implements FromView
             tb.barang_alias as barang_alias,
             ts.satuan_satuan as barang_satuan,
             tb.barangnama_asli as barangnama_asli,
-            sum(case when td.id_group = 2 then td.detail_harga_barang_harga_jual else 0 end) as h1,
-            sum(case when td.id_group = 3 then td.detail_harga_barang_harga_jual else 0 end) as h2,
-            sum(case when td.id_group = 4 then td.detail_harga_barang_harga_jual else 0 end) as h3,
-            sum(case when td.id_group = 5 then td.detail_harga_barang_harga_jual else 0 end) as h4
+            sum(case when hgp.id_group = 2 then hgp.harga_group else 0 end) as h1,
+            sum(case when hgp.id_group = 3 then hgp.harga_group else 0 end) as h2,
+            sum(case when hgp.id_group = 4 then hgp.harga_group else 0 end) as h3,
+            sum(case when hgp.id_group = 5 then hgp.harga_group else 0 end) as h4
             FROM tbl_barang as tb
-            LEFT JOIN tbl_detail_harga_barang as td
-            ON td.barang_id = tb.barang_id
+            LEFT JOIN harga_produk_group as hgp
+            ON hgp.id_product = tb.barang_id
             LEFT JOIN tbl_satuan as ts
             ON ts.satuan_id = tb.satuan_id
             GROUP BY tb.barang_kode

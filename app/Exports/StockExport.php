@@ -23,6 +23,7 @@ class StockExport implements FromView
                 tbl_barang.barang_kode as barang_kode,
                 tbl_barang.barang_nama as barang_nama,
                 tbl_satuan.satuan_nama as nama_satuan,
+                tbl_satuan.satuan_id as id_satuan,
                 SUM( tbl_log_stok.unit_masuk - tbl_log_stok.unit_keluar ) AS stok'
         ))
             ->groupBy('tbl_barang.barang_id');
@@ -38,6 +39,7 @@ class StockExport implements FromView
                 tbl_barang.barang_kode as barang_kode,
                 tbl_barang.barang_nama as barang_nama,
                 tbl_satuan.satuan_nama as nama_satuan,
+                tbl_satuan.satuan_id as id_satuan,
                 "0" AS stok
             ')
             ->unionAll($barang)

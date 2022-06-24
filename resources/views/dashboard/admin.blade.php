@@ -1,6 +1,3 @@
-@php
-	use App\Http\Controllers\Helper;
-@endphp
 @extends('app')
 
 @section('css')
@@ -44,7 +41,7 @@
                         <a href="javascript:void(0)" onclick="{$('.users-feature').parent().click(); $('.users-feature').click()}" class="card p-30 flex-row justify-content-between">
                             <div class="counter counter-md text-left">
                                 <div class="counter-number-group">
-                                    <span class="counter-number-related text-capitalize">Orders</span>
+                                    <span class="counter-number-related text-capitalize">Users</span>
                                 </div>
                             </div>
                             <div class="white">
@@ -61,9 +58,6 @@
 
 @section('js')
 
-<script src="{{ asset('public/themeforest/global/js/Plugin/datatables.js') }}"></script>
-<script src="{{ asset('public/themeforest/page-base/examples/js/tables/datatable.js') }}"></script>
-<script src="{{ asset('public/themeforest/page-base/examples/js/uikit/icon.js') }}"></script>
 <script>
     $('.item-point').on('click', function(e) {
         e.preventDefault()

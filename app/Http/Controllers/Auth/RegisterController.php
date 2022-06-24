@@ -75,8 +75,9 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $create = null;
-        $group_id = $data['group_id'] ?? 'UMUM';
+        $group_id = $data['group_id'] ?? 'LEVEL 1';
         $id_group = GroupUser::where('group_name', $group_id)->get('id')[0]['id'];
+        // dd($id_group);
         // dd(GroupUser::where('group_name', $id_group)->get('id')[0]['id']);
         $submission = [
             'name' => $data['name'],
@@ -84,7 +85,7 @@ class RegisterController extends Controller
             'address' => $data['address'],
             'no_handphone' => $data['no_handphone'],
             'password' => Hash::make($data['password']),
-            'group_id' => $data['group_id'] ?? 'UMUM',
+            'group_id' => $data['group_id'] ?? 'LEVEL 1',
             'id_group' => $id_group
         ];
         $create = User::create($submission);
@@ -100,21 +101,6 @@ class RegisterController extends Controller
             $insertions[$key]['harga_user'] = $value['harga_group'];
         }
         $insert = HargaProdukUser::insert($insertions);
-        $insert_setting_user = DB::table('user_setting')
-        ->insert([
-          'user_id' => $user[0]->id
-        ]);
-        if ($submission['id_group'] == 2) {
-            $customer = Customer::create([
-                'id' => $user[0]->id
-            ]);
-        }
-        else if ($submission['id_group'] == 4) {
-            $agent = Agent::create([
-                'id' => $user[0]->id,
-                'limit' => 99999999999999
-            ]);
-        }
 
         // dd($data);
         // return view('catalogue/index');

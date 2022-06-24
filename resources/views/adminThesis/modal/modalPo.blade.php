@@ -27,7 +27,7 @@
 					<tbody>
 					</tbody>
 				</table>
-				<button data-prop="" id="accOrder" class="btn btn-primary">Kirim</button>
+				<button data-prop="" id="accOrder" class="btn btn-primary">Setujui Pesanan</button>
 			</div>
 		</div>
 	</div>

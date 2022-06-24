@@ -9,6 +9,7 @@
         <th>Kode Barang</th>
         <th>Stok</th>
         <th>Nama Satuan</th>
+        <th>ID Satuan</th>
     </tr>
     </thead>
     <tbody>
@@ -19,6 +20,7 @@
             <td>{{ $item->barang_kode }}</td>
             <td>{{ $item->stok }}</td>
             <td>{{ $item->nama_satuan }}</td>
+            <td>{{ $item->id_satuan }}</td>
         </tr>
     @endforeach
     </tbody>

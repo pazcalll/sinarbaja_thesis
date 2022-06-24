@@ -30,10 +30,6 @@ class CatalogueController extends Controller
             if (Auth::user()->id_group == 1) {
                 return redirect('dashboard');
             }
-            else if (Auth::user()->id_group == 3) {
-                // return redirect('order');
-                return view('driver.order');
-            }
         }
         return view('catalogue.index');
     }
@@ -61,7 +57,7 @@ class CatalogueController extends Controller
         $offset = is_null($request["start"]) ? 0 : $request["start"];
         $get = DB::table('tbl_barang AS a')
         ->select('a.*','b.*','c.*','d.*',DB::raw('SUM(b.unit_masuk) AS unit_masuk_sum'),
-        DB::raw('SUM(b.unit_keluar) AS unit_keluar_sum'))
+        DB::raw('SUM(b.unit_keluar) AS unit_keluar_sum'), 'ts.satuan_nama as satuan_nama')
         ->where('a.barang_alias', str_replace('__', ' ',$request->alias));
         if (Auth::user() != null) {
           $get = $get->where('d.id_user',Auth::user()->id);
@@ -78,12 +74,12 @@ class CatalogueController extends Controller
         $get = $get->leftJoin('tbl_log_stok AS b','a.barang_id','b.id_barang')
         ->join('harga_produk_group AS c','c.id_product','a.barang_id')
         ->leftJoin('harga_produk_user AS d','d.id_product','a.barang_id')
+        ->leftJoin('tbl_satuan as ts', 'ts.satuan_id', 'a.satuan_id')
         ->groupBy('a.barang_id');
         $count = $get->get();
         $get_count = count($count);
         $get = $get->limit($limit)->offset($offset)->get();
         foreach ($get as $key => $value) {
-          // dd($value->stok);
           $stok = $value->unit_masuk_sum - $value->unit_keluar_sum;
           if(!empty(Auth::user()->id_group)){
             if (!empty($value->harga_user)) {
@@ -99,6 +95,7 @@ class CatalogueController extends Controller
                       'nama' => $value->barang_nama,
                       'deskripsi' => $value->barang_kode.' - '.$value->barang_alias,
                       'stok' => !empty(Auth::user())?$stok:null,
+                      'satuan' => $value->satuan_nama,
                       'harga' => !empty($harga)?$harga:null,
                       'btn' => ''
                     );
@@ -185,78 +182,6 @@ class CatalogueController extends Controller
     public function detail(Request $request){
         $product = Product::with(['images', 'stocks', 'category'])->where('ditampilkan', 0)->where("id", $request->id);
         return $this->response($product);
-    }
-
-    public function search(Request $request)
-    {
-        session()->forget(['filter']);
-        $input = $request->search;
-        $get = DB::table('tbl_barang AS a')
-        ->leftJoin('tbl_log_stok AS b','a.barang_id','b.id_barang')
-        ->where('a.barang_alias','like','%'.$input.'%')
-        ->whereNotNull('b.log_stok_id')
-        ->groupBy('a.barang_alias')
-        ->get();
-        if (count($get) > 0) {
-          foreach ($get as $key => $value) {
-            if (!empty($value->log_stok_id)) {
-              $status = 'Tersedia';
-            }
-            else {
-              $status = 'Kosong';
-            }
-            $produk[] = array(
-              'barang_alias' => $value->barang_alias,
-              'status' => $status
-            );
-          }
-        }
-        else {
-          $produk = [];
-        }
-        return response()->json([
-            'status' => 'success',
-            'data' => $produk
-        ], 200);
-        // $product = Product::with(['images', 'stocks', 'category'])->where('nama', 'like', '%' . $input . '%');
-        // return $this->response($product);
-    }
-
-    public function filter(Request $request)
-    {
-        if (!empty($request->all())) {
-            $filterBy = $request->all();
-            session(['filter' => $filterBy]);
-        } else {
-            return redirect(url('/'));
-        }
-
-        $filter = session()->get('filter') ?? [];
-        $hargaMin = session()->get('filter')['hargaMin'];
-        $hargaMax = session()->get('filter')['hargaMax'];
-        $product = Product::with(['images', 'stocks', 'category']);
-
-        if ($hargaMin != null) {
-            $product = $product->where('harga', '>=', $hargaMin);
-        }
-        if ($hargaMax != null) {
-            $product = $product->where('harga', '<=', $hargaMax);
-        }
-        foreach($filter as $key => $value) {
-            if ($key != 'hargaMin' && $key != 'hargaMax' && $value != null) {
-                $product = $product->where($key, $value);
-            }
-        }
-
-        return $this->response($product);
-    }
-
-    private function response($product) {
-        return response()->json([
-            'status' => 'success',
-            'message' => "Berhasil load data produk dari katalog.",
-            'data' => $product->paginate(4)
-        ], 200);
     }
 
     public function hargaGroup(){

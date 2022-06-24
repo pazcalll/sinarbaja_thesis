@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
-class IsAdminMiddleware
+class IsCustomerMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,7 +16,7 @@ class IsAdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::user()->id_group == 1) {
+        if (Auth::user()->id_group > 1) {
             return $next($request);
         }
         return redirect('/login');
