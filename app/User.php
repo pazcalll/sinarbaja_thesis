@@ -257,7 +257,7 @@ class User extends Authenticatable
             // multiply the existing character of the substring by using prime number (11) powered by the index
             for ($j=0; $j < strlen($tmpSubstr); $j++) { 
                 // powering prime number comes first bcs operation of power must be done first before multiplication
-                $primesMultiplicator = pow(26, strlen($tmpSubstr)-($j+1));
+                $primesMultiplicator = pow(11, strlen($tmpSubstr)-($j+1));
                 // split the existing character of the substring by index 
                 $tmpHashChar = ord(str_split($tmpSubstr)[$j])*$primesMultiplicator;
                 // save the result into a temporary array variable
