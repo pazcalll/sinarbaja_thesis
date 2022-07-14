@@ -68,7 +68,7 @@
                         @endif
                         <img class="brand-img"
                             src="{{ asset('public/themeforest/page-base/images/logo-colored.png') }}" alt="...">
-                        <h2 class="brand-text font-size-18">LOGIN PAGE</h2>
+                        <h2 class="brand-text font-size-18">HALAMAN LOGIN</h2>
                     </div>
                     <form method="post" action="{{ route('loginUser') }}" autocomplete="off">
                         @csrf
@@ -79,12 +79,12 @@
                         </div>
                         <div class="form-group form-material floating" data-plugin="formMaterial">
                             <input type="password" class="form-control" name="password" id="password" value="" />
-                            <label class="floating-label">Password</label>
+                            <label class="floating-label">Kata Sandi</label>
                         </div>
                         <div class="form-group clearfix">
                             <div class="checkbox-custom checkbox-inline checkbox-primary checkbox-lg float-left">
                                 <input type="checkbox" onclick="password1()">
-                                <label for="inputCheckbox">Show Password</label>
+                                <label for="inputCheckbox">Perlihatkan Kata Sandi</label>
                             </div>
                             {{-- <a class="float-right" href="forgot-password.html">Lupa password?</a> --}}
                         </div>

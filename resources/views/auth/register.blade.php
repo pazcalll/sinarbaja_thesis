@@ -90,7 +90,7 @@
 
                         <div class="form-group form-material floating" data-plugin="formMaterial">
                             <input type="password" class="form-control" name="password" />
-                            <label class="floating-label">Password</label>
+                            <label class="floating-label">Kata Sandi</label>
                         </div>
 
                         <!-- <div class="form-group clearfix">

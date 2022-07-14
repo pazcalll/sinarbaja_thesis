@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Customer;
-use App\GroupUser;
+// use App\GroupUser;
 use App\PurchaseOrder;
 use App\Tagihan;
 use Illuminate\Http\Request;

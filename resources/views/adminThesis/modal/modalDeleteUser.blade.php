@@ -7,11 +7,11 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title" style="color: blue;">Delete User</h4>
+                    <h4 class="modal-title" style="color: blue;">Penghapusan Pengguna</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group col-12">
-                        <label class="col-4 control-label">User Name : </label>
+                        <label class="col-4 control-label">Nama Pengguna : </label>
                         <div class="input-group col-12 user-name-div">
                             
                         </div>
@@ -19,8 +19,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" form="deleteUser" class="btn btn-primary">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    <button type="submit" form="deleteUser" class="btn btn-primary">Hapus</button>
                 </div>
             </div>
         </div>

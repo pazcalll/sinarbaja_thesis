@@ -7,19 +7,19 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title" style="color: blue;">Upload Excel</h4>
+                    <h4 class="modal-title" style="color: blue;">Unggah Berkas Excel</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group col-12">
-                        <label class="col-4 control-label">Insert Excel File</label>
+                        <label class="col-4 control-label">Masukkan Berkas Excel</label>
                         <div class="input-group col-12">
                             <input type="file" class="form-control" required name="file_excel" id="file_excel">
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" form="uploadExcel" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    <button type="submit" form="uploadExcel" class="btn btn-primary">Kirim</button>
                 </div>
             </div>
         </div>

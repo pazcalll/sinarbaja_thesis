@@ -6,7 +6,7 @@
 					<span aria-hidden="true">×</span>
 				</button>
 				<div>
-					<h3 class="title-modal" style="color: blue">Acceptance Modal</h3>
+					<h3 class="title-modal" style="color: blue">Persetujuan Pesanan Masuk</h3>
 				</div>
 			</div>
 			<div class="modal-body" style="margin-top: 0px; padding-top: 0px">
@@ -20,8 +20,8 @@
 						<th>No.</th>
 						<th>Nama Barang</th>
 						<th>Harga Barang</th>
-						<th>Qty</th>
-						<th>Total</th>
+						<th>Jumlah Barang</th>
+						<th>Total Harga</th>
 					</tr>
 					</thead>
 					<tbody>

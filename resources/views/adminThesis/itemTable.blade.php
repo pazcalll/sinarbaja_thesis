@@ -1,18 +1,19 @@
 <div class="container nowrap" style="width: 100%; right: 0px; background-color: white;" id="main-content">
-    <h2>Items Master</h2>
-    <a href="javascript:void(0)" onclick="$('#modalUploadExcel').modal('show')" class="card-body-title"><button class="btn btn-success"><i class="icon md-upload"></i> Import Excel</button></a>
-    <a href="{{route('export_excel_item')}}" class="card-body-title"><button class="btn btn-warning"><i class="icon md-download"></i> Export Excel</button></a>
+    <h2>Data Nama Barang</h2>
+    <a href="javascript:void(0)" onclick="$('#modalUploadExcel').modal('show')" class="card-body-title"><button class="btn btn-success"><i class="icon md-upload"></i> Unggah Berkas Excel</button></a>
+    <a href="{{route('export_excel_item')}}" class="card-body-title"><button class="btn btn-warning"><i class="icon md-download"></i> Unduh Berkas Excel</button></a>
+    {{-- <a href="javascript:void(0)" onclick="" class="card-body-title"><button class="btn btn-info"><i class="icon md-album"></i> Categories</button></a> --}}
     <table id="table_item" class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th style="width:5%">No.</th>
-                <th style="width:10%">Type</th>
-                <th style="width:20%">Real Name</th>
-                <th style="width:10%">Code</th>
-                <th style="width:20%">Name</th>
-                <th style="width:10%">Unit</th>
-                <th style="width:5%">Stock</th>
-                <th style="width:10%">Prices</th>
+                <th style="width:10%">Tipe</th>
+                <th style="width:20%">Nama Asli</th>
+                <th style="width:10%">Kode Barang</th>
+                <th style="width:20%">Nama Barang</th>
+                <th style="width:10%">Satuan</th>
+                <th style="width:5%">Stok Barang</th>
+                <th style="width:10%">Harga</th>
                 {{-- <th style="width:10%">Action</th> --}}
             </tr>
         </thead>

@@ -1,5 +1,5 @@
 <div class="container nowrap" style="width: 100%; right: 0px; background-color: white;" id="main-content">
-    <h2>List Incoming Order</h2>
+    <h2>Daftar Pesanan Masuk</h2>
     {{-- <a href="javascript:void(0)" onclick="$('#modalUploadExcel').modal('show')" class="card-body-title"><button class="btn btn-success"><i class="icon md-upload"></i> Upload Stock</button></a>
     <a href="{{route('export_stock')}}" class="card-body-title"><button class="btn btn-warning"><i class="icon md-download"></i> Download Stock</button></a>
     <a href="javascript:void(0)" onclick="$('#modalTruncateStock').modal('show')" class="card-body-title"><button class="btn btn-danger"><i class="icon md-delete"></i> Empty Stock</button></a> --}}
@@ -8,7 +8,7 @@
             <tr>
                 <th width="5%">No.</th>
                 <th>No. Nota</th>
-                <th width="10%">Tipe User</th>
+                <th width="10%">Tipe Pengguna</th>
                 <th >Pembeli</th>
                 <th>Tanggal Pesan</th>
             </tr>

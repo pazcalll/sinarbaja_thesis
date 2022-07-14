@@ -1,14 +1,14 @@
 <div style="width: 100%; right: 0px; background-color: white;" id="main-content">
     <div class="container">
-        <h3>Users</h3>
+        <h3>Pengguna</h3>
         <table id="main_table" class="table table-bordered table-hover table-striped" style="width: 100%; table-layout: fixed;">
             <thead>
                 <tr>
                     <th width="5%">No.</th>
-                    <th width="25%">User Name</th>
-                    <th width="15%">Group Name</th>
+                    <th width="25%">Nama Pengguna</th>
+                    <th width="15%">Grup Pengguna</th>
                     <th width="25%">Email</th>
-                    <th width="30%">Action</th>
+                    <th width="30%">Aksi</th>
                 </tr>
             </thead>
             <tbody>

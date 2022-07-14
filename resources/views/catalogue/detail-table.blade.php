@@ -77,8 +77,13 @@ $bodyType = 'site-menubar-unfold';
 				{ 
 					data: null,
 					render: function(data, type,full,meta) {
-						console.log(data)
-						return data['stok'] + ' ' + data['satuan']
+						// console.log(data)
+						@auth
+							return data['stok'] + ' ' + data['satuan']
+						@endauth
+						@guest
+							return ""
+						@endguest
 					}
 				},
 				{

@@ -259,16 +259,16 @@ class Customer extends User
         try {
             DB::beginTransaction();
             $validator = \Validator::make($request->all(), [
-                'jumlahBayarInput' => 'required|numeric|min:100',
                 'inputBukti' => 'required|image'
             ],[
-                'jumlahBayarInput.required' => 'Jumlah yang dibayar tidak boleh kosong',
-                'jumlahBayarInput.min' => 'Pembayaran tidak boleh kurang dari 100 Rupiah',
                 'inputBukti.required' => 'image required',
                 'inputBukti.image' => 'file must be an image'
             ]);
             if ($validator->fails()) {
-                return response(['message'=>$validator->errors()->toArray()], 400);
+                foreach ($validator->errors()->toArray()['inputBukti'] as $key => $value) {
+                    $error[] = $value;
+                }
+                return response(['message'=>$error], 400);
             }else{
                 $filename =time().'_'.$request->file('inputBukti')->getClientOriginalName();
                 $request->file('inputBukti')->storeAs('public/tagihan', $filename);

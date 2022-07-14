@@ -7,16 +7,17 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title" style="color: blue;">truncate Stock</h4>
+                    <h4 class="modal-title" style="color: blue;">Pengosongan Stok Barang</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group col-12">
                         Are you sure to delete all records in the stock table?
+                        Apakah anda yakin untuk menghapus semua catatan stok barang di tabel?
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" form="truncateStock" class="btn btn-primary">Yes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak</button>
+                    <button type="submit" form="truncateStock" class="btn btn-primary">Ya</button>
                 </div>
             </div>
         </div>

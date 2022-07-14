@@ -24,7 +24,7 @@ $bodyType = 'site-menubar-unfold';
         <div>
             <div>
                 <ul class="site-menu" data-plugin="menu">
-                    <li class="site-menu-category">Analytics Menu</li>
+                    <li class="site-menu-category">Menu Analisis Algoritma</li>
 					<li class="site-menu-item has-sub">
 						<a href="javascript:void(0)">
 							<i class="site-menu-icon md-view-compact" aria-hidden="true"></i>
@@ -77,13 +77,13 @@ $bodyType = 'site-menubar-unfold';
 					<li class="site-menu-item has-sub">
 						<a href="javascript:void(0)">
 							<i class="site-menu-icon md-view-compact" aria-hidden="true"></i>
-							<span class="site-menu-title">Test</span>
+							<span class="site-menu-title">Pengujian</span>
 							<span class="site-menu-arrow"></span>
 						</a>
 						<ul class="site-menu-sub">
 							<li class="site-menu-item item-point" data-url='{{url("analytics/speed")}}'>
 								<a class="animsition-link" href="">
-									<span class="site-menu-title">Speed and Rows</span>
+									<span class="site-menu-title">Kecepatan dan Baris</span>
 								</a>
 							</li>
 						</ul>

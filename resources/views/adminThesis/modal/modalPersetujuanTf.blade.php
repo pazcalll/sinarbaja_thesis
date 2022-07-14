@@ -6,7 +6,7 @@
 					<span aria-hidden="true">×</span>
 				</button>
 				<div>
-					<h3 class="title-modal" style="color: blue">Bill Acceptance Modal</h3>
+					<h3 class="title-modal" style="color: blue">Persetujuan Tagihan</h3>
 				</div>
 			</div>
 			<div class="modal-body" style="margin-top: 0px; padding-top: 0px">

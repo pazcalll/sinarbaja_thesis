@@ -3,8 +3,8 @@
         <thead>
             <tr style="background-color: #696969; color: #fff;">
                 <th></th>
-                <th><b>Number of Rows</b></th>
-                <th><b>Duration</b></th>
+                <th><b>Jumlah Baris</b></th>
+                <th><b>Durasi</b></th>
             </tr>
         </thead>
         <tbody></tbody>

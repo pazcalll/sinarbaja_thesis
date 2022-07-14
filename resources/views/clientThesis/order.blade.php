@@ -70,7 +70,7 @@ $showNavigation = false;
                 <thead>
                     <tr>
                         <th>Nama Barang</th>
-                        <th>qty</th>
+                        <th>Jumlah Barang</th>
                         <th>Harga</th>
                     </tr>
                 </thead>
@@ -165,7 +165,7 @@ $showNavigation = false;
                 <thead>
                     <tr>
                         <th>Nama Barang</th>
-                        <th>qty</th>
+                        <th>Jumlah Barang</th>
                         <th>Harga</th>
                     </tr>
                 </thead>
@@ -288,7 +288,7 @@ $showNavigation = false;
                 <thead>
                     <tr>
                         <th>Nama Barang</th>
-                        <th>qty</th>
+                        <th>Jumlah Barang</th>
                         <th>Harga</th>
                     </tr>
                 </thead>
@@ -419,10 +419,15 @@ $showNavigation = false;
             data: fd,
             success: (res) => {
                 $('#modalPembayaran').modal('hide')
+                toastr['success']('Bukti transfer telah dikirim')
                 window.location.reload()
             },
             error: (err) => {
-                console.error(err)
+                // console.log(JSON.parse(err.responseText))
+                err = JSON.parse(err.responseText)
+                err.message.forEach(error => {
+                    toastr['error'](error)
+                });
             }
         })
     })
@@ -438,7 +443,7 @@ $showNavigation = false;
                 <thead>
                     <tr>
                         <th>Nama Barang</th>
-                        <th>qty</th>
+                        <th>Jumlah Barang</th>
                         <th>Harga</th>
                     </tr>
                 </thead>

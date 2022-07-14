@@ -76,9 +76,7 @@ class RegisterController extends Controller
     {
         $create = null;
         $group_id = $data['group_id'] ?? 'LEVEL 1';
-        $id_group = GroupUser::where('group_name', $group_id)->get('id')[0]['id'];
-        // dd($id_group);
-        // dd(GroupUser::where('group_name', $id_group)->get('id')[0]['id']);
+        $id_group = DB::table('group_users')->where('group_name', $group_id)->get('id')[0]['id'];
         $submission = [
             'name' => $data['name'],
             'email' => $data['email'],

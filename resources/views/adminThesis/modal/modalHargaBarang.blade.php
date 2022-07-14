@@ -13,7 +13,7 @@
                 <th>No.</th>
                 <th>Nama Barang</th>
                 <th>Harga Barang</th>
-                <th>Group</th>
+                <th>Grup</th>
               </tr>
             </thead>
             <tbody>

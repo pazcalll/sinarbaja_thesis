@@ -136,6 +136,20 @@ $bodyType = 'site-menubar-unfold';
     let hargaPerGroup = null
     let currentAuth = null
     var newHargaProduk = []
+    let img = [
+        'pelengkap-aluminium.jpg',
+        'alumunium.jpg',
+        'plat-strip-aluminium.jpg',
+        'pipa-bulat-aluminium.jpg',
+        'hollow-aluminium.jpg',
+        'talang-roll-aluminium.jpg',
+        'plat-aluminium.jpg',
+        'mesh-aluminium.jpg',
+        'rolling-door-aluminium.jpg',
+        'pipa-stainless-sch.jpg',
+        'pipa-bulat-stainless.jpg'
+    ]
+    let img_i = 0
 
     $(document).ready(function() {
         toastr.options = {
@@ -279,8 +293,6 @@ $bodyType = 'site-menubar-unfold';
                     });
                 });
                 $('#loading-notification').html('')
-                // bindView(response.data)
-                // $('#product-wrapper').empty()
             },
             error: (err) => {
                 console.log(err)
@@ -334,7 +346,7 @@ $bodyType = 'site-menubar-unfold';
     let iterationCart = 0
     let iterationBuy = 0
     function bindView(data) {
-        currentPage = data.current_page
+        // currentPage = data.current_page
 
         $('#loader').hide()
         if (data != null && data.length != 0) {
@@ -342,15 +354,23 @@ $bodyType = 'site-menubar-unfold';
             console.log(data)
             data.forEach((product, index) => {
                 newdata.push(product);
-                if(currentPage != 1){
-                    index = index + (4 * (currentPage-1))
+                // if(currentPage != 1){
+                //     index = index + (4 * (currentPage-1))
+                // }
+                if (img_i == img.length) {
+                    img_i = 0
                 }
+                let alias_img = img[img_i]
+                img_i = img_i + 1
+
                 console.log(product)
+                // src="{{ asset('storage/app/public/photo/steel_hollow.jpg') }}"
                 let template = `
                             <div class="card card-shadow">
                                 <figure class="card-img-top overlay-hover overlay">
                                     <img class="overlay-figure"
-                                        src="{{ asset('storage/app/public/photo/Besi.jpg') }}">
+                                        src="{{ asset('storage/app/public/photo') }}/${alias_img}"
+                                        style="max-width: 300px; height: 200px">
                                 </figure>
                                 <div class="card-block table-responsive">
                                     <h4 class="card-title text-center" style="font-size: 1rem; dont-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform:uppercase;">` + product + `</h4>
@@ -360,32 +380,6 @@ $bodyType = 'site-menubar-unfold';
 										<p class="text-center" style="color: #fb8b34; font-weight: bold"><a class="btn btn-round btn-primary" href="{{ url('detail/product') }}/` + product.replace(' ', '__') + `"><b>Detail</b></a></p>
 										`
                                 template+=`
-                            </div>
-                            <div class="card-block text-center div_card_beli my-cart-btn" style=" padding-top: 5px; col-lg-2">
-                                <div class="input-group bootstrap-touchspin bootstrap-touchspin-injected" style="width: 190px; margin-left: 25px; text-align: center;">
-                                    {{-- <input type="text" class="form-control" id="qty" data-plugin="TouchSpin" data-min="1" data-max="1000000000" data-stepinterval="50" data-maxboostedstep="10000000" value="1"  />
-                                        <span class="input-group-text" >Stok<b id="data-stock"></b></span> --}}
-                                    @if (Auth::check())
-                                        {{-- <button type="button" class="btn btn-md btn-round add-to-cart"
-                                            style="background: #fb8b34; color: white; margin-left: 10px; font-weight: bold" data-id="${ index }">
-                                            <a class="icon md-shopping-cart" aria-hidden="true"></a>
-                                        </button> --}}
-                                        {{-- <button type="button" class="btn btn-md btn-round buyitem"
-                                            style="background: #3f51b5; color: white; margin-left: 10px; font-weight: bold; width:70px;" data-target="#purchaseOrder"
-                                            data-toggle="modal" data-id="${ index }">
-                                            Beli
-                                        </button> --}}
-                                    @else
-                                        {{-- <a href="{{ url('/login') }}" class="btn btn-md btn-round"
-                                            style="background: #fb8b34; color: white; margin-left: 10px; font-weight: bold">
-                                            <i class="icon md-shopping-cart" aria-hidden="true"></i>
-                                        </a> --}}
-                                        {{--}} <a href="{{ url('/login') }}" class="btn btn-md btn-round"
-                                            style="background: #3f51b5; color: white; margin-left: 10px; font-weight: bold">
-                                            Beli
-                                        </a> --}}
-                                    @endif
-                                </div>
                             </div>
                         </div>`;
                 $('#product-wrapper').append(template);

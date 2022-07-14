@@ -1,13 +1,13 @@
 <div class="pre-casefolding">
     {{-- <button class="btn btn-primary rounded style-changer" data-url={{url("analytics/pre-casefolding")}}>Case Folding</button>
     <button class="btn btn-outline-primary rounded style-changer" data-url={{url("analytics/pre-punctuation")}}>Punctuation Removal</button> --}}
-    <span class="btn btn-primary">User Insert</span>
+    <span class="btn btn-primary">Masukan Pengguna</span>
     <table id="main_table" class="table table-bordered table-hover table-striped" style="width: 100%">
         <thead>
             <tr>
                 <th width="10%">No.</th>
-                <th>Base</th>
-                <th>Result</th>
+                <th>Awalan</th>
+                <th>Hasil</th>
             </tr>
         </thead>
         <tbody>
@@ -21,13 +21,13 @@
         </tbody>
     </table>
 
-    <span class="btn btn-primary">System Data</span>
+    <span class="btn btn-primary">Data Sistem</span>
     <table id="secondary_table" class="table table-bordered table-hover table-striped" style="width: 100%">
         <thead>
             <tr>
                 <th width="10%">No.</th>
-                <th>Base</th>
-                <th>Result</th>
+                <th>Awalan</th>
+                <th>Hasil</th>
             </tr>
         </thead>
         <tbody>

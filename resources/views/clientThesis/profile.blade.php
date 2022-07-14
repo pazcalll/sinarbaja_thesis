@@ -34,7 +34,7 @@ $showNavigation = false;
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
-                <h4 class="modal-title" style="color: blue">Form Edit Profile</h4>
+                <h4 class="modal-title" style="color: blue">Form Edit Profil Pengguna</h4>
             </div>
             <form id="form-update-profile" enctype="multipart/form-data" method="POST">
                 @csrf
@@ -60,7 +60,7 @@ $showNavigation = false;
                             </div>
 
                             <div class="form-group row form-material">
-                                <label class="col-xl-12 col-md-3 form-control-label text-left">No. Handphone
+                                <label class="col-xl-12 col-md-3 form-control-label text-left">No. Telepon
                                     <span class="required">*</span>
                                 </label>
                                 <div class=" col-xl-12 col-md-6">

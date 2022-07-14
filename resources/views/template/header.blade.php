@@ -99,9 +99,11 @@
 
 <body class="animation {{ $bodyType ?? 'dashboard' }}">
     <nav class="site-navbar navbar navbar-default navbar-fixed-top navbar-mega" role="navigation">
-        <div class="navbar-header">
-            <a class="md-arrow-left navbar-toggler-left" style="width: inherit" href="{{ url('/') }}"></a>
-        </div>
+        <a class="navbar-header" style="color: #FFFFFF;" href="{{ url('/') }}">
+            <strong class="" style="margin-left: 10%; padding: 10%;">
+                SINARBAJA
+            </strong>
+        </a>
 
         <div class="navbar-container container-fluid">
             <!-- Navbar Collapse -->
@@ -175,7 +177,7 @@
                             <div class="dropdown-menu" role="menu">
                                 @if (Auth::user()->id_group != 1)
                                     <span class="username ml-4" style="color: blue">{{ Auth::user()->name }}</span>
-                                    <a class="dropdown-item" href="{{ url('/profile') }}" role="menuitem"><i class="icon md-account" aria-hidden="true"></i> Profile</a>
+                                    <a class="dropdown-item" href="{{ url('/profile') }}" role="menuitem"><i class="icon md-account" aria-hidden="true"></i> Profil</a>
                                     <a class="dropdown-item" href="{{ url('/order') }}" role="menuitem"><i class="icon md-inbox" aria-hidden="true"></i>Pesanan</a>
                                     <div class="dropdown-divider" role="presentation"></div>
                                 @endif
@@ -238,7 +240,7 @@
                                     <thead>
                                         <tr style="text-align: center;">
                                             <th width="30%">Nama</th>
-                                            <th width="10%">Qty</th>
+                                            <th width="10%">Jumlah Barang</th>
                                             <th width="20%">Total Harga</th>
                                             <th width="10%"></th>
                                         </tr>

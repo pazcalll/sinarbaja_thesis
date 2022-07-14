@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Profil;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
@@ -200,6 +201,11 @@ class User extends Authenticatable
             }
         }
         $sorterCallback = function($a, $b) {
+            if ($a['similarity'] == $b['similarity']) {
+                if ($a['id'] < $b['id']) {
+                    return $a['id'] < $b['id'];
+                }
+            }
             return $a['similarity'] < $b['similarity'];
         };
         

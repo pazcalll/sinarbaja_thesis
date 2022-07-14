@@ -8,7 +8,7 @@
                         <th width="5%">No.</th>
                         <th width="50%">No. Nota</th>
                         <th width="20%">Tanggal Pesan</th>
-                        <th width="20%">Total Pesanan</th>
+                        <th width="20%">Total Harga</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,7 +37,7 @@
                                     <th>No.</th>
                                     <th>No. Nota</th>
                                     <th>Tanggal</th>
-                                    <th>Total</th>
+                                    <th>Total Harga</th>
                                     <th>Status Bayar</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -53,7 +53,7 @@
                                     <th>No.</th>
                                     <th>No. Nota</th>
                                     <th>Tanggal</th>
-                                    <th>Total</th>
+                                    <th>Total Harga</th>
                                     <th>Status Bayar</th>
                                     <th>Status Kirim</th>
                                     <th>Aksi</th>
@@ -83,7 +83,7 @@
                             {{-- <th width="10%">Tipe User</th>
                             <th>Pembeli</th> --}}
                             <th>Tanggal Pesan</th>
-                            <th>Total</th>
+                            <th>Total Harga</th>
                         </tr>
                     </thead>
                 </table>

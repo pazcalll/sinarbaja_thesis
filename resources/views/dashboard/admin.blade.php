@@ -14,7 +14,7 @@
                         <a href="javascript:void(0)" onclick="{$('.item-list').parent().parent().click(); $('.item-list').click()}" class="card p-30 flex-row justify-content-between">
                             <div class="counter counter-md text-left">
                                 <div class="counter-number-group">
-                                    <span class="counter-number-related text-capitalize">Items</span>
+                                    <span class="counter-number-related text-capitalize">Barang</span>
                                     
                                 </div>
                             </div>
@@ -28,7 +28,7 @@
                         <a href="javascript:void(0)" onclick="{$('.order-list').parent().parent().click(); $('.order-list').click()}" class="card p-30 flex-row justify-content-between">
                             <div class="counter counter-md text-left">
                                 <div class="counter-number-group">
-                                    <span class="counter-number-related text-capitalize">Orders</span>
+                                    <span class="counter-number-related text-capitalize">Pesanan</span>
                                 </div>
                             </div>
                             <div class="white">
@@ -41,7 +41,7 @@
                         <a href="javascript:void(0)" onclick="{$('.users-feature').parent().click(); $('.users-feature').click()}" class="card p-30 flex-row justify-content-between">
                             <div class="counter counter-md text-left">
                                 <div class="counter-number-group">
-                                    <span class="counter-number-related text-capitalize">Users</span>
+                                    <span class="counter-number-related text-capitalize">Pengguna</span>
                                 </div>
                             </div>
                             <div class="white">
