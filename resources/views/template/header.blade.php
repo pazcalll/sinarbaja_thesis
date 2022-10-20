@@ -107,7 +107,7 @@
 
         <div class="navbar-container container-fluid">
             <!-- Navbar Collapse -->
-            <div class="collapse navbar-collapse navbar-collapse-toolbar" id="site-navbar-collapse">
+            <div class="navbar-collapse navbar-collapse-toolbar" id="site-navbar-collapse">
 
                 <!-- Navbar Toolbar Right -->
                 <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right">

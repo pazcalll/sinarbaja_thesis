@@ -124,7 +124,7 @@ class Customer extends User
             $isUpdate = false;
 			foreach ($userCart as $key => $value) {
 				$thisValue = $value->getThis();
-				if ($thisValue->barang->barang_id == intval($request->id_barang)) {
+				if ($thisValue->barang->barang_id == intval($request['id_barang'])) {
 					DB::table('cart')
 						->where('id', $thisValue->id)
 						->update(['jumlah' => $thisValue->jumlah + intval($request['jumlah'])]);

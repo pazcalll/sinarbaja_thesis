@@ -49,13 +49,27 @@ $bodyType = 'site-menubar-unfold';
             max-width: 401px;
         }
     }
-
+    
     @media (min-width: 480px) {
         .card-columns{
             -webkit-column-gap: 1.429rem;
             column-gap: 1.429rem;
             orphans: 1;
             widows: 1;
+        }
+    }
+
+    @media (max-width: 500px) {
+        
+        .card{
+            float: left;
+            margin: 5px;
+            margin-bottom: 10px;
+            width: 150px;
+            max-width: 300px;
+        }
+        img{
+            height: 130px;
         }
     }
 
@@ -370,7 +384,7 @@ $bodyType = 'site-menubar-unfold';
                                 <figure class="card-img-top overlay-hover overlay">
                                     <img class="overlay-figure"
                                         src="{{ asset('storage/app/public/photo') }}/${alias_img}"
-                                        style="max-width: 300px; height: 200px">
+                                        style="max-width: 300px; max-height: 200px">
                                 </figure>
                                 <div class="card-block table-responsive">
                                     <h4 class="card-title text-center" style="font-size: 1rem; dont-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform:uppercase;">` + product + `</h4>
