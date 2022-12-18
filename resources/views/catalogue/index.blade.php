@@ -49,13 +49,27 @@ $bodyType = 'site-menubar-unfold';
             max-width: 401px;
         }
     }
-
+    
     @media (min-width: 480px) {
         .card-columns{
             -webkit-column-gap: 1.429rem;
             column-gap: 1.429rem;
             orphans: 1;
             widows: 1;
+        }
+    }
+
+    @media (max-width: 500px) {
+        
+        .card{
+            float: left;
+            margin: 5px;
+            margin-bottom: 10px;
+            width: 150px;
+            max-width: 300px;
+        }
+        img{
+            height: 130px;
         }
     }
 
@@ -74,19 +88,6 @@ $bodyType = 'site-menubar-unfold';
 @endsection
 
 @section('page')
-{{-- <div class="row">
-    <div class="col-12">
-        <div class="py-15">
-            <div class="text-center">
-                <div class="btn-group" aria-label="Basic example" role="group">
-                    <a type="button" class="btn btn-icon btn-primary waves-effect waves-classic" style="color: #fff"><i class="icon md-collection-image" aria-hidden="true"></i></a>
-                    <a class="btn btn-icon btn-light waves-effect waves-classic" href="{{ url('index-tabel') }}" style="color: #3f51b5"><i class="icon md-view-list" aria-hidden="true"></i></a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> --}}
-
 <div class="row">
     <div class="col-12">
         <div class="example-wrap">
@@ -94,7 +95,13 @@ $bodyType = 'site-menubar-unfold';
                 <div style="display: none; width: 80%; margin: 0 auto;" id="search-res">
                     <div class="panel" style="margin: 0 auto;">
                         <div class="panel-body">
+                            <div id="loading-notification"></div>
+                            <span class="btn-group">
+                                <button type="button" class="btn btn-primary" onclick="search($('#input_search').val(), `sql`)">SQL</button>
+                                <button type="button" class="btn btn-primary" onclick="search($('#input_search').val(), `rabin`)">Rabin</button>
+                            </span>
                             <button class="btn btn-info" onclick="analyticsPage()">Analytics</button>
+                            
                             <table id="search-table" style="margin: 0 auto; width: 100%;">
                                 <thead style="border-bottom: 1px solid gray;">
                                     <tr style="height: 70px;">
@@ -110,30 +117,6 @@ $bodyType = 'site-menubar-unfold';
                                     
                                 </tbody>
                             </table>
-                            {{-- <div class="search-navigator" style="display: flex;">
-                                <div style="display:flex; margin: 0 auto">
-                                    <select id="search-navigator-select" class="form-control">
-                                        <option value="5">5</option>
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                    </select>
-                                    <p style="margin-top:5px; margin-left:5px"> Baris</p>
-                                </div>
-                                <nav style="display:flex; margin: 0 auto">
-                                    <ul class="pagination">
-                                        <li class="page-item">
-                                            <span class="page-link">Previous</span>
-                                        </li>
-                                        <li class="page-item active" aria-current="page">
-                                            <a class="page-link" href="#">1</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#">Next</a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -167,6 +150,20 @@ $bodyType = 'site-menubar-unfold';
     let hargaPerGroup = null
     let currentAuth = null
     var newHargaProduk = []
+    let img = [
+        'pelengkap-aluminium.jpg',
+        'alumunium.jpg',
+        'plat-strip-aluminium.jpg',
+        'pipa-bulat-aluminium.jpg',
+        'hollow-aluminium.jpg',
+        'talang-roll-aluminium.jpg',
+        'plat-aluminium.jpg',
+        'mesh-aluminium.jpg',
+        'rolling-door-aluminium.jpg',
+        'pipa-stainless-sch.jpg',
+        'pipa-bulat-stainless.jpg'
+    ]
+    let img_i = 0
 
     $(document).ready(function() {
         toastr.options = {
@@ -179,11 +176,7 @@ $bodyType = 'site-menubar-unfold';
             type: 'GET',
             async: true
         }).then((res) => {
-            const {
-                data
-            } = res
-            // console.log(res)
-            // console.log("jj",data)
+            const {data} = res
             if (carts == null) {
                 carts = []
             }
@@ -191,55 +184,34 @@ $bodyType = 'site-menubar-unfold';
             $('#product-wrapper').empty()
             bindView(data)
         });
-        //button filter katalog
-        $('#btn_filter').on('click', function() {
-            filter()
-        });
-        //end button
 
         $("#search_form").submit(function(event) {
             event.preventDefault();
             var input = $("#input_search").val();
             search(input)
         });
-
-        // $('#btn-buy').click(function() {
-        //     let total = 0
-        //     carts.forEach((product, _index) => total += parseInt(product.harga) * parseInt(product.qty))
-        //     buy(carts, total)
-        //     carts = []
-        // })
-        //function load more
-        $('#load-more').on('click', function() {
-            move(path, (currentPage + 1))
-        })
-        //end function
-
-        //function reset filter kategori
-        $(document).ready(function() {
-            $("#reset").click(function() {
-                document.getElementById("form_filter").reset();
-                $('#kategori').val($('#kategori option:first-child').val()).trigger('change');
-                $('#merek').val($('#merek option:first-child').val()).trigger('change');
-                $("#filterKatalog").modal();
-            });
-        })
-        //end reset filter kategori
     }) // end of jquery
 
-    function search(input) {
+    function search(input, string = 'strings') {
+        let url = ''
+        let type = 'GET'
+        if(string == 'sql') {
+            url = `{{ url('analytics/speed/sql') }}`
+            type = 'GET'    
+        }
+        else url = `{{ url('data/rabin') }}/${4}/${input}`
+        $('#loading-notification').html('Loading, please wait...')
         $.ajax({
-            type: "GET",
-            url: `{{ url('data/rabin') }}/${4}/${input}`,
-            dataType: "json",
+            type: type,
+            url: url,
             data: {
-                search: input
+                search: input,
+                string: input
             },
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: (response) => {
-                console.log(response.data)
                 $('#product-wrapper').hide()
 
                 if ($.fn.dataTable.isDataTable('#search-table')) $('#search-table').DataTable().destroy()
@@ -292,8 +264,8 @@ $bodyType = 'site-menubar-unfold';
                 $('#search-table').DataTable({
                     searching: false,
                     info: false,
-                    serverside:false,
-                    processing: false,
+                    serverside:true,
+                    processing: true,
                     columnDefs:[{
                         targets: [0,1,2,3,4],
                         orderable: false
@@ -326,7 +298,7 @@ $bodyType = 'site-menubar-unfold';
                             toastr['success']('Berhasil ditambahkan')
                             cart_count()
 
-                            table_cart_ndess.ajax.reload();
+                            table_cart.ajax.reload();
                         },
                         error:function(){
                             alert("error");
@@ -334,8 +306,7 @@ $bodyType = 'site-menubar-unfold';
 
                     });
                 });
-                // bindView(response.data)
-                // $('#product-wrapper').empty()
+                $('#loading-notification').html('')
             },
             error: (err) => {
                 console.log(err)
@@ -349,22 +320,6 @@ $bodyType = 'site-menubar-unfold';
         }else if(event.target.value == ''){
             $('#'+id).val(1)
         }
-    }
-
-    function filter() {
-        $.ajax({
-            url: "{{ url('filter') }}",
-            type: 'GET',
-            dataType: 'json',
-            data: $('#form_filter').serialize(),
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: (response) => {
-                $('#product-wrapper').empty()
-                bindView(response.data)
-            }
-        });
     }
 
     function hargaGroup(){
@@ -393,10 +348,7 @@ $bodyType = 'site-menubar-unfold';
                     }
                 })
                 hargaPerGroup=response
-                // console.log(hargaPerGroup)
-                // if ('{{Auth::user()}}' != []) {
-                //     console.log('{{Auth::user()}}')
-                // }
+                console.log(hargaPerGroup)
             },
             error: (err) =>{
                 console.log(err)
@@ -407,82 +359,41 @@ $bodyType = 'site-menubar-unfold';
     let newdata = []
     let iterationCart = 0
     let iterationBuy = 0
-    hargaGroup()
-    hargaPerGroup.forEach((item, index)=>{
-        if (item.id_group == currentAuth.id_group) {
-            newHargaProduk.push(item)
-        }
-    })
     function bindView(data) {
-        // path.push(data)
-        // console.log(path)
-        currentPage = data.current_page
+        // currentPage = data.current_page
 
         $('#loader').hide()
         if (data != null && data.length != 0) {
             $('#result-not-found').hide()
+            console.log(data)
             data.forEach((product, index) => {
                 newdata.push(product);
-                if(currentPage != 1){
-                    index = index + (4 * (currentPage-1))
-                    console.log('true', index)
+                // if(currentPage != 1){
+                //     index = index + (4 * (currentPage-1))
+                // }
+                if (img_i == img.length) {
+                    img_i = 0
                 }
+                let alias_img = img[img_i]
+                img_i = img_i + 1
+
+                console.log(product)
+                // src="{{ asset('storage/app/public/photo/steel_hollow.jpg') }}"
                 let template = `
                             <div class="card card-shadow">
                                 <figure class="card-img-top overlay-hover overlay">
                                     <img class="overlay-figure"
-                                        src="{{ asset('storage/app/public/photo/Besi.jpg') }}">
+                                        src="{{ asset('storage/app/public/photo') }}/${alias_img}"
+                                        style="max-width: 300px; max-height: 200px">
                                 </figure>
                                 <div class="card-block table-responsive">
                                     <h4 class="card-title text-center" style="font-size: 1rem; dont-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform:uppercase;">` + product + `</h4>
 
 									`
-                                    if (!currentAuth.message) {
-                                        let foreachMarker = 0
-                                        newHargaProduk.forEach((item, index)=>{
-                                            if (item.id_group == currentAuth.id_group && item.id_product == product.id) {
-                                                template+=`
-													<p class="text-center" style="color: #fb8b34; font-weight: bold"><a class="btn btn-round btn-primary" href="{{ url('detail/product') }}/` + product + `"><b>Detail</b></a></p>
-													`
-                                                foreachMarker = 1
-                                            }
-                                            else if(index == newHargaProduk.length-1 && foreachMarker == 0)
-                                                template+=`
-                                                <p class="text-center" style="color: #fb8b34; font-weight: bold"><a class="btn btn-round btn-primary" href="{{ url('detail/product') }}/` + product + `"><b>Detail</b></a></p>
-                                                `
-                                        })
-                                    }
-                                    else
-										template+=`
-										<p class="text-center" style="color: #fb8b34; font-weight: bold"><a class="btn btn-round btn-primary" href="{{ url('detail/product') }}/` + product + `"><b>Detail</b></a></p>
+                                    template+=`
+										<p class="text-center" style="color: #fb8b34; font-weight: bold"><a class="btn btn-round btn-primary" href="{{ url('detail/product') }}/` + product.replace(' ', '__') + `"><b>Detail</b></a></p>
 										`
                                 template+=`
-                            </div>
-                            <div class="card-block text-center div_card_beli my-cart-btn" style=" padding-top: 5px; col-lg-2">
-                                <div class="input-group bootstrap-touchspin bootstrap-touchspin-injected" style="width: 190px; margin-left: 25px; text-align: center;">
-                                    {{-- <input type="text" class="form-control" id="qty" data-plugin="TouchSpin" data-min="1" data-max="1000000000" data-stepinterval="50" data-maxboostedstep="10000000" value="1"  />
-                                        <span class="input-group-text" >Stok<b id="data-stock"></b></span> --}}
-                                    @if (Auth::check())
-                                        {{-- <button type="button" class="btn btn-md btn-round add-to-cart"
-                                            style="background: #fb8b34; color: white; margin-left: 10px; font-weight: bold" data-id="${ index }">
-                                            <a class="icon md-shopping-cart" aria-hidden="true"></a>
-                                        </button> --}}
-                                        {{-- <button type="button" class="btn btn-md btn-round buyitem"
-                                            style="background: #3f51b5; color: white; margin-left: 10px; font-weight: bold; width:70px;" data-target="#purchaseOrder"
-                                            data-toggle="modal" data-id="${ index }">
-                                            Beli
-                                        </button> --}}
-                                    @else
-                                        {{-- <a href="{{ url('/login') }}" class="btn btn-md btn-round"
-                                            style="background: #fb8b34; color: white; margin-left: 10px; font-weight: bold">
-                                            <i class="icon md-shopping-cart" aria-hidden="true"></i>
-                                        </a> --}}
-                                        {{--}} <a href="{{ url('/login') }}" class="btn btn-md btn-round"
-                                            style="background: #3f51b5; color: white; margin-left: 10px; font-weight: bold">
-                                            Beli
-                                        </a> --}}
-                                    @endif
-                                </div>
                             </div>
                         </div>`;
                 $('#product-wrapper').append(template);
@@ -513,82 +424,6 @@ $bodyType = 'site-menubar-unfold';
 
         $('#catatan').text(data.data[0].catatan)
 
-    }
-    let i = 0
-    let productBuyItem = null
-    let templateBuyItem = ``
-    let totalBuyItem = 0
-    let qtyBuyItem = 0
-    let param = {}
-    $(document).on('click', '.buyitem', function() {
-        // i = i+1
-        const $parent = $($(this).parent())
-        qtyBuyItem = $($parent.children()[0]).val()
-
-        productBuyItem = newdata[$(this).data('id')]
-        console.log(productBuyItem)
-        templateBuyItem = `
-                    <tr style="text-align: center";>
-                        <td>1.</td>
-                        <td><a class="waves-effect waves-light waves-round" style="color: blue">${ productBuyItem.nama }</a></td>
-                        <td><input type="text" class="form-control qty" style="text-center" id="catatan" value=""/></td>
-                        <td>Rp ${ productBuyItem.harga.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.") }</td>
-                        <td>${ qtyBuyItem }</td>
-                        <td>Rp ${ qtyBuyItem * productBuyItem.harga }</td>
-                    </tr>`
-
-        totalBuyItem = qtyBuyItem * productBuyItem.harga
-
-        $('.pembelian-content').empty()
-        $('.pembelian-content').append(templateBuyItem)
-        $('#data-harga').html(`Rp ${ totalBuyItem }`.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."))
-        $('#btn-buy-item').data('id', $(this).data('id'))
-        $('#btn-buy-item').data('total', totalBuyItem)
-        $('#btn-buy-item').data('qty', qtyBuyItem)
-        // $('#btn-buy-item').click(function() {
-
-        // })
-    })
-    $(document).on('click', '#btn-buy-item', function() {
-        var arr = []
-        var index = $(this).data('id')
-        var totalbuy = $(this).data('total')
-        var qtybuy = $(this).data('qty')
-        param = productBuyItem
-        param.qty = qtybuy
-        arr.push(param)
-        // buy(arr, totalBuyItem)
-        singleBuy(arr, totalBuyItem)
-    })
-
-    $(document).on('click', '.add-to-cart', function() {
-        const $parent = $($(this).parent())
-        console.log($parent)
-        qty = $($parent.children()[0]).val()
-        product = newdata[$(this).data('id')]
-        id = product.id
-        console.log($(this).data('id'))
-
-        addToChart(product, qty, id)
-    });
-
-    function move(path, id) {
-        $('#loader').show()
-
-        var json = $.getJSON({
-            url: `${path}?page=${id}`,
-            type: 'GET',
-            async: true
-        }).then((res) => {
-            const {
-                data
-            } = res
-            if (carts == null) {
-                carts = []
-            }
-
-            bindView(data)
-        });
     }
 
     function analyticsPage() {

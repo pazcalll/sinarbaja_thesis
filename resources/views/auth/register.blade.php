@@ -34,15 +34,6 @@
     <link rel="stylesheet" href="{{ asset('public/themeforest/global/fonts/brand-icons/brand-icons.min.css') }}">
     <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,300italic'>
 
-    <!--[if lt IE 9]>
-    <script src="{{ asset('public/themeforest/global/vendor/html5shiv/html5shiv.min.js') }}"></script>
-    <![endif]-->
-
-    <!--[if lt IE 10]>
-    <script src="{{ asset('public/themeforest/global/vendor/media-match/media.match.min.js') }}"></script>
-    <script src="{{ asset('public/themeforest/global/vendor/respond/respond.min.js') }}"></script>
-    <![endif]-->
-
     <!-- Scripts -->
     <script src="{{ asset('public/themeforest/global/vendor/breakpoints/breakpoints.js') }}"></script>
     <script>
@@ -74,7 +65,7 @@
                             </ul>
                         </div>
                     @endif
-                    <form method="post" action="{{ route('register') }}" autocomplete="off">
+                    <form method="post" action="{{ route('registerUser') }}" autocomplete="off">
                         @csrf
 
                         <div class="form-group form-material floating" data-plugin="formMaterial">
@@ -99,7 +90,7 @@
 
                         <div class="form-group form-material floating" data-plugin="formMaterial">
                             <input type="password" class="form-control" name="password" />
-                            <label class="floating-label">Password</label>
+                            <label class="floating-label">Kata Sandi</label>
                         </div>
 
                         <!-- <div class="form-group clearfix">

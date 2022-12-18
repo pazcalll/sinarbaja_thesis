@@ -3,27 +3,26 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Order;
-use App\HargaProdukUser;
-use App\HargaProdukGroup;
 
-class barang extends Model
+class Barang
 {
-      protected $table = 'tbl_barang';
-      protected $primaryKey = 'barang_id';
-      protected $fillable = array('barang_id', 'satuan_id', 'barang_kode', 'barang_nama', 'barang_alias');
+    public $barang_id;
+    public $satuan_id;
+    public $barang_kode;
+    public $barang_nama;
+    public $barang_alias;
+    public $barangnama_asli;
+    public $harga_user;
 
-      public function order() {
-            return $this->hasMany(Order::class, 'product_id');
-      }
-
-      public function harga_group() {
-            return $this->hasMany(HargaProdukGroup::class, 'id_product');
-      }
-
-      public function harga_user() {
-            return $this->hasMany(HargaProdukUser::class, 'id_product');
-      }
-
-      // function group
+    public function __construct($barang_id, $satuan_id, $barang_kode, $barang_nama, $barang_alias, $barangnama_asli, $harga_user)
+    {
+        $this->barang_id = $barang_id;
+        $this->satuan_id = $satuan_id;
+        $this->barang_kode = $barang_kode;
+        $this->barang_nama = $barang_nama;
+        $this->barang_alias = $barang_alias;
+        $this->barangnama_asli = $barangnama_asli;
+        $this->harga_user = $harga_user;
+    }
+    
 }

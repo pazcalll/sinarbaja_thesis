@@ -3,13 +3,13 @@
     <button class="btn btn-outline-primary rounded style-changer" data-url={{url("analytics/pre-punctuation")}}>Punctuation Removal</button> --}}
     @isset($stringsUser)
         @if ($stringsUser != '')
-            <span class="btn btn-primary rounded-0" style="pointer-events: none">User Insert</span>
+            <span class="btn btn-primary rounded-0" style="pointer-events: none">Masukan Pengguna</span>
             <table id="main_table" class="table table-bordered table-hover table-striped" style="width: 100%; table-layout: fixed;">
                 <thead>
                     <tr>
                         <th width="10%">No.</th>
-                        <th width="45%">Base</th>
-                        <th width="45%">Result</th>
+                        <th width="45%">Awalan</th>
+                        <th width="45%">Hasil</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,13 +27,13 @@
 
     @isset($stringsData)
         @if ($stringsData != '')
-            <span class="btn btn-primary rounded-0" style="pointer-events: none">System Data</span>
+            <span class="btn btn-primary rounded-0" style="pointer-events: none">Data Sistem</span>
             <table id="secondary_table" class="table table-bordered table-hover table-striped" style="width: 100%; table-layout: fixed;">
                 <thead>
                     <tr>
                         <th width="10%">No.</th>
-                        <th width="45%">Base</th>
-                        <th width="45%">Result</th>
+                        <th width="45%">Awalan</th>
+                        <th width="45%">Hasil</th>
                     </tr>
                 </thead>
                 <tbody>

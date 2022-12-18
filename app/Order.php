@@ -2,41 +2,53 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use App\barang;
+use Illuminate\Support\Facades\DB;
+use stdClass;
 
-class Order extends Model
+class Order
 {
-    //
-    // use Columns;
-    protected $fillable = array('po_id', 'product_id', 'qty', 'status', 'tagihan_id', 'harga_order', 'nama_barang', 'order');
+    protected $id;
+    protected $po_id;
+    protected $product_id;
+    protected $qty;
+    protected $status;
+    protected $harga_order;
+    protected $nama_barang;
 
-    public function po() {
-        return $this->belongsTo(PurchaseOrder::class, 'po_id');
+    public function __construct($id, $po_id, $product_id, $qty, $status, $harga_order, $nama_barang)
+    {
+        $this->id = $id;
+        $this->po_id = $po_id;
+        $this->product_id = $product_id;
+        $this->qty = $qty;
+        $this->status = $status;
+        $this->harga_order = $harga_order;
+        $this->nama_barang = $nama_barang;
     }
 
-    // public function product() {
-    //     return $this->belongsTo(Product::class, 'product_id');
-    // }
-
-    public function product() {
-        return $this->belongsTo(Product::class, 'product_id', 'barang_id');
+    public function getThis()
+    {
+        $getThis = new stdClass();
+        $getThis->id;
+        $getThis->po_id;
+        $getThis->product_id;
+        $getThis->qty;
+        $getThis->status;
+        $getThis->harga_order;
+        $getThis->nama_barang;
+        return $getThis;
     }
-
-    public function tagihan() {
-        return $this->belongsTo(Tagihan::class, 'tagihan_id');
+    
+    public function save()
+    {
+        DB::table('orders')
+            ->insert([
+                'po_id' => $this->po_id,
+                'product_id' => $this->product_id,
+                'qty' => $this->qty,
+                'status' => $this->status,
+                'harga_order' => $this->harga_order,
+                'nama_barang' => $this->nama_barang
+            ]);
     }
-
-    public function tracking() {
-        return $this->hasMany(Tracking::class, 'order_id');
-    }
-    public function order() {
-        return $this->belongsTo(Order::class, 'order_id');
-    }
-
-    public function barang() {
-        return $this->belongsTo(barang::class, 'product_id');
-    }
-
-
 }

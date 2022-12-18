@@ -63,11 +63,14 @@
             <div class="panel">
                 <div class="panel-body">
                     <div class="brand">
+                        @if ($errors->any())
+                            <div class="alert alert-danger">{{$errors->first()}}</div>
+                        @endif
                         <img class="brand-img"
                             src="{{ asset('public/themeforest/page-base/images/logo-colored.png') }}" alt="...">
-                        <h2 class="brand-text font-size-18">PRIVATE ECOMMERCE</h2>
+                        <h2 class="brand-text font-size-18">HALAMAN LOGIN</h2>
                     </div>
-                    <form method="post" action="{{ route('login') }}" autocomplete="off">
+                    <form method="post" action="{{ route('loginUser') }}" autocomplete="off">
                         @csrf
 
                         <div class="form-group form-material floating" data-plugin="formMaterial">
@@ -76,14 +79,14 @@
                         </div>
                         <div class="form-group form-material floating" data-plugin="formMaterial">
                             <input type="password" class="form-control" name="password" id="password" value="" />
-                            <label class="floating-label">Password</label>
+                            <label class="floating-label">Kata Sandi</label>
                         </div>
                         <div class="form-group clearfix">
                             <div class="checkbox-custom checkbox-inline checkbox-primary checkbox-lg float-left">
                                 <input type="checkbox" onclick="password1()">
-                                <label for="inputCheckbox">Show Password</label>
+                                <label for="inputCheckbox">Perlihatkan Kata Sandi</label>
                             </div>
-                            <a class="float-right" href="forgot-password.html">Lupa password?</a>
+                            {{-- <a class="float-right" href="forgot-password.html">Lupa password?</a> --}}
                         </div>
                         <button type="submit" class="btn btn-primary btn-block btn-lg mt-40">Masuk</button>
                     </form>
@@ -92,7 +95,7 @@
             </div>
 
             <footer class="page-copyright page-copyright-inverse">
-                <p>© 2021. All RIGHT RESERVED.</p>
+                
         </div>
         </footer>
     </div>

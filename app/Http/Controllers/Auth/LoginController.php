@@ -38,7 +38,7 @@ class LoginController extends Controller
     {
       // dd($request->cookie('login'));
 
-        $this->middleware('guest')->except('logout');
+        // $this->middleware('guest')->except('logout');
     }
 
     protected function sendLoginResponse(Request $request)
